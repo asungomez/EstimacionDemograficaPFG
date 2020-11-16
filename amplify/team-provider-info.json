@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-demografiapfg-dev-112954-authRole",
+      "UnauthRoleArn": "arn:aws:iam::291311682549:role/amplify-demografiapfg-dev-112954-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::291311682549:role/amplify-demografiapfg-dev-112954-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-demografiapfg-dev-112954-deployment",
+      "UnauthRoleName": "amplify-demografiapfg-dev-112954-unauthRole",
+      "StackName": "amplify-demografiapfg-dev-112954",
+      "StackId": "arn:aws:cloudformation:us-east-2:291311682549:stack/amplify-demografiapfg-dev-112954/ac964760-27f6-11eb-9420-029eea1c8142",
+      "AmplifyAppId": "d3ts2y5hfz3gmg"
+    }
+  }
+}
