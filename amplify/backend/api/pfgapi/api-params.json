@@ -1,0 +1,35 @@
+{
+    "paths": [
+        {
+            "name": "/accounts/validate",
+            "lambdaFunction": "validateAccount",
+            "privacy": {
+                "open": true
+            },
+            "policyResourceName": "/accounts/validate"
+        }
+    ],
+    "resourceName": "pfgapi",
+    "apiName": "pfgapi",
+    "functionArns": [
+        {
+            "lambdaFunction": "validateAccount"
+        }
+    ],
+    "privacy": {
+        "auth": 0,
+        "unauth": 0,
+        "authRoleName": "amplify-demografiapfg-dev-112954-authRole",
+        "unAuthRoleName": "amplify-demografiapfg-dev-112954-unauthRole"
+    },
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "validateAccount",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        }
+    ]
+}
