@@ -34,6 +34,8 @@ test:
   phases:
     preTest:
       commands:
+        - nvm install 12.19.0
+        - nvm use 12.19.0
         - yarn install
         - yarn add mocha mochawesome mochawesome-merge mochawesome-report-generator
     test:
