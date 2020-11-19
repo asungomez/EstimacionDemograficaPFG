@@ -42,8 +42,7 @@ test:
         - 'npx wait-on http://localhost:3000'
     test:
       commands:
-        - NO_COLOR=1 'npx cypress run --reporter mochawesome --reporter-options "reportDir=cypress/report/mochawesome-report,overwrite=false,html=false,json=true,timestamp=mmddyyyy_HHMMss"'
+        - NO_COLOR=1 npx start-test 'yarn start' https://localhost:3000 'NODE_ENV=test npx cypress run --reporter mochawesome --reporter-options "reportDir=cypress/report/mochawesome-report,overwrite=false,html=false,json=true,timestamp=mmddyyyy_HHMMss"'
     postTest:
       commands:
         - npx mochawesome-merge cypress/report/mochawesome-report/mochawesome*.json > cypress/report/mochawesome.json
-        - npx pm2 kill
