@@ -34,12 +34,8 @@ test:
   phases:
     preTest:
       commands:
-        - npm ci
-        - npm install wait-on
-        - npm install pm2
-        - npm install mocha mochawesome mochawesome-merge mochawesome-report-generator
-        - npx pm2 start npm -- start
-        - 'npx wait-on http://localhost:3000'
+        - yarn install
+        - yarn add mocha mochawesome mochawesome-merge mochawesome-report-generator
     test:
       commands:
         - NO_COLOR=1 npx start-test 'yarn start' https://localhost:3000 'NODE_ENV=test npx cypress run --reporter mochawesome --reporter-options "reportDir=cypress/report/mochawesome-report,overwrite=false,html=false,json=true,timestamp=mmddyyyy_HHMMss"'
