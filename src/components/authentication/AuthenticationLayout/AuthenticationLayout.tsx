@@ -24,7 +24,7 @@ const AuthenticationLayout: React.FC<{}> = () => (
       <EuiFlexItem>
         <div className="titlePane-panel" />
         <EuiTitle size="m" className="landing-container-title">
-          <h3>Estimación demográfica</h3>
+          <h3>UNED</h3>
         </EuiTitle>
       </EuiFlexItem>
       <EuiFlexItem className="landing-container-body">
@@ -58,10 +58,10 @@ const AuthenticationLayout: React.FC<{}> = () => (
 
                 <EuiText color="subdued" size="xs" textAlign="center">
                   Imagen creada por{' '}
-                  <a 
+                  <a
                     href="https://www.freepik.es/vectores/datos"
                     target="_blank"
-                    rel="noopener noreferer"
+                    rel="noopener noreferrer"
                   >
                     stories
                   </a>

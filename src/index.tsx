@@ -1,11 +1,15 @@
 import './index.scss';
 import '@elastic/eui/dist/eui_theme_light.css';
 
+import Amplify from 'aws-amplify';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
 import App from './App';
+import awsmobile from './aws-exports';
 import * as serviceWorker from './serviceWorker';
+
+Amplify.configure(awsmobile);
 
 ReactDOM.render(
   <React.StrictMode>

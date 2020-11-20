@@ -13,19 +13,13 @@ const Footer: React.FC<{}> = () => (
       href="https://github.com/asungomez/EstimacionDemograficaPFG"
       target="_blank"
     >
-      Github
+      Términos del Servicio
     </EuiLink>
     <EuiLink
       href="https://github.com/asungomez/EstimacionDemograficaPFG"
       target="_blank"
     >
-      Github
-    </EuiLink>
-    <EuiLink
-      href="https://github.com/asungomez/EstimacionDemograficaPFG"
-      target="_blank"
-    >
-      Github
+      Política de privacidad
     </EuiLink>
   </>
 );

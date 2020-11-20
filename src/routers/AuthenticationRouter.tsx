@@ -8,7 +8,7 @@ import SignUp from '../components/authentication/SignUp/SignUp';
 const AuthenticationRouter: React.FC<{}> = () => {
   return (
     <Switch>
-      <Route path={['/', '/login']} exact component={Login} />
+      <Route path={['/', '/log-in']} exact component={Login} />
       <Route path="/reset-password" component={ResetPassword} />
       <Route path="/sign-up" component={SignUp} />
     </Switch>
