@@ -23,9 +23,6 @@ const AuthenticationLayout: React.FC<{}> = () => (
     >
       <EuiFlexItem>
         <div className="titlePane-panel" />
-        <EuiTitle size="m" className="landing-container-title">
-          <h3>UNED</h3>
-        </EuiTitle>
       </EuiFlexItem>
       <EuiFlexItem className="landing-container-body">
         <EuiFlexGroup

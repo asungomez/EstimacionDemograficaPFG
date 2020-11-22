@@ -17,6 +17,7 @@
     "@types/yup": "^0.29.9",
     "aws-amplify": "^3.3.8",
     "aws-amplify-react": "^4.2.12",
+    "cypress-wait-until": "^1.7.1",
     "formik": "^2.2.5",
     "moment": "^2.29.1",
     "node-sass": "^4.0.0",
@@ -35,7 +36,8 @@
     "eject": "react-scripts eject",
     "lint": "echo \"Linting...\" && eslint \"./src/**/*.tsx\"",
     "format": "yarn --silent lint --fix",
-    "integration-tests": "NODE_ENV=test yarn run cypress open"
+    "integration-tests": "NODE_ENV=test yarn run cypress open",
+    "validate": "yarn test --watchAll=false && yarn -s lint"
   },
   "eslintConfig": {
     "extends": [

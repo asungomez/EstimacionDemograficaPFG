@@ -65,7 +65,7 @@ const SignUp: React.FC<{}> = () => {
     closePopover();
     AuthenticationService.signUp(values.email, values.password)
       .then(() => {
-        history.push('/log-in?message=confirmed');
+        history.push('/iniciar-sesion?message=confirmed');
         setSubmitting(false);
       })
       .catch(error => {
@@ -88,7 +88,7 @@ const SignUp: React.FC<{}> = () => {
       <EuiFlexItem grow={false}>
         <EuiText size="s" textAlign="center">
           ¿Ya te has registrado?{' '}
-          <EuiCustomLink to="/log-in">Inicia sesión</EuiCustomLink>
+          <EuiCustomLink to="/iniciar-sesion">Inicia sesión</EuiCustomLink>
         </EuiText>
       </EuiFlexItem>
       <EuiFlexItem grow={false}>
@@ -167,13 +167,13 @@ const SignUp: React.FC<{}> = () => {
               <EuiFormRow>
                 <EuiText color="subdued" size="s">
                   Al registrarte, confirmas haber leído y aceptado nuestros{' '}
-                  <EuiLink href="aa.com" target="_blank">
+                  <EuiLink
+                    href="https://descargas.uned.es/publico/pdf/Politica_privacidad_UNED.pdf"
+                    target="blank"
+                  >
                     Términos de Servicio
-                  </EuiLink>{' '}
-                  y nuestra{' '}
-                  <EuiLink href="aa.com" target="_blank">
-                    Política de privacidad
-                  </EuiLink>{' '}
+                  </EuiLink>
+                  .
                 </EuiText>
               </EuiFormRow>
             </EuiForm>
