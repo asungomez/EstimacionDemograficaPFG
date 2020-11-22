@@ -2,5 +2,9 @@
   "validoNoRegistrado": {
     "email": "usuario@valido.com",
     "password": "aaaAAA1.1.1."
+  },
+  "validoRegistrado": {
+    "email": "lefelaj168@tjuln.com",
+    "password": "aaaAAA1.1.1."
   }
 }

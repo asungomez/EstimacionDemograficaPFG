@@ -37,7 +37,7 @@
     "lint": "echo \"Linting...\" && eslint \"./src/**/*.tsx\"",
     "format": "yarn --silent lint --fix",
     "integration-tests": "NODE_ENV=test yarn run cypress open",
-    "validate": "yarn test --watchAll=false && yarn -s lint"
+    "validate": "yarn test --watchAll=false && yarn -s lint --fix"
   },
   "eslintConfig": {
     "extends": [

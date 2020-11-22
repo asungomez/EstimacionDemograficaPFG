@@ -41,7 +41,7 @@ const SignUp: React.FC<{}> = () => {
   const { policy } = usePasswordContext();
   const history = useHistory();
 
-  let passwordPolicy = Yup.string().required('Password is required');
+  let passwordPolicy = Yup.string().required('Introduce tu contraseña');
 
   for (const requirement of policy) {
     passwordPolicy = passwordPolicy.matches(
@@ -121,7 +121,7 @@ const SignUp: React.FC<{}> = () => {
               >
                 <EuiFieldText
                   name="email"
-                  type="email"
+                  type="text"
                   value={values.email}
                   onChange={handleChange}
                   icon="email"

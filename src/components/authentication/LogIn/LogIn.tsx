@@ -35,7 +35,7 @@ const schema: Yup.ObjectSchema<LogInFormValues> = Yup.object().shape({
 });
 
 const LogIn: React.FC<{}> = () => {
-  const [error, setError] = useState<string>(null);
+  const [error] = useState<string>(null);
   const location = useLocation();
   const message = new URLSearchParams(location.search).get('message');
 
