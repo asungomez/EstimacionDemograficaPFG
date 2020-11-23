@@ -5,7 +5,6 @@ import {
   EuiText,
   EuiTitle,
 } from '@elastic/eui';
-import { string } from 'prop-types';
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import EuiCustomLink from '../../common/EuiCustomLink';
@@ -26,8 +25,7 @@ type ErrorDescription = {
 const ErrorView: React.FC<{}> = () => {
   const location = useLocation();
   const message = new URLSearchParams(location.search).get('message');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string>(null);
+  const [error] = useState<string>(null);
 
   const resendConfirmationEmail = () => {};
 
