@@ -10,10 +10,17 @@ import {
 import React from 'react';
 
 import sideImage from '../../../assets/images/authentication_image.svg';
+import lockImage from '../../../assets/images/lock.svg';
 import AuthenticationRouter from '../../../routers/AuthenticationRouter';
 import Footer from './Footer/Footer';
 
-const AuthenticationLayout: React.FC<{}> = () => (
+export type AuthenticationLayoutProps = {
+  error?: boolean;
+};
+
+const AuthenticationLayout: React.FC<AuthenticationLayoutProps> = ({
+  error = false,
+}) => (
   <div className="landing-container scroll-landing">
     <EuiFlexGroup
       direction="row"
@@ -44,7 +51,7 @@ const AuthenticationLayout: React.FC<{}> = () => (
             >
               <EuiFlexItem>
                 <img
-                  src={sideImage}
+                  src={error ? lockImage : sideImage}
                   alt="Estimación Demográfica"
                   className="euiIcon"
                 />

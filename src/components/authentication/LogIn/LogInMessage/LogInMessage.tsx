@@ -11,7 +11,7 @@ import LogInMessageAction, {
   LogInMessageActionType,
 } from './LogInMessageAction/LogInMessageAction';
 
-export type LogInMessageType = 'confirmed';
+export type LogInMessageType = 'registered' | 'confirmed';
 
 type LogInMessageDefinition = {
   [type in LogInMessageType]: {
@@ -23,12 +23,17 @@ type LogInMessageDefinition = {
 };
 
 const messageDefinition: LogInMessageDefinition = {
-  confirmed: {
+  registered: {
     title: 'Comprueba tu bandeja de entrada',
     description: 'Te hemos enviado un enlace de confirmación',
     color: 'primary',
     action: 'resendConfirmationMail',
   },
+  confirmed: {
+    title: 'Tu cuenta ha sido confirmada',
+    description: 'Ya puedes iniciar sesión',
+    color: 'primary'
+  }
 };
 
 export type LogInMessageProps = {

@@ -65,7 +65,7 @@ const SignUp: React.FC<{}> = () => {
     closePopover();
     AuthenticationService.signUp(values.email, values.password)
       .then(() => {
-        history.push('/iniciar-sesion?message=confirmed');
+        history.push('/iniciar-sesion?message=registered');
         setSubmitting(false);
       })
       .catch(error => {

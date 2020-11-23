@@ -3,7 +3,6 @@ import { Route, Switch } from 'react-router-dom';
 
 import AuthenticationLayout from '../components/authentication/AuthenticationLayout/AuthenticationLayout';
 import DashboardLayout from '../components/dashboard/DashboardLayout/DashboardLayout';
-import ErrorView from '../components/other/ErrorView/ErrorView';
 import NotFound from '../components/other/NotFound/NotFound';
 import AuthenticatedRoute from './AuthenticatedRoute';
 import UnauthenticatedRoute from './UnauthenticatedRoute';
@@ -21,7 +20,7 @@ const AppRouter: React.FC<{}> = () => {
         <DashboardLayout />
       </AuthenticatedRoute>
       <Route path="/error">
-        <ErrorView />
+        <AuthenticationLayout error={true} />
       </Route>
       <Route>
         <NotFound />
