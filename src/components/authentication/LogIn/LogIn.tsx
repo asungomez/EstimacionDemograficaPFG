@@ -44,20 +44,29 @@ const LogIn: React.FC<{}> = () => {
   const [error, setError] = useState<string>(null);
   const [submitting, setSubmitting] = useState(false);
   const location = useLocation();
-  const message = new URLSearchParams(location.search).get('message');
+  const [message, setMessage] = useState<LogInMessageType>(
+    new URLSearchParams(location.search).get('message') as LogInMessageType
+  );
   const email = new URLSearchParams(location.search).get('email');
   const logIn = useLogin('/dashboard');
 
   const submit = (values: LogInFormValues) => {
     setError(null);
     setSubmitting(true);
+    setMessage(null);
     AuthenticationService.logIn(values.email, values.password)
       .then(() => {
         setSubmitting(false);
         logIn();
       })
       .catch(error => {
-        setError(error.message);
+        if (error.code === 'UserNotConfirmedException') {
+          setMessage('needsConfirmation');
+        } else if (error.code === 'UserNotFoundException') {
+          setMessage('notExistent');
+        } else {
+          setError(error.message);
+        }
         setSubmitting(false);
       });
   };
@@ -88,7 +97,7 @@ const LogIn: React.FC<{}> = () => {
                   <EuiSpacer />
                 </>
               )}
-              {!!message && (
+              {!!message && !error && (
                 <>
                   <LogInMessage
                     type={message as LogInMessageType}

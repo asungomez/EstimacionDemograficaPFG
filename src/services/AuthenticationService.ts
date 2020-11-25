@@ -18,9 +18,6 @@ class AuthenticationService {
       const info = await Auth.currentUserInfo();
       return Promise.resolve(mapCognitoAttributes(info.attributes));
     } catch (e) {
-      if (process.env.REACT_APP_DEBUG === 'true') {
-        console.log('Get user attributes error', e);
-      }
       return Promise.reject(e);
     }
   }
@@ -34,6 +31,12 @@ class AuthenticationService {
         error.message = 'El usuario especificado no existe';
       } else if (error.code === 'UserNotConfirmedException') {
         error.message = 'Necesitas confirmar tu dirección de email para iniciar sesión';
+      }
+      else if(error.code === 'NetworkError'){
+        error.message = 'No hay conexión a Internet';
+      }
+      else {
+        error.message = 'Error interno';
       }
       return Promise.reject(error);
     }
@@ -64,6 +67,9 @@ class AuthenticationService {
         e.message = 'Tu cuenta de usuario ya se encuentra confirmada';
         e.code = 'AlreadyConfirmed';
       }
+      else {
+        e.message = 'Error interno';
+      }
       return Promise.reject(e);
     }
   }
@@ -87,6 +93,9 @@ class AuthenticationService {
       }
       else if (e.code === 'NetworkError') {
         e.message = 'No hay conexión a Internet';
+      }
+      else {
+        e.message = 'Error interno';
       }
       return Promise.reject(e);
     }

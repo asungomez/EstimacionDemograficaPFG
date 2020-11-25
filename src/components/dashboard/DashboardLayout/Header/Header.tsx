@@ -1,3 +1,5 @@
+import './Header.scss';
+
 import {
   EuiButtonEmpty,
   EuiFlexGroup,
@@ -9,14 +11,12 @@ import {
   EuiIcon,
   EuiPopover,
   EuiPopoverTitle,
-  EuiTitle,
 } from '@elastic/eui';
 import React, { useState } from 'react';
 
 import logo from '../../../../assets/images/logo_uned.svg';
 import { useAuthenticationContext } from '../../../../contexts/AuthenticationContext';
 import AuthenticationService from '../../../../services/AuthenticationService';
-import './Header.scss';
 
 const Header: React.FC<{}> = () => {
   const [popoverOpen, setPopoverOpen] = useState(false);
@@ -46,7 +46,10 @@ const Header: React.FC<{}> = () => {
             closePopover={() => setPopoverOpen(false)}
             anchorPosition="downRight"
             button={
-              <EuiHeaderSectionItemButton onClick={togglePopover}>
+              <EuiHeaderSectionItemButton
+                onClick={togglePopover}
+                aria-label="Opciones"
+              >
                 <EuiIcon type="gear" />
               </EuiHeaderSectionItemButton>
             }
@@ -57,10 +60,10 @@ const Header: React.FC<{}> = () => {
             <EuiFlexGroup direction="column" alignItems="flexStart">
               <EuiButtonEmpty color="text" iconType="user">
                 Perfil
-            </EuiButtonEmpty>
+              </EuiButtonEmpty>
               <EuiButtonEmpty color="text" iconType="exit" onClick={logOut}>
                 Cerrar sesión
-            </EuiButtonEmpty>
+              </EuiButtonEmpty>
             </EuiFlexGroup>
           </EuiPopover>
         </EuiHeaderSectionItem>
