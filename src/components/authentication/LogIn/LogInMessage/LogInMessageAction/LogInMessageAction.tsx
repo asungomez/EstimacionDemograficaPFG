@@ -39,10 +39,9 @@ const LogInMessageAction: React.FC<LogInMessageActionProps> = ({
         })
         .catch(error => {
           setLoading(false);
-          if(error.code === 'AlreadyConfirmed') {
+          if (error.code === 'AlreadyConfirmed') {
             onSuccess(error.message);
-          }
-          else {
+          } else {
             onError(error.message);
           }
         });

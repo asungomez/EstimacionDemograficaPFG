@@ -7,7 +7,7 @@ const UnauthenticatedRoute: React.FC<any> = ({ children, ...routeProps }) => {
   const { isAuthenticated } = useAuthenticationContext();
   return (
     <Route {...routeProps}>
-      {!isAuthenticated ? children : <Redirect to="/console" />}
+      {!isAuthenticated ? children : <Redirect to="/dashboard" />}
     </Route>
   );
 };

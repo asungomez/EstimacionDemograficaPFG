@@ -10,7 +10,7 @@ const AuthenticationRouter: React.FC<{}> = () => {
   return (
     <Switch>
       <Route path={['/', '/iniciar-sesion']} exact component={Login} />
-      <Route path="/reset-password" component={ResetPassword} />
+      <Route path="/recuperar-contrasena" component={ResetPassword} />
       <Route path="/error" component={ErrorView} />
       <Route path="/registro" component={SignUp} />
     </Switch>

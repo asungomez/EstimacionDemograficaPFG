@@ -12,8 +12,12 @@ import AuthenticationService from '../../../services/AuthenticationService';
 import EuiCustomLink from '../../common/EuiCustomLink';
 import EuiError from '../../common/EuiError';
 
-const ERROR_TYPES = ['confirmacion_fallida', 'usuario_no_existe', 'default'] as const
-type ErrorType = typeof ERROR_TYPES[number]
+const ERROR_TYPES = [
+  'confirmacion_fallida',
+  'usuario_no_existe',
+  'default',
+] as const;
+type ErrorType = typeof ERROR_TYPES[number];
 
 type ErrorDescription = {
   title: string;
@@ -43,8 +47,7 @@ const ErrorView: React.FC<{}> = () => {
         .catch(error => {
           if (error.code === 'AlreadyConfirmed') {
             history.push('/iniciar-sesion?message=confirmed');
-          }
-          else {
+          } else {
             setError(error.message);
             setLoading(false);
           }
@@ -71,7 +74,7 @@ const ErrorView: React.FC<{}> = () => {
     default: {
       title: 'Ha habido un error',
       description: 'Por favor, inténtalo de nuevo más tarde.',
-    }
+    },
   };
 
   let type: ErrorType = 'default';
@@ -80,7 +83,6 @@ const ErrorView: React.FC<{}> = () => {
       type = errorType;
     }
   });
-
 
   return (
     <EuiFlexGroup direction="column" alignItems="center" responsive={false}>
