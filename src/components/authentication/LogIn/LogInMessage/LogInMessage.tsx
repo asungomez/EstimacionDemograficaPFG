@@ -11,7 +11,11 @@ import LogInMessageAction, {
   LogInMessageActionType,
 } from './LogInMessageAction/LogInMessageAction';
 
-export type LogInMessageType = 'registered' | 'confirmed';
+export type LogInMessageType =
+  | 'registered'
+  | 'confirmed'
+  | 'needsConfirmation'
+  | 'notExistent';
 
 type LogInMessageDefinition = {
   [type in LogInMessageType]: {
@@ -33,6 +37,20 @@ const messageDefinition: LogInMessageDefinition = {
     title: 'Tu cuenta ha sido confirmada',
     description: 'Ya puedes iniciar sesión',
     color: 'primary',
+  },
+  needsConfirmation: {
+    title: 'Tu dirección de email no está confirmada',
+    description:
+      'Te hemos enviado un mensaje con un enlace de confirmación tras tu registro. Si no lo has recibido, podemos enviártelo otra vez.',
+    color: 'danger',
+    action: 'resendConfirmationMail',
+  },
+  notExistent: {
+    title: 'No existe la cuenta',
+    description:
+      'La dirección de email proporcionada no se corresponde con ninguna cuenta registrada',
+    color: 'danger',
+    action: 'register',
   },
 };
 
@@ -67,6 +85,13 @@ const LogInMessage: React.FC<LogInMessageProps> = ({ type, email }) => {
                     email={email}
                     onError={setError}
                     onSuccess={setSuccess}
+                    color={
+                      error
+                        ? 'danger'
+                        : success
+                        ? 'success'
+                        : messageDefinition[type].color
+                    }
                   />
                 </EuiFlexItem>
               </EuiFlexGroup>

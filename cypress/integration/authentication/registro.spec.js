@@ -11,6 +11,7 @@ describe('Registro', () => {
       cy.get('input[name="password"]').type(usuario.password);
     }
     cy.get('form').submit();
+    cy.wait(3000);
   };
 
   describe('Registrar una cuenta con datos válidos', () => {

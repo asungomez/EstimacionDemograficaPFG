@@ -60,12 +60,12 @@ const SignUp: React.FC<{}> = () => {
   const openPopover = () => setPopoverOpen(true);
   const closePopover = () => setPopoverOpen(false);
 
-  const submit = ({email, password}: SignUpFormValues) => {
+  const submit = ({ email, password }: SignUpFormValues) => {
     setSubmitting(true);
     closePopover();
     AuthenticationService.signUp(email, password)
       .then(() => {
-        history.push('/iniciar-sesion?message=registered&email='+email);
+        history.push('/iniciar-sesion?message=registered&email=' + email);
         setSubmitting(false);
       })
       .catch(error => {

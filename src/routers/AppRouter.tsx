@@ -11,12 +11,12 @@ const AppRouter: React.FC<{}> = () => {
   return (
     <Switch>
       <UnauthenticatedRoute
-        path={['/', '/iniciar-sesion', '/registro', '/reset-password']}
+        path={['/', '/iniciar-sesion', '/registro', '/recuperar-contrasena']}
         exact
       >
         <AuthenticationLayout />
       </UnauthenticatedRoute>
-      <AuthenticatedRoute path={['/console']}>
+      <AuthenticatedRoute path={['/dashboard']}>
         <DashboardLayout />
       </AuthenticatedRoute>
       <Route path="/error">

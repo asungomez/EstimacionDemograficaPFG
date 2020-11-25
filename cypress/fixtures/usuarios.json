@@ -1,6 +1,6 @@
 {
   "validoNoRegistrado": {
-    "email": "usuario@valido.com",
+    "email": "abc@valido.com",
     "password": "aaaAAA1.1.1."
   },
   "validoRegistrado": {
@@ -9,6 +9,10 @@
   },
   "validoConfirmado": {
     "email": "piconax795@tjuln.com",
-    "password": "piconax795@tjuln.com"
+    "password": "aaaAAA1.1.1."
+  },
+  "validoNoConfirmado": {
+    "email": "xayekab287@tjuln.com",
+    "password": "aaaAAA1.1.1."
   }
 }

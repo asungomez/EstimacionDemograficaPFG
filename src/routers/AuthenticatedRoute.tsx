@@ -11,7 +11,7 @@ const AuthenticatedRoute: React.FC<any> = ({ children, ...routeProps }) => {
       {isAuthenticated ? (
         children
       ) : (
-        <Redirect to={`/login?redirect=${pathname}${search}`} />
+        <Redirect to={`/iniciar-sesion?redirect=${pathname}${search}`} />
       )}
     </Route>
   );

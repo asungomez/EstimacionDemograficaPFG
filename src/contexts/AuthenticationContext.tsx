@@ -1,10 +1,12 @@
 import { createContext, useContext } from 'react';
 
+import { User } from '../models/User';
+
 export type AuthenticationContextType = {
   isAuthenticated: boolean;
   userHasAuthenticated: (auth: boolean) => void;
-  user: any;
-  setUser: (user: any) => void;
+  user: User;
+  setUser: (user: User) => void;
 };
 export const AuthenticationContext = createContext<AuthenticationContextType>({
   isAuthenticated: false,
