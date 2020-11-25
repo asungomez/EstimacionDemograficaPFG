@@ -5,7 +5,7 @@ import {
   EuiSpacer,
   EuiText,
 } from '@elastic/eui';
-import React from 'react';
+import React, { useState } from 'react';
 
 import LogInMessageAction, {
   LogInMessageActionType,
@@ -32,30 +32,46 @@ const messageDefinition: LogInMessageDefinition = {
   confirmed: {
     title: 'Tu cuenta ha sido confirmada',
     description: 'Ya puedes iniciar sesión',
-    color: 'primary'
-  }
+    color: 'primary',
+  },
 };
 
 export type LogInMessageProps = {
   type: LogInMessageType;
+  email?: string;
 };
 
-const LogInMessage: React.FC<LogInMessageProps> = ({ type }) => {
+const LogInMessage: React.FC<LogInMessageProps> = ({ type, email }) => {
+  const [error, setError] = useState<string>(null);
+  const [success, setSuccess] = useState<string>(null);
+
   return (
     <EuiCallOut
-      title={messageDefinition[type].title}
-      color={messageDefinition[type].color}
+      title={error ? error : success ? success : messageDefinition[type].title}
+      color={
+        error ? 'danger' : success ? 'success' : messageDefinition[type].color
+      }
+      iconType={error ? 'alert' : success ? 'check' : null}
     >
-      <EuiText>{messageDefinition[type].description}</EuiText>
-
-      {messageDefinition[type].action && (
+      {!error && !success && (
         <>
-          <EuiSpacer />
-          <EuiFlexGroup direction="row" justifyContent="flexEnd">
-            <EuiFlexItem grow={false}>
-              <LogInMessageAction type={messageDefinition[type].action} />
-            </EuiFlexItem>
-          </EuiFlexGroup>
+          <EuiText>{messageDefinition[type].description}</EuiText>
+
+          {messageDefinition[type].action && (
+            <>
+              <EuiSpacer />
+              <EuiFlexGroup direction="row" justifyContent="flexEnd">
+                <EuiFlexItem grow={false}>
+                  <LogInMessageAction
+                    type={messageDefinition[type].action}
+                    email={email}
+                    onError={setError}
+                    onSuccess={setSuccess}
+                  />
+                </EuiFlexItem>
+              </EuiFlexGroup>
+            </>
+          )}
         </>
       )}
     </EuiCallOut>

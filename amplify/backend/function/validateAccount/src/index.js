@@ -10,6 +10,7 @@ const apiVersion = '2016-04-18';
 const appURL = 'https://deployment-dev.d3ts2y5hfz3gmg.amplifyapp.com';
 const userPoolId = 'us-east-2_HJiVnrvgt';
 exports.handler = async (request) => {
+    let email = '';
     try {
 
         const cognito = new AWS.CognitoIdentityServiceProvider({
@@ -17,7 +18,8 @@ exports.handler = async (request) => {
             apiVersion
         });
 
-        const {code: confirmationCode, email, id: clientId} = request.queryStringParameters;
+        const {code: confirmationCode, id: clientId} = request.queryStringParameters;
+        email = request.queryStringParameters.email;
 
         /**
          * Use the received email to look for the user ID in the Cognito User Pool
@@ -61,6 +63,9 @@ exports.handler = async (request) => {
         if(error.message.includes('Current status is CONFIRMED')) {
             return redirectResponse(appURL + '/iniciar-sesion/?message=confirmed');
         }
-        return errorRedirect(appURL, 'confirmacion_fallida');
+        else if(error.message.includes('Username/client id combination not found')) {
+            return errorRedirect(appURL, 'usuario_no_existe');
+        }
+        return redirectResponse(appURL + '/error/?message=confirmacion_fallida&email='+email);
     }
 };

@@ -2,6 +2,26 @@ import { ISignUpResult } from 'amazon-cognito-identity-js';
 import { Auth } from 'aws-amplify';
 
 class AuthenticationService {
+  public static async resendConfirmationMessage(email: string): Promise<string> {
+    try {
+      const response = await Auth.resendSignUp(email);
+      return Promise.resolve(response);
+    }
+    catch(e) {
+      if(e.code === 'NetworkError') {
+        e.message = 'No hay conexión a Internet';
+      }
+      else if(e.message.includes('limit exceeded')) {
+        e.message = 'Límite de intentos superado, inténtalo de nuevo más tarde';
+      }
+      else if(e.message.includes('already confirmed')) {
+        e.message = 'Tu cuenta de usuario ya se encuentra confirmada';
+        e.code = 'AlreadyConfirmed';
+      }
+      return Promise.reject(e);
+    }
+  }
+
   public static async signUp(email: string, password: string) : Promise<ISignUpResult> {
     try {
       const response = await Auth.signUp(email, password);

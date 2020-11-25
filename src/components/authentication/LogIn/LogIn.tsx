@@ -38,6 +38,7 @@ const LogIn: React.FC<{}> = () => {
   const [error] = useState<string>(null);
   const location = useLocation();
   const message = new URLSearchParams(location.search).get('message');
+  const email = new URLSearchParams(location.search).get('email');
 
   const submit = (values: LogInFormValues) => {};
 
@@ -69,7 +70,10 @@ const LogIn: React.FC<{}> = () => {
               )}
               {!!message && (
                 <>
-                  <LogInMessage type={message as LogInMessageType} />
+                  <LogInMessage
+                    type={message as LogInMessageType}
+                    email={email}
+                  />
                   <EuiSpacer />
                 </>
               )}

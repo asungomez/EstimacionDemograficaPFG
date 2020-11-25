@@ -1,7 +1,9 @@
 const { accountConfirmation } = require("emails");
 
 exports.handler = (event, context, callback) => {
-  if (event.triggerSource === 'CustomMessage_SignUp') {
+  if (
+    event.triggerSource === 'CustomMessage_SignUp' 
+    || event.triggerSource === 'CustomMessage_ResendCode') {
     const { codeParameter } = event.request;
     const email = event.request.userAttributes.email;
     const { clientId } = event.callerContext;
