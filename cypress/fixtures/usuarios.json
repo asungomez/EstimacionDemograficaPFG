@@ -1,0 +1,14 @@
+{
+  "validoNoRegistrado": {
+    "email": "usuario@valido.com",
+    "password": "aaaAAA1.1.1."
+  },
+  "validoRegistrado": {
+    "email": "lefelaj168@tjuln.com",
+    "password": "aaaAAA1.1.1."
+  },
+  "validoConfirmado": {
+    "email": "piconax795@tjuln.com",
+    "password": "piconax795@tjuln.com"
+  }
+}

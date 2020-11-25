@@ -12,6 +12,7 @@ frontend:
         - nvm install 12.19.0
         - nvm use 12.19.0
         - yarn install
+        - yarn validate
     build:
       commands:
         - nvm install 12.19.0
