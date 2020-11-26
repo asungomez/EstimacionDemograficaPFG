@@ -90,7 +90,9 @@ describe('Registro', () => {
         let usuarioInvalido = {};
         usuarioInvalido.email = 'abc';
         usuarioInvalido.password = usuario.password;
-        intentarRegistrarInvalido(usuario);
+        intentarRegistrarInvalido(usuarioInvalido);
+        cy.get('input[name="email"]').click();
+        cy.get('input[name="email"]').clear()
         cy.get('input[name="email"]').type(usuario.email);
         cy.get(selectors.errorCampoFormulario).should('not.exist');
       });

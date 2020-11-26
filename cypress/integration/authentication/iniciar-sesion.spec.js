@@ -62,6 +62,7 @@ describe('Iniciar sesion', () => {
   describe('Con un usuario que no existe', () => {
     it('muestra un mensaje de error', () => {
       cy.fixture('usuarios').then(({validoNoRegistrado: usuario}) => {
+        usuario.email = '' + Math.random() + usuario.email;
         login(usuario);
         cy.waitUntil(() => {
           return cy
@@ -76,6 +77,7 @@ describe('Iniciar sesion', () => {
 
     it('muestra la opción de registro', () => {
       cy.fixture('usuarios').then(({validoNoRegistrado: usuario}) => {
+        usuario.email = '' + Math.random() + usuario.email;
         login(usuario);
         cy.waitUntil(() => {
           return cy
