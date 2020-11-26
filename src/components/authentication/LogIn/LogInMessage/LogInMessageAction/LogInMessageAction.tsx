@@ -4,7 +4,10 @@ import { useHistory } from 'react-router-dom';
 
 import AuthenticationService from '../../../../../services/AuthenticationService';
 
-export type LogInMessageActionType = 'resendConfirmationMail' | 'register';
+export type LogInMessageActionType =
+  | 'resendConfirmationMail'
+  | 'register'
+  | 'resendPasswordMail';
 
 type LogInMessageActionDescription = {
   [action in LogInMessageActionType]: {
@@ -36,6 +39,7 @@ const LogInMessageAction: React.FC<LogInMessageActionProps> = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const history = useHistory();
+
   const resendConfirmationEmail = () => {
     if (email) {
       setLoading(true);
@@ -59,6 +63,25 @@ const LogInMessageAction: React.FC<LogInMessageActionProps> = ({
     }
   };
 
+  const resendPasswordEmail = () => {
+    if (email) {
+      setLoading(true);
+      AuthenticationService.requestResetPassword(email)
+        .then(() => {
+          setLoading(false);
+          onSuccess(
+            'Mensaje enviado con éxito, consulta tu bandeja de entrada'
+          );
+        })
+        .catch(error => {
+          setLoading(false);
+          onError(error.message);
+        });
+    } else {
+      onError('No se pudo enviar el mensaje');
+    }
+  };
+
   const goToSignUp = () => history.push('/registro');
 
   const actions: LogInMessageActionDescription = {
@@ -71,6 +94,11 @@ const LogInMessageAction: React.FC<LogInMessageActionProps> = ({
       icon: 'user',
       action: goToSignUp,
       text: 'Crear nueva cuenta',
+    },
+    resendPasswordMail: {
+      icon: 'refresh',
+      action: resendPasswordEmail,
+      text: 'Enviar de nuevo',
     },
   };
 

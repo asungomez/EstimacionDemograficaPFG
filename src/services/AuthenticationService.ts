@@ -51,6 +51,22 @@ class AuthenticationService {
     }
   }
 
+  public static async requestResetPassword(email: string) : Promise<void> {
+    try {
+      await Auth.forgotPassword(email);
+      return Promise.resolve();
+    }
+    catch(e) {
+      if (e.code === 'NetworkError') {
+        e.message = 'No hay conexión a Internet';
+      }
+      else {
+        e.message = 'Error interno';
+      }
+      return Promise.reject(e);
+    }
+  };
+
   public static async resendConfirmationMessage(email: string): Promise<string> {
     try {
       const response = await Auth.resendSignUp(email);
