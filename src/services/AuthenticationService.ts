@@ -57,7 +57,15 @@ class AuthenticationService {
       return Promise.resolve();
     }
     catch(e) {
-      if (e.code === 'NetworkError') {
+      console.log(e);
+      if (e.code === 'UserNotFoundException') {
+        e.message = 'Usuario no registrado';
+      }
+      else if (e.code === 'InvalidParameterException' && e.message.includes('registered/verified')) {
+        e.code = 'UserNotConfirmedException';
+        e.message = 'Usuario no confirmado';
+      }
+      else if (e.code === 'NetworkError') {
         e.message = 'No hay conexión a Internet';
       }
       else {
