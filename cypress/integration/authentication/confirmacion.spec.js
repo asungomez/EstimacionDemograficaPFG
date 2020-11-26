@@ -1,6 +1,7 @@
 const urlConfirmacion = (email, code = '1234', id = 'abcd') => `https://yp989cvkn3.execute-api.us-east-2.amazonaws.com/dev/accounts/validate?code=${code}&email=${email}&id=${id}`;
 
 describe('Confirmacion', () => {
+  
   describe('Visitar URL de confirmación con datos erróneos', () => {
     it('muestra un mensaje de error cuando el email no existe', () => {
       cy.fixture('usuarios').then(({ validoNoRegistrado: usuario }) => {
