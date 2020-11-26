@@ -90,6 +90,21 @@ class AuthenticationService {
     }
   }
 
+  public static async resetPassword(email: string, password: string, code: string) : Promise<void> {
+    try {
+      await Auth.forgotPasswordSubmit(email, code, password);
+    }
+    catch(e) {
+      if (e.code === 'NetworkError') {
+        e.message = 'No hay conexión a Internet';
+      }
+      else {
+        e.message = 'Error interno';
+      }
+      return Promise.reject(e);
+    }
+  };
+
   public static async signUp(email: string, password: string): Promise<ISignUpResult> {
     try {
       const response = await Auth.signUp(email, password);

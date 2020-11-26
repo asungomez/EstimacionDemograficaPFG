@@ -16,7 +16,8 @@ export type LogInMessageType =
   | 'confirmed'
   | 'needsConfirmation'
   | 'notExistent'
-  | 'resetPasswordRequested';
+  | 'resetPasswordRequested'
+  | 'resetPasswordSucceeded';
 
 type LogInMessageDefinition = {
   [type in LogInMessageType]: {
@@ -56,8 +57,13 @@ const messageDefinition: LogInMessageDefinition = {
   resetPasswordRequested: {
     title: 'Comprueba tu bandeja de entrada',
     description: 'Te hemos enviado un enlace para restaurar tu contraseña',
-    color: 'success',
+    color: 'primary',
     action: 'resendPasswordMail',
+  },
+  resetPasswordSucceeded: {
+    title: 'Tu contraseña se ha actualizado',
+    description: 'Puedes iniciar sesión con tus nuevas credenciales',
+    color: 'success',
   },
 };
 
