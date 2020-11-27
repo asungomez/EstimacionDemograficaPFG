@@ -19,8 +19,11 @@ import * as Yup from 'yup';
 
 import { usePasswordContext } from '../../../../contexts/PasswordContext';
 import AuthenticationService from '../../../../services/AuthenticationService';
-import EuiCustomLink from '../../../common/EuiCustomLink';
+import EuiCustomLink from '../../../common/eui/EuiCustomLink';
 import PasswordChecker from '../../SignUp/PasswodChecker/PasswordChecker';
+import SetNewPasswordMessage, {
+  SetNewPasswordMessageType,
+} from './SetNewPasswordMessage/SetNewPasswordMessage';
 
 export type SetNewPasswordFormValues = {
   password: string;
@@ -39,6 +42,7 @@ const SetNewPassword: React.FC<SetNewPasswordProps> = ({ email, code }) => {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string>(null);
   const [popoverOpen, setPopoverOpen] = useState(false);
+  const [message, setMessage] = useState<SetNewPasswordMessageType>(null);
   const history = useHistory();
   const { policy } = usePasswordContext();
 
@@ -46,13 +50,18 @@ const SetNewPassword: React.FC<SetNewPasswordProps> = ({ email, code }) => {
     setPopoverOpen(false);
     setSubmitting(true);
     setError(null);
+    setMessage(null);
     AuthenticationService.resetPassword(email, password, code)
       .then(() => {
         setSubmitting(false);
         history.push('/iniciar-sesion?message=resetPasswordSucceeded');
       })
       .catch(error => {
-        setError(error.message);
+        if (error.code === 'InvalidCodeException') {
+          setMessage('expiredCode');
+        } else {
+          setError(error.message);
+        }
         setSubmitting(false);
       });
   };
@@ -106,6 +115,12 @@ const SetNewPassword: React.FC<SetNewPasswordProps> = ({ email, code }) => {
                   <EuiCallOut color="danger" title="Ha habido un error">
                     {error}
                   </EuiCallOut>
+                  <EuiSpacer />
+                </>
+              )}
+              {!error && !!message && (
+                <>
+                  <SetNewPasswordMessage type={message} email={email} />
                   <EuiSpacer />
                 </>
               )}

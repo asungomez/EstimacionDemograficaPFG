@@ -20,7 +20,7 @@ import * as Yup from 'yup';
 
 import { usePasswordContext } from '../../../contexts/PasswordContext';
 import AuthenticationService from '../../../services/AuthenticationService';
-import EuiCustomLink from '../../common/EuiCustomLink';
+import EuiCustomLink from '../../common/eui/EuiCustomLink';
 import PasswordChecker from './PasswodChecker/PasswordChecker';
 
 type SignUpFormValues = {

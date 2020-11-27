@@ -103,7 +103,15 @@ class AuthenticationService {
       await Auth.forgotPasswordSubmit(email, code, password);
     }
     catch(e) {
-      if (e.code === 'NetworkError') {
+      console.log(e);
+      if(e.code === 'CodeMismatchException' || e.code === 'ExpiredCodeException') {
+        e.code = 'InvalidCodeException';
+        e.message = 'Código inválido o caducado';
+      }
+      else if(e.code === 'UserNotFoundException') {
+        e.message = 'El usuario especificado no existe';
+      }
+      else if (e.code === 'NetworkError') {
         e.message = 'No hay conexión a Internet';
       }
       else {
