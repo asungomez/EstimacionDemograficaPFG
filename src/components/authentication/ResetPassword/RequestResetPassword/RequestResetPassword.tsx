@@ -17,7 +17,10 @@ import { useHistory } from 'react-router-dom';
 import * as Yup from 'yup';
 
 import AuthenticationService from '../../../../services/AuthenticationService';
-import EuiCustomLink from '../../../common/EuiCustomLink';
+import EuiCustomLink from '../../../common/eui/EuiCustomLink';
+import RequestResetPasswordMessage, {
+  RequestResetPasswordMessageType,
+} from './RequestResetPasswordMessage/RequestResetPasswordMessage';
 
 export type RequestResetPasswordFormValues = {
   email: string;
@@ -38,11 +41,14 @@ const schema: Yup.ObjectSchema<RequestResetPasswordFormValues> = Yup.object().sh
 const RequestResetPassword: React.FC<{}> = () => {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string>(null);
+  const [message, setMessage] = useState<RequestResetPasswordMessageType>(null);
+  const [email, setEmail] = useState('');
   const history = useHistory();
 
   const submit = ({ email }: RequestResetPasswordFormValues) => {
     setSubmitting(true);
     setError(null);
+    setMessage(null);
 
     AuthenticationService.requestResetPassword(email)
       .then(() => {
@@ -52,9 +58,23 @@ const RequestResetPassword: React.FC<{}> = () => {
         );
       })
       .catch(error => {
-        setError(error.message);
+        if (error.code === 'UserNotFoundException') {
+          setMessage('notRegistered');
+        } else if (error.code === 'UserNotConfirmedException') {
+          setMessage('needsConfirmation');
+        } else {
+          setError(error.message);
+        }
         setSubmitting(false);
       });
+  };
+
+  const changeEmail = (
+    event: React.ChangeEvent<any>,
+    handleChange: (e: React.ChangeEvent<any>) => void
+  ) => {
+    setEmail(event.target.value);
+    handleChange(event);
   };
 
   return (
@@ -87,6 +107,12 @@ const RequestResetPassword: React.FC<{}> = () => {
                   <EuiSpacer />
                 </>
               )}
+              {!error && message && (
+                <>
+                  <RequestResetPasswordMessage type={message} email={email} />
+                  <EuiSpacer />
+                </>
+              )}
               <EuiFormRow
                 label="Email"
                 isInvalid={errors.email && touched.email}
@@ -97,7 +123,7 @@ const RequestResetPassword: React.FC<{}> = () => {
                   name="email"
                   type="text"
                   value={values.email}
-                  onChange={handleChange}
+                  onChange={e => changeEmail(e, handleChange)}
                   icon="email"
                   fullWidth
                 />

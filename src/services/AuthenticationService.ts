@@ -57,7 +57,15 @@ class AuthenticationService {
       return Promise.resolve();
     }
     catch(e) {
-      if (e.code === 'NetworkError') {
+      console.log(e);
+      if (e.code === 'UserNotFoundException') {
+        e.message = 'Usuario no registrado';
+      }
+      else if (e.code === 'InvalidParameterException' && e.message.includes('registered/verified')) {
+        e.code = 'UserNotConfirmedException';
+        e.message = 'Usuario no confirmado';
+      }
+      else if (e.code === 'NetworkError') {
         e.message = 'No hay conexión a Internet';
       }
       else {
@@ -95,7 +103,15 @@ class AuthenticationService {
       await Auth.forgotPasswordSubmit(email, code, password);
     }
     catch(e) {
-      if (e.code === 'NetworkError') {
+      console.log(e);
+      if(e.code === 'CodeMismatchException' || e.code === 'ExpiredCodeException') {
+        e.code = 'InvalidCodeException';
+        e.message = 'Código inválido o caducado';
+      }
+      else if(e.code === 'UserNotFoundException') {
+        e.message = 'El usuario especificado no existe';
+      }
+      else if (e.code === 'NetworkError') {
         e.message = 'No hay conexión a Internet';
       }
       else {
