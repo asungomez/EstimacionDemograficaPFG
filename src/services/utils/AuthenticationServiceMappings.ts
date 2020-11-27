@@ -5,5 +5,6 @@ export const mapCognitoAttributes = (attributes: any): User => {
     email: attributes.email,
     name: attributes.name,
     familyName: attributes.family_name,
+    sub: attributes.sub,
   };
 };

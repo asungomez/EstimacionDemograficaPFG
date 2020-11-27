@@ -15,7 +15,9 @@ export type LogInMessageType =
   | 'registered'
   | 'confirmed'
   | 'needsConfirmation'
-  | 'notExistent';
+  | 'notExistent'
+  | 'resetPasswordRequested'
+  | 'resetPasswordSucceeded';
 
 type LogInMessageDefinition = {
   [type in LogInMessageType]: {
@@ -51,6 +53,17 @@ const messageDefinition: LogInMessageDefinition = {
       'La dirección de email proporcionada no se corresponde con ninguna cuenta registrada',
     color: 'danger',
     action: 'register',
+  },
+  resetPasswordRequested: {
+    title: 'Comprueba tu bandeja de entrada',
+    description: 'Te hemos enviado un enlace para restaurar tu contraseña',
+    color: 'primary',
+    action: 'resendPasswordMail',
+  },
+  resetPasswordSucceeded: {
+    title: 'Tu contraseña se ha actualizado',
+    description: 'Puedes iniciar sesión con tus nuevas credenciales',
+    color: 'success',
   },
 };
 

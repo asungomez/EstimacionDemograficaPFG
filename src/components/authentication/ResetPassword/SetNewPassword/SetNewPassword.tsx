@@ -1,14 +1,13 @@
 import {
   EuiButton,
+  EuiButtonEmpty,
   EuiCallOut,
   EuiFieldPassword,
-  EuiFieldText,
   EuiFlexGroup,
   EuiFlexItem,
   EuiForm,
   EuiFormRow,
   EuiInputPopover,
-  EuiLink,
   EuiSpacer,
   EuiText,
   EuiTitle,
@@ -18,28 +17,54 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import * as Yup from 'yup';
 
-import { usePasswordContext } from '../../../contexts/PasswordContext';
-import AuthenticationService from '../../../services/AuthenticationService';
-import EuiCustomLink from '../../common/eui/EuiCustomLink';
-import PasswordChecker from './PasswodChecker/PasswordChecker';
+import { usePasswordContext } from '../../../../contexts/PasswordContext';
+import AuthenticationService from '../../../../services/AuthenticationService';
+import EuiCustomLink from '../../../common/eui/EuiCustomLink';
+import PasswordChecker from '../../SignUp/PasswodChecker/PasswordChecker';
+import SetNewPasswordMessage, {
+  SetNewPasswordMessageType,
+} from './SetNewPasswordMessage/SetNewPasswordMessage';
 
-type SignUpFormValues = {
-  email: string;
+export type SetNewPasswordFormValues = {
   password: string;
 };
 
-const initialValues: SignUpFormValues = {
-  email: '',
+export type SetNewPasswordProps = {
+  email: string;
+  code: string;
+};
+
+const initialValues: SetNewPasswordFormValues = {
   password: '',
 };
 
-const SignUp: React.FC<{}> = () => {
+const SetNewPassword: React.FC<SetNewPasswordProps> = ({ email, code }) => {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string>(null);
   const [popoverOpen, setPopoverOpen] = useState(false);
-
-  const { policy } = usePasswordContext();
+  const [message, setMessage] = useState<SetNewPasswordMessageType>(null);
   const history = useHistory();
+  const { policy } = usePasswordContext();
+
+  const submit = ({ password }: SetNewPasswordFormValues) => {
+    setPopoverOpen(false);
+    setSubmitting(true);
+    setError(null);
+    setMessage(null);
+    AuthenticationService.resetPassword(email, password, code)
+      .then(() => {
+        setSubmitting(false);
+        history.push('/iniciar-sesion?message=resetPasswordSucceeded');
+      })
+      .catch(error => {
+        if (error.code === 'InvalidCodeException') {
+          setMessage('expiredCode');
+        } else {
+          setError(error.message);
+        }
+        setSubmitting(false);
+      });
+  };
 
   let passwordPolicy = Yup.string().required('Introduce tu contraseña');
 
@@ -50,45 +75,22 @@ const SignUp: React.FC<{}> = () => {
     );
   }
 
-  const schema: Yup.ObjectSchema<SignUpFormValues> = Yup.object().shape({
-    password: passwordPolicy,
-    email: Yup.string()
-      .required('Introduce tu email')
-      .email('No es una dirección de email válida'),
-  });
+  const schema: Yup.ObjectSchema<SetNewPasswordFormValues> = Yup.object().shape(
+    {
+      password: passwordPolicy,
+    }
+  );
 
   const openPopover = () => setPopoverOpen(true);
   const closePopover = () => setPopoverOpen(false);
-
-  const submit = ({ email, password }: SignUpFormValues) => {
-    setSubmitting(true);
-    closePopover();
-    AuthenticationService.signUp(email, password)
-      .then(() => {
-        history.push('/iniciar-sesion?message=registered&email=' + email);
-        setSubmitting(false);
-      })
-      .catch(error => {
-        console.log(error);
-        setError(error.message);
-        setSubmitting(false);
-      });
-  };
 
   return (
     <EuiFlexGroup direction="column" alignItems="center" responsive={false}>
       <EuiFlexItem grow={false}>
         <EuiText size="m" textAlign="center">
           <EuiTitle size="m">
-            <h2>Crear una cuenta</h2>
+            <h2>Restaurar contraseña</h2>
           </EuiTitle>
-        </EuiText>
-      </EuiFlexItem>
-      <EuiSpacer size="xs" />
-      <EuiFlexItem grow={false}>
-        <EuiText size="s" textAlign="center">
-          ¿Ya te has registrado?{' '}
-          <EuiCustomLink to="/iniciar-sesion">Inicia sesión</EuiCustomLink>
         </EuiText>
       </EuiFlexItem>
       <EuiFlexItem grow={false}>
@@ -106,6 +108,8 @@ const SignUp: React.FC<{}> = () => {
             handleBlur,
           }) => (
             <EuiForm component="form" onSubmit={handleSubmit}>
+              <EuiText size="s">Introduce tu nueva contraseña</EuiText>
+              <EuiSpacer />
               {!!error && (
                 <>
                   <EuiCallOut color="danger" title="Ha habido un error">
@@ -114,23 +118,17 @@ const SignUp: React.FC<{}> = () => {
                   <EuiSpacer />
                 </>
               )}
-              <EuiFormRow
-                label="Email"
-                isInvalid={errors.email && touched.email}
-                error={errors.email}
-              >
-                <EuiFieldText
-                  name="email"
-                  type="text"
-                  value={values.email}
-                  onChange={handleChange}
-                  icon="email"
-                />
-              </EuiFormRow>
+              {!error && !!message && (
+                <>
+                  <SetNewPasswordMessage type={message} email={email} />
+                  <EuiSpacer />
+                </>
+              )}
               <EuiFormRow
                 label="Contraseña"
                 isInvalid={errors.password && touched.password}
                 error={errors.password}
+                fullWidth
               >
                 <EuiInputPopover
                   isOpen={popoverOpen}
@@ -152,30 +150,25 @@ const SignUp: React.FC<{}> = () => {
                   <PasswordChecker password={values.password} />
                 </EuiInputPopover>
               </EuiFormRow>
-              <EuiSpacer size="xl" />
-              <EuiFormRow>
-                <EuiButton
-                  type="submit"
-                  color="primary"
-                  fill
-                  isLoading={submitting}
-                  fullWidth
-                >
-                  Crear cuenta
-                </EuiButton>
-              </EuiFormRow>
-              <EuiFormRow>
-                <EuiText color="subdued" size="s">
-                  Al registrarte, confirmas haber leído y aceptado nuestros{' '}
-                  <EuiLink
-                    href="https://descargas.uned.es/publico/pdf/Politica_privacidad_UNED.pdf"
-                    target="blank"
+              <EuiSpacer />
+              <EuiFlexGroup direction="row">
+                <EuiFlexItem>
+                  <EuiButton
+                    type="submit"
+                    color="primary"
+                    fill
+                    isLoading={submitting}
+                    fullWidth
                   >
-                    Términos de Servicio
-                  </EuiLink>
-                  .
-                </EuiText>
-              </EuiFormRow>
+                    Restaurar contraseña
+                  </EuiButton>
+                </EuiFlexItem>
+                <EuiFlexItem>
+                  <EuiCustomLink to="/iniciar-sesion">
+                    <EuiButtonEmpty>Cancelar</EuiButtonEmpty>
+                  </EuiCustomLink>
+                </EuiFlexItem>
+              </EuiFlexGroup>
             </EuiForm>
           )}
         </Formik>
@@ -184,4 +177,4 @@ const SignUp: React.FC<{}> = () => {
   );
 };
 
-export default SignUp;
+export default SetNewPassword;

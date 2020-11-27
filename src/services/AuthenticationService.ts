@@ -51,6 +51,30 @@ class AuthenticationService {
     }
   }
 
+  public static async requestResetPassword(email: string) : Promise<void> {
+    try {
+      await Auth.forgotPassword(email);
+      return Promise.resolve();
+    }
+    catch(e) {
+      console.log(e);
+      if (e.code === 'UserNotFoundException') {
+        e.message = 'Usuario no registrado';
+      }
+      else if (e.code === 'InvalidParameterException' && e.message.includes('registered/verified')) {
+        e.code = 'UserNotConfirmedException';
+        e.message = 'Usuario no confirmado';
+      }
+      else if (e.code === 'NetworkError') {
+        e.message = 'No hay conexión a Internet';
+      }
+      else {
+        e.message = 'Error interno';
+      }
+      return Promise.reject(e);
+    }
+  };
+
   public static async resendConfirmationMessage(email: string): Promise<string> {
     try {
       const response = await Auth.resendSignUp(email);
@@ -73,6 +97,29 @@ class AuthenticationService {
       return Promise.reject(e);
     }
   }
+
+  public static async resetPassword(email: string, password: string, code: string) : Promise<void> {
+    try {
+      await Auth.forgotPasswordSubmit(email, code, password);
+    }
+    catch(e) {
+      console.log(e);
+      if(e.code === 'CodeMismatchException' || e.code === 'ExpiredCodeException') {
+        e.code = 'InvalidCodeException';
+        e.message = 'Código inválido o caducado';
+      }
+      else if(e.code === 'UserNotFoundException') {
+        e.message = 'El usuario especificado no existe';
+      }
+      else if (e.code === 'NetworkError') {
+        e.message = 'No hay conexión a Internet';
+      }
+      else {
+        e.message = 'Error interno';
+      }
+      return Promise.reject(e);
+    }
+  };
 
   public static async signUp(email: string, password: string): Promise<ISignUpResult> {
     try {

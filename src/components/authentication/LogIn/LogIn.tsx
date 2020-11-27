@@ -20,7 +20,7 @@ import * as Yup from 'yup';
 
 import useLogin from '../../../hooks/useLogin';
 import AuthenticationService from '../../../services/AuthenticationService';
-import EuiCustomLink from '../../common/EuiCustomLink';
+import EuiCustomLink from '../../common/eui/EuiCustomLink';
 import LogInMessage, { LogInMessageType } from './LogInMessage/LogInMessage';
 
 type LogInFormValues = {

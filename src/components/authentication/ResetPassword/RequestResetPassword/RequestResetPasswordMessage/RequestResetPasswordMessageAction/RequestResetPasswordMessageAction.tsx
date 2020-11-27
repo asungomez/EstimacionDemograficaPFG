@@ -2,23 +2,22 @@ import { EuiButton } from '@elastic/eui';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import AuthenticationService from '../../../../../services/AuthenticationService';
+import AuthenticationService from '../../../../../../services/AuthenticationService';
 
-export type LogInMessageActionType =
+export type RequestResetPasswordMessageActionType =
   | 'resendConfirmationMail'
-  | 'register'
-  | 'resendPasswordMail';
+  | 'register';
 
-type LogInMessageActionDescription = {
-  [action in LogInMessageActionType]: {
+type RequestResetPasswordMessageActionDescription = {
+  [action in RequestResetPasswordMessageActionType]: {
     icon: string;
     action: () => void;
     text: string;
   };
 };
 
-export type LogInMessageActionProps = {
-  type: LogInMessageActionType;
+export type RequestResetPasswordMessageActionProps = {
+  type: RequestResetPasswordMessageActionType;
   email?: string;
   color: 'primary' | 'success' | 'warning' | 'danger';
   onError: (message: string) => void;
@@ -30,7 +29,7 @@ const mapColor = (
 ): 'primary' | 'text' | 'warning' | 'danger' =>
   color === 'success' ? 'text' : color;
 
-const LogInMessageAction: React.FC<LogInMessageActionProps> = ({
+const RequestResetPasswordMessageAction: React.FC<RequestResetPasswordMessageActionProps> = ({
   type,
   email,
   onError,
@@ -63,28 +62,9 @@ const LogInMessageAction: React.FC<LogInMessageActionProps> = ({
     }
   };
 
-  const resendPasswordEmail = () => {
-    if (email) {
-      setLoading(true);
-      AuthenticationService.requestResetPassword(email)
-        .then(() => {
-          setLoading(false);
-          onSuccess(
-            'Mensaje enviado con éxito, consulta tu bandeja de entrada'
-          );
-        })
-        .catch(error => {
-          setLoading(false);
-          onError(error.message);
-        });
-    } else {
-      onError('No se pudo enviar el mensaje');
-    }
-  };
-
   const goToSignUp = () => history.push('/registro');
 
-  const actions: LogInMessageActionDescription = {
+  const actions: RequestResetPasswordMessageActionDescription = {
     resendConfirmationMail: {
       icon: 'refresh',
       action: resendConfirmationEmail,
@@ -94,11 +74,6 @@ const LogInMessageAction: React.FC<LogInMessageActionProps> = ({
       icon: 'user',
       action: goToSignUp,
       text: 'Crear nueva cuenta',
-    },
-    resendPasswordMail: {
-      icon: 'refresh',
-      action: resendPasswordEmail,
-      text: 'Enviar de nuevo',
     },
   };
 
@@ -114,4 +89,4 @@ const LogInMessageAction: React.FC<LogInMessageActionProps> = ({
   );
 };
 
-export default LogInMessageAction;
+export default RequestResetPasswordMessageAction;
