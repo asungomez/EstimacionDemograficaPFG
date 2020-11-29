@@ -30,7 +30,7 @@ const Header: React.FC<{}> = () => {
       .then(() => {
         userHasAuthenticated(false);
       })
-      .catch(() => { });
+      .catch(() => {});
   };
 
   return (
@@ -38,7 +38,9 @@ const Header: React.FC<{}> = () => {
       <EuiHeaderSection grow side="left">
         <EuiHeaderSectionItem>
           <EuiCustomLink to="/panel">
-            <EuiHeaderLogo iconType={logo}>Estimación demográfica</EuiHeaderLogo>
+            <EuiHeaderLogo iconType={logo}>
+              Estimación demográfica
+            </EuiHeaderLogo>
           </EuiCustomLink>
         </EuiHeaderSectionItem>
       </EuiHeaderSection>

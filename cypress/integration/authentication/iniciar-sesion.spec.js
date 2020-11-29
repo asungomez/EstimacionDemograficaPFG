@@ -1,16 +1,5 @@
 import selectors from "../../common/selectors";
-
-const login = (usuario) => {
-  cy.visit('/iniciar-sesion');
-  if(usuario && usuario.email && usuario.email.length > 0) {
-    cy.get('input[name="email"]').type(usuario.email);
-  }
-  if(usuario && usuario.password && usuario.password.length > 0) {
-    cy.get('input[name="password"]').type(usuario.password);
-  }
-  cy.get('form').submit();
-  cy.wait(3000);
-};
+import { login } from "../../common/actions";
 
 describe('Iniciar sesion', () => {
   describe('Con un usuario registrado y confirmado', () => {

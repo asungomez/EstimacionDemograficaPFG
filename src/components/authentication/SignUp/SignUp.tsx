@@ -166,12 +166,12 @@ const SignUp: React.FC<{}> = () => {
               </EuiFormRow>
               <EuiFormRow>
                 <EuiText color="subdued" size="s">
-                  Al registrarte, confirmas haber leído y aceptado nuestros{' '}
+                  Al registrarte, confirmas haber leído y aceptado nuestra{' '}
                   <EuiLink
                     href="https://descargas.uned.es/publico/pdf/Politica_privacidad_UNED.pdf"
                     target="blank"
                   >
-                    Términos de Servicio
+                    Política de Privacidad
                   </EuiLink>
                   .
                 </EuiText>

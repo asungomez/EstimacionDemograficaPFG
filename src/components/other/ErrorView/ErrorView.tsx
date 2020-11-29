@@ -42,7 +42,7 @@ const ErrorView: React.FC<{}> = () => {
       setLoading(true);
       AuthenticationService.resendConfirmationMessage(email)
         .then(() => {
-          history.push('/iniciar-sesion?message=registered?email=' + email);
+          history.push('/iniciar-sesion?message=registered&email=' + email);
         })
         .catch(error => {
           if (error.code === 'AlreadyConfirmed') {
