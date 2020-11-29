@@ -13,6 +13,7 @@ import {
   EuiPopoverTitle,
 } from '@elastic/eui';
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import logo from '../../../../assets/images/logo_uned.svg';
 import { useAuthenticationContext } from '../../../../contexts/AuthenticationContext';
@@ -22,6 +23,7 @@ import EuiCustomLink from '../../../common/eui/EuiCustomLink';
 const Header: React.FC<{}> = () => {
   const [popoverOpen, setPopoverOpen] = useState(false);
   const { userHasAuthenticated, user } = useAuthenticationContext();
+  const history = useHistory();
 
   const togglePopover = () => setPopoverOpen(open => !open);
 
@@ -37,11 +39,9 @@ const Header: React.FC<{}> = () => {
     <EuiHeader position="static">
       <EuiHeaderSection grow side="left">
         <EuiHeaderSectionItem>
-          <EuiCustomLink to="/panel">
-            <EuiHeaderLogo iconType={logo}>
-              Estimación demográfica
-            </EuiHeaderLogo>
-          </EuiCustomLink>
+          <EuiHeaderLogo iconType={logo} onClick={() => history.push('/panel')}>
+            Estimación demográfica
+          </EuiHeaderLogo>
         </EuiHeaderSectionItem>
       </EuiHeaderSection>
       <EuiHeaderSection grow={false} side="right">

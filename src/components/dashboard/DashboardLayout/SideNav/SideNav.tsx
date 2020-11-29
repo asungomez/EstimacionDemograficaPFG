@@ -1,7 +1,7 @@
 import { EuiSideNav } from '@elastic/eui';
 import React, { useState } from 'react';
 
-const SideNav : React.FC<{}> = () => {
+const SideNav: React.FC<{}> = () => {
   const [isSideNavOpenOnMobile, setisSideNavOpenOnMobile] = useState(false);
 
   const toggleOpenOnMobile = () => {
@@ -44,13 +44,13 @@ const SideNav : React.FC<{}> = () => {
   ];
 
   return (
-    <EuiSideNav 
+    <EuiSideNav
       className="side-nav"
       toggleOpenOnMobile={() => toggleOpenOnMobile()}
       isOpenOnMobile={isSideNavOpenOnMobile}
       items={menuItems}
     />
-  )
+  );
 };
 
 export default SideNav;
