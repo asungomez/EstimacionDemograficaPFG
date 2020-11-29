@@ -17,6 +17,7 @@ import React, { useState } from 'react';
 import logo from '../../../../assets/images/logo_uned.svg';
 import { useAuthenticationContext } from '../../../../contexts/AuthenticationContext';
 import AuthenticationService from '../../../../services/AuthenticationService';
+import EuiCustomLink from '../../../common/eui/EuiCustomLink';
 
 const Header: React.FC<{}> = () => {
   const [popoverOpen, setPopoverOpen] = useState(false);
@@ -29,14 +30,16 @@ const Header: React.FC<{}> = () => {
       .then(() => {
         userHasAuthenticated(false);
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   return (
     <EuiHeader position="static">
       <EuiHeaderSection grow side="left">
         <EuiHeaderSectionItem>
-          <EuiHeaderLogo iconType={logo}>Estimación demográfica</EuiHeaderLogo>
+          <EuiCustomLink to="/panel">
+            <EuiHeaderLogo iconType={logo}>Estimación demográfica</EuiHeaderLogo>
+          </EuiCustomLink>
         </EuiHeaderSectionItem>
       </EuiHeaderSection>
       <EuiHeaderSection grow={false} side="right">
@@ -58,9 +61,11 @@ const Header: React.FC<{}> = () => {
               {user.email}
             </EuiPopoverTitle>
             <EuiFlexGroup direction="column" alignItems="flexStart">
-              <EuiButtonEmpty color="text" iconType="user">
-                Perfil
-              </EuiButtonEmpty>
+              <EuiCustomLink to="/panel/cuenta">
+                <EuiButtonEmpty color="text" iconType="user">
+                  Perfil
+                </EuiButtonEmpty>
+              </EuiCustomLink>
               <EuiButtonEmpty color="text" iconType="exit" onClick={logOut}>
                 Cerrar sesión
               </EuiButtonEmpty>

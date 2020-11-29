@@ -14,7 +14,7 @@ const login = (usuario) => {
 
 describe('Iniciar sesion', () => {
   describe('Con un usuario registrado y confirmado', () => {
-    it('redirige al dashboard', () => {
+    it('redirige al panel', () => {
       cy.fixture('usuarios').then(({validoConfirmado: usuario}) => {
         login(usuario);
         cy.waitUntil(() => {
@@ -22,7 +22,7 @@ describe('Iniciar sesion', () => {
             .get(selectors.spinner)
             .should('not.exist')
             .then(() => {
-              return cy.url().should('contain', 'dashboard');
+              return cy.url().should('contain', 'panel');
             });
         });
       });

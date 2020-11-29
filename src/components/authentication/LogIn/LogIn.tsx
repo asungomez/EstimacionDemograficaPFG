@@ -48,7 +48,7 @@ const LogIn: React.FC<{}> = () => {
     new URLSearchParams(location.search).get('message') as LogInMessageType
   );
   const email = new URLSearchParams(location.search).get('email');
-  const logIn = useLogin('/dashboard');
+  const logIn = useLogin('/panel');
 
   const submit = (values: LogInFormValues) => {
     setError(null);

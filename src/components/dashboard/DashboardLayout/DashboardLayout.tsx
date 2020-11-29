@@ -1,6 +1,7 @@
 import { EuiPage } from '@elastic/eui';
 import React from 'react';
 
+import DashboardRouter from '../../../routers/DashboardRouter';
 import Header from './Header/Header';
 
 const DashboardLayout: React.FC<{}> = () => (
@@ -8,7 +9,9 @@ const DashboardLayout: React.FC<{}> = () => (
     <header>
       <Header />
     </header>
-    <EuiPage>Dashboard</EuiPage>
+    <EuiPage>
+      <DashboardRouter />
+    </EuiPage>
   </div>
 );
 

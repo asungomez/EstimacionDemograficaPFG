@@ -10,7 +10,7 @@ const useLogin = (redirect: string) => {
     AuthenticationService.getUserAttributes().then((attributes: any) => {
       setUser(attributes);
       userHasAuthenticated(true);
-      history.push(redirect || '/dashboard');
+      history.push(redirect || '/panel');
     });
   };
   return execute;

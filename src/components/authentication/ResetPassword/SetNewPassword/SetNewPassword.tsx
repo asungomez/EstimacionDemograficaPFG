@@ -47,7 +47,7 @@ const SetNewPassword: React.FC<SetNewPasswordProps> = ({ email, code }) => {
   const { policy } = usePasswordContext();
 
   const submit = ({ password }: SetNewPasswordFormValues) => {
-    setPopoverOpen(false);
+    closePopover();
     setSubmitting(true);
     setError(null);
     setMessage(null);
