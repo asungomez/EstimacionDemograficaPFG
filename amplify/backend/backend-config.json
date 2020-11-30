@@ -36,6 +36,20 @@
           ]
         }
       ]
+    },
+    "updateProfile": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": [
+        {
+          "category": "auth",
+          "resourceName": "demografiapfgee9e612f",
+          "attributes": [
+            "UserPoolId"
+          ]
+        }
+      ]
     }
   },
   "api": {
@@ -46,6 +60,14 @@
         {
           "category": "function",
           "resourceName": "validateAccount",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        },
+        {
+          "category": "function",
+          "resourceName": "updateProfile",
           "attributes": [
             "Name",
             "Arn"

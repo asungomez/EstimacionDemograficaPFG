@@ -1,8 +1,9 @@
 import { Auth } from 'aws-amplify';
-import { User } from '../models/User';
-import { mapCognitoAttributes } from './utils/AuthenticationServiceMappings';
+import { User } from '../../models/User';
+import { mapCognitoAttributes, mapUserAttributesRequest } from './utils/AuthenticationServiceMappings';
 import { CognitoUser, ISignUpResult } from 'amazon-cognito-identity-js';
-import { AccountSettingsUserAttributesValues } from '../components/dashboard/AccountSettings/AccountSettingsUserAttributes/AccountSettingsUserAttributes';
+import { AccountSettingsUserAttributesValues } from '../../components/dashboard/AccountSettings/AccountSettingsUserAttributes/AccountSettingsUserAttributes';
+import ApiService from '../ApiService/ApiService';
 
 class AuthenticationService {
   public static async checkAuthentication(): Promise<any> {
@@ -150,7 +151,18 @@ class AuthenticationService {
   }
 
   public static async updateUserProfile({firstName, lastName}: AccountSettingsUserAttributesValues) : Promise<void> {
-    return Promise.resolve();
+    try {
+      await ApiService.put('/account/update-profile', mapUserAttributesRequest(firstName, lastName));
+    }
+    catch(e) {
+      if (e.code === 'NetworkError') {
+        e.message = 'No hay conexión a Internet';
+      }
+      else {
+        e.message = 'Error interno';
+      }
+      return Promise.reject(e);
+    }
   }
 };
 

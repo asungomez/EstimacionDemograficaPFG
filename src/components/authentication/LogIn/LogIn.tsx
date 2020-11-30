@@ -21,7 +21,7 @@ import { useLocation } from 'react-router-dom';
 import * as Yup from 'yup';
 
 import useLogin from '../../../hooks/useLogin';
-import AuthenticationService from '../../../services/AuthenticationService';
+import AuthenticationService from '../../../services/AuthenticationService/AuthenticationService';
 import EuiCustomLink from '../../common/eui/EuiCustomLink';
 import LogInMessage, { LogInMessageType } from './LogInMessage/LogInMessage';
 

@@ -2,7 +2,7 @@ import { EuiButton } from '@elastic/eui';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import AuthenticationService from '../../../../../services/AuthenticationService';
+import AuthenticationService from '../../../../../services/AuthenticationService/AuthenticationService';
 
 export type LogInMessageActionType =
   | 'resendConfirmationMail'

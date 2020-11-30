@@ -8,7 +8,7 @@ import {
 import React, { useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 
-import AuthenticationService from '../../../services/AuthenticationService';
+import AuthenticationService from '../../../services/AuthenticationService/AuthenticationService';
 import EuiCustomLink from '../../common/eui/EuiCustomLink';
 import EuiError from '../../common/eui/EuiError';
 

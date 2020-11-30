@@ -17,7 +17,7 @@ import { useHistory } from 'react-router-dom';
 
 import logo from '../../../../assets/images/logo_uned.svg';
 import { useAuthenticationContext } from '../../../../contexts/AuthenticationContext';
-import AuthenticationService from '../../../../services/AuthenticationService';
+import AuthenticationService from '../../../../services/AuthenticationService/AuthenticationService';
 import EuiCustomLink from '../../../common/eui/EuiCustomLink';
 
 const Header: React.FC<{}> = () => {

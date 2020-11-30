@@ -14,8 +14,13 @@ import { Formik } from 'formik';
 import React, { useState } from 'react';
 import * as Yup from 'yup';
 
-import AuthenticationService from '../../../../services/AuthenticationService';
+import { useAuthenticationContext } from '../../../../contexts/AuthenticationContext';
+import AuthenticationService from '../../../../services/AuthenticationService/AuthenticationService';
 import EuiError from '../../../common/eui/EuiError';
+
+export type AccountSettingsUserAttributesProps = {
+  onSuccess: (message: string) => void;
+};
 
 type AccountSettingsUserAttributesFields = 'firstName' | 'lastName';
 
@@ -30,14 +35,18 @@ const schema: Yup.ObjectSchema<AccountSettingsUserAttributesValues> = Yup.object
   }
 );
 
-const AccountSettingsUserAttributes: React.FC<{}> = () => {
+const AccountSettingsUserAttributes: React.FC<AccountSettingsUserAttributesProps> = ({
+  onSuccess,
+}) => {
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string>(null);
   const [editing, setEditing] = useState(false);
 
+  const { user, setUser } = useAuthenticationContext();
+
   const initialValues: AccountSettingsUserAttributesValues = {
-    firstName: '',
-    lastName: '',
+    firstName: user.name,
+    lastName: user.familyName,
   };
 
   const submit = (values: AccountSettingsUserAttributesValues) => {
@@ -45,7 +54,15 @@ const AccountSettingsUserAttributes: React.FC<{}> = () => {
     setSubmitError(null);
     AuthenticationService.updateUserProfile(values)
       .then(() => {
-        // TODO success
+        onSuccess('Perfil actualizado');
+        const newUser = { ...user };
+        if (values.firstName && values.firstName.length > 0) {
+          newUser.name = values.firstName;
+        }
+        if (values.lastName && values.lastName.length > 0) {
+          newUser.familyName = values.lastName;
+        }
+        setUser(newUser);
         setEditing(false);
         setSubmitting(false);
       })
@@ -70,6 +87,7 @@ const AccountSettingsUserAttributes: React.FC<{}> = () => {
         initialValues[field as AccountSettingsUserAttributesFields]
       );
     }
+    setSubmitError(null);
     setEditing(false);
   };
 
@@ -98,7 +116,12 @@ const AccountSettingsUserAttributes: React.FC<{}> = () => {
               </EuiText>
             }
           >
-            {submitError && <EuiError error={submitError} />}
+            {submitError && (
+              <>
+                <EuiError error={submitError} />
+                <EuiSpacer />
+              </>
+            )}
             <EuiFormRow
               label="Nombre"
               isInvalid={errors.firstName && touched.firstName}

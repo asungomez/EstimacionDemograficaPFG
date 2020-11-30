@@ -16,7 +16,7 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import * as Yup from 'yup';
 
-import AuthenticationService from '../../../../services/AuthenticationService';
+import AuthenticationService from '../../../../services/AuthenticationService/AuthenticationService';
 import EuiCustomLink from '../../../common/eui/EuiCustomLink';
 import RequestResetPasswordMessage, {
   RequestResetPasswordMessageType,

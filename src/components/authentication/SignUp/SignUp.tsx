@@ -19,7 +19,7 @@ import { useHistory } from 'react-router-dom';
 import * as Yup from 'yup';
 
 import { usePasswordContext } from '../../../contexts/PasswordContext';
-import AuthenticationService from '../../../services/AuthenticationService';
+import AuthenticationService from '../../../services/AuthenticationService/AuthenticationService';
 import EuiCustomLink from '../../common/eui/EuiCustomLink';
 import PasswordChecker from './PasswodChecker/PasswordChecker';
 
