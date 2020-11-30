@@ -1,5 +1,15 @@
-import { EuiPageContentHeaderSection, EuiPageHeader, EuiTitle } from '@elastic/eui';
+import {
+  EuiFlexGroup,
+  EuiFlexItem,
+  EuiHorizontalRule,
+  EuiPageContentHeaderSection,
+  EuiPageHeader,
+  EuiSpacer,
+  EuiTitle,
+} from '@elastic/eui';
 import React from 'react';
+
+import AccountSettingsUserAttributes from './AccountSettingsUserAttributes/AccountSettingsUserAttributes';
 
 const AccountSettings: React.FC<{}> = () => {
   return (
@@ -11,6 +21,13 @@ const AccountSettings: React.FC<{}> = () => {
           </EuiTitle>
         </EuiPageContentHeaderSection>
       </EuiPageHeader>
+      <EuiFlexGroup direction="column" responsive={false}>
+        <EuiSpacer />
+        <EuiFlexItem grow={false}>
+          <AccountSettingsUserAttributes />
+        </EuiFlexItem>
+        <EuiHorizontalRule />
+      </EuiFlexGroup>
     </>
   );
 };

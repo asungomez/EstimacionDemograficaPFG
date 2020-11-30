@@ -2,6 +2,7 @@ import { Auth } from 'aws-amplify';
 import { User } from '../models/User';
 import { mapCognitoAttributes } from './utils/AuthenticationServiceMappings';
 import { CognitoUser, ISignUpResult } from 'amazon-cognito-identity-js';
+import { AccountSettingsUserAttributesValues } from '../components/dashboard/AccountSettings/AccountSettingsUserAttributes/AccountSettingsUserAttributes';
 
 class AuthenticationService {
   public static async checkAuthentication(): Promise<any> {
@@ -146,6 +147,10 @@ class AuthenticationService {
       }
       return Promise.reject(e);
     }
+  }
+
+  public static async updateUserProfile({firstName, lastName}: AccountSettingsUserAttributesValues) : Promise<void> {
+    return Promise.resolve();
   }
 };
 
