@@ -13,14 +13,17 @@ import {
   EuiPopoverTitle,
 } from '@elastic/eui';
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import logo from '../../../../assets/images/logo_uned.svg';
 import { useAuthenticationContext } from '../../../../contexts/AuthenticationContext';
-import AuthenticationService from '../../../../services/AuthenticationService';
+import AuthenticationService from '../../../../services/AuthenticationService/AuthenticationService';
+import EuiCustomLink from '../../../common/eui/EuiCustomLink';
 
 const Header: React.FC<{}> = () => {
   const [popoverOpen, setPopoverOpen] = useState(false);
   const { userHasAuthenticated, user } = useAuthenticationContext();
+  const history = useHistory();
 
   const togglePopover = () => setPopoverOpen(open => !open);
 
@@ -36,7 +39,9 @@ const Header: React.FC<{}> = () => {
     <EuiHeader position="static">
       <EuiHeaderSection grow side="left">
         <EuiHeaderSectionItem>
-          <EuiHeaderLogo iconType={logo}>Estimación demográfica</EuiHeaderLogo>
+          <EuiHeaderLogo iconType={logo} onClick={() => history.push('/panel')}>
+            Estimación demográfica
+          </EuiHeaderLogo>
         </EuiHeaderSectionItem>
       </EuiHeaderSection>
       <EuiHeaderSection grow={false} side="right">
@@ -58,9 +63,11 @@ const Header: React.FC<{}> = () => {
               {user.email}
             </EuiPopoverTitle>
             <EuiFlexGroup direction="column" alignItems="flexStart">
-              <EuiButtonEmpty color="text" iconType="user">
-                Perfil
-              </EuiButtonEmpty>
+              <EuiCustomLink to="/panel/cuenta">
+                <EuiButtonEmpty color="text" iconType="user">
+                  Perfil
+                </EuiButtonEmpty>
+              </EuiCustomLink>
               <EuiButtonEmpty color="text" iconType="exit" onClick={logOut}>
                 Cerrar sesión
               </EuiButtonEmpty>

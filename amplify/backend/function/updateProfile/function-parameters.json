@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "auth": {
+      "demografiapfgee9e612f": [
+        "update"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}

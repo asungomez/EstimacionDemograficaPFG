@@ -8,7 +8,7 @@ import {
 import React, { useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 
-import AuthenticationService from '../../../services/AuthenticationService';
+import AuthenticationService from '../../../services/AuthenticationService/AuthenticationService';
 import EuiCustomLink from '../../common/eui/EuiCustomLink';
 import EuiError from '../../common/eui/EuiError';
 
@@ -42,7 +42,7 @@ const ErrorView: React.FC<{}> = () => {
       setLoading(true);
       AuthenticationService.resendConfirmationMessage(email)
         .then(() => {
-          history.push('/iniciar-sesion?message=registered?email=' + email);
+          history.push('/iniciar-sesion?message=registered&email=' + email);
         })
         .catch(error => {
           if (error.code === 'AlreadyConfirmed') {

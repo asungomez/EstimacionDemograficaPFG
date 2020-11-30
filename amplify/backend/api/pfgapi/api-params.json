@@ -7,6 +7,17 @@
                 "open": true
             },
             "policyResourceName": "/accounts/validate"
+        },
+        {
+            "name": "/account/update-profile",
+            "lambdaFunction": "updateProfile",
+            "privacy": {
+                "private": true,
+                "auth": [
+                    "/PUT",
+                    "/PATCH"
+                ]
+            }
         }
     ],
     "resourceName": "pfgapi",
@@ -14,10 +25,13 @@
     "functionArns": [
         {
             "lambdaFunction": "validateAccount"
+        },
+        {
+            "lambdaFunction": "updateProfile"
         }
     ],
     "privacy": {
-        "auth": 0,
+        "auth": 1,
         "unauth": 0,
         "authRoleName": "amplify-demografiapfg-dev-112954-authRole",
         "unAuthRoleName": "amplify-demografiapfg-dev-112954-unauthRole"
@@ -30,6 +44,15 @@
                 "Name",
                 "Arn"
             ]
+        },
+        {
+            "category": "function",
+            "resourceName": "updateProfile",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
         }
-    ]
+    ],
+    "uuid": "ba7762cc"
 }

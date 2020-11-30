@@ -10,7 +10,7 @@ export type PasswordContextType = {
   policy: PasswordRequirement[];
 };
 
-const minPasswordLength = 6;
+const minPasswordLength = 12;
 
 export const PasswordContext = createContext<PasswordContextType>({
   policy: [

@@ -16,7 +16,7 @@ const AppRouter: React.FC<{}> = () => {
       >
         <AuthenticationLayout />
       </UnauthenticatedRoute>
-      <AuthenticatedRoute path={['/dashboard']}>
+      <AuthenticatedRoute path={['/panel']}>
         <DashboardLayout />
       </AuthenticatedRoute>
       <Route path="/error">

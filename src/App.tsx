@@ -4,7 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { AuthenticationContext } from './contexts/AuthenticationContext';
 import { User } from './models/User';
 import AppRouter from './routers/AppRouter';
-import AuthenticationService from './services/AuthenticationService';
+import AuthenticationService from './services/AuthenticationService/AuthenticationService';
 
 const App: React.FC<{}> = () => {
   const [isAuthenticated, userHasAuthenticated] = useState(false);
