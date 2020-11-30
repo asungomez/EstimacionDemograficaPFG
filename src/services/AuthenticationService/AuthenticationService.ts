@@ -34,6 +34,10 @@ class AuthenticationService {
       } else if (error.code === 'UserNotConfirmedException') {
         error.message = 'Necesitas confirmar tu dirección de email para iniciar sesión';
       }
+      else if(error.code === 'NotAuthorizedException') {
+        error.code = 'WrongUsernameOrPassword';
+        error.message = 'El nombre de usuario no existe o la contraseña no es correcta';
+      }
       else if(error.code === 'NetworkError'){
         error.message = 'No hay conexión a Internet';
       }
@@ -150,12 +154,19 @@ class AuthenticationService {
     }
   }
 
-  public static async updateUserProfile({firstName, lastName}: AccountSettingsUserAttributesValues) : Promise<void> {
+  public static async updateUserProfile({firstName, lastName, email, password}: AccountSettingsUserAttributesValues) : Promise<void> {
     try {
-      await ApiService.put('/account/update-profile', mapUserAttributesRequest(firstName, lastName));
+      if (email && password) {
+        const {email: currentEmail} = await this.getUserAttributes();
+        await this.logIn(currentEmail, password);
+      }
+      await ApiService.put('/account/update-profile', mapUserAttributesRequest(firstName, lastName, email));
     }
     catch(e) {
-      if (e.code === 'NetworkError') {
+      if (e.code === 'WrongUsernameOrPassword') {
+        e.message = 'Contraseña incorrecta';
+      }
+      else if (e.code === 'NetworkError') {
         e.message = 'No hay conexión a Internet';
       }
       else {

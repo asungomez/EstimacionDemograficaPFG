@@ -2,6 +2,7 @@ import {
   EuiButton,
   EuiButtonEmpty,
   EuiDescribedFormGroup,
+  EuiFieldPassword,
   EuiFieldText,
   EuiFlexGroup,
   EuiFlexItem,
@@ -10,7 +11,7 @@ import {
   EuiSpacer,
   EuiText,
 } from '@elastic/eui';
-import { Formik } from 'formik';
+import { Formik, FormikHelpers } from 'formik';
 import React, { useState } from 'react';
 import * as Yup from 'yup';
 
@@ -22,16 +23,31 @@ export type AccountSettingsUserAttributesProps = {
   onSuccess: (message: string) => void;
 };
 
-type AccountSettingsUserAttributesFields = 'firstName' | 'lastName';
+type AccountSettingsUserAttributesFields =
+  | 'firstName'
+  | 'lastName'
+  | 'email'
+  | 'password';
 
 export type AccountSettingsUserAttributesValues = {
   [field in AccountSettingsUserAttributesFields]?: string;
 };
 
-const schema: Yup.ObjectSchema<AccountSettingsUserAttributesValues> = Yup.object().shape(
+const schemaWithoutEmail: Yup.ObjectSchema<AccountSettingsUserAttributesValues> = Yup.object().shape(
   {
     firstName: Yup.string(),
     lastName: Yup.string(),
+  }
+);
+
+const schemaWithEmail: Yup.ObjectSchema<AccountSettingsUserAttributesValues> = Yup.object().shape(
+  {
+    firstName: Yup.string(),
+    lastName: Yup.string(),
+    email: Yup.string()
+      .required('El campo email no puede estar en blanco')
+      .email('Debes introducir un email válido'),
+    password: Yup.string().required('Debes introducir tu contraseña actual'),
   }
 );
 
@@ -41,29 +57,65 @@ const AccountSettingsUserAttributes: React.FC<AccountSettingsUserAttributesProps
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string>(null);
   const [editing, setEditing] = useState(false);
+  const [editingEmail, setEditingEmail] = useState(false);
 
   const { user, setUser } = useAuthenticationContext();
 
   const initialValues: AccountSettingsUserAttributesValues = {
-    firstName: user.name,
-    lastName: user.familyName,
+    firstName: user.name ? user.name : '',
+    lastName: user.familyName ? user.familyName : '',
+    email: user.email ? user.email : '',
+    password: '',
   };
 
-  const submit = (values: AccountSettingsUserAttributesValues) => {
+  const submit = (
+    values: AccountSettingsUserAttributesValues,
+    { setFieldValue }: FormikHelpers<AccountSettingsUserAttributesValues>
+  ) => {
     setSubmitting(true);
     setSubmitError(null);
-    AuthenticationService.updateUserProfile(values)
+    const updatedValues = { ...values };
+    if (
+      !(
+        values.firstName &&
+        values.firstName.length > 0 &&
+        values.firstName !== user.name
+      )
+    ) {
+      updatedValues.firstName = '';
+    }
+    if (
+      !(
+        values.lastName &&
+        values.lastName.length > 0 &&
+        values.lastName !== user.familyName
+      )
+    ) {
+      updatedValues.lastName = '';
+    }
+    if (
+      !(values.email && values.email.length > 0 && values.email !== user.email)
+    ) {
+      updatedValues.email = '';
+    }
+    AuthenticationService.updateUserProfile(updatedValues)
       .then(() => {
         onSuccess('Perfil actualizado');
         const newUser = { ...user };
-        if (values.firstName && values.firstName.length > 0) {
-          newUser.name = values.firstName;
+        if (updatedValues.firstName && updatedValues.firstName.length > 0) {
+          newUser.name = updatedValues.firstName;
         }
-        if (values.lastName && values.lastName.length > 0) {
-          newUser.familyName = values.lastName;
+        if (updatedValues.lastName && updatedValues.lastName.length > 0) {
+          newUser.familyName = updatedValues.lastName;
+        }
+        if (updatedValues.email && updatedValues.email.length > 0) {
+          setFieldValue('email', user.email);
+          setFieldValue('password', '');
+          // TODO display message about confirmation
         }
         setUser(newUser);
         setEditing(false);
+        setEditingEmail(false);
         setSubmitting(false);
       })
       .catch(error => {
@@ -77,6 +129,9 @@ const AccountSettingsUserAttributes: React.FC<AccountSettingsUserAttributesProps
     handleChange: (e: React.ChangeEvent<any>) => void
   ) => {
     setEditing(true);
+    if (event.target.name === 'email') {
+      setEditingEmail(true);
+    }
     handleChange(event);
   };
 
@@ -88,13 +143,14 @@ const AccountSettingsUserAttributes: React.FC<AccountSettingsUserAttributesProps
       );
     }
     setSubmitError(null);
+    setEditingEmail(false);
     setEditing(false);
   };
 
   return (
     <Formik
       initialValues={initialValues}
-      validationSchema={schema}
+      validationSchema={editingEmail ? schemaWithEmail : schemaWithoutEmail}
       onSubmit={submit}
     >
       {({
@@ -144,6 +200,31 @@ const AccountSettingsUserAttributes: React.FC<AccountSettingsUserAttributesProps
                 value={values.lastName}
               />
             </EuiFormRow>
+            <EuiFormRow
+              label="Email"
+              isInvalid={errors.email && touched.email}
+              error={errors.email}
+            >
+              <EuiFieldText
+                name="email"
+                onChange={e => onChange(e, handleChange)}
+                value={values.email}
+              />
+            </EuiFormRow>
+            {editingEmail && (
+              <EuiFormRow
+                label="Contraseña"
+                isInvalid={errors.password && touched.password}
+                error={errors.password}
+              >
+                <EuiFieldPassword
+                  type="dual"
+                  name="password"
+                  onChange={e => onChange(e, handleChange)}
+                  value={values.password}
+                />
+              </EuiFormRow>
+            )}
             {editing && (
               <>
                 <EuiSpacer />

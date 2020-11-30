@@ -5,6 +5,17 @@
 Amplify Params - DO NOT EDIT */
 const AWS = require('aws-sdk');
 const apiVersion = '2016-04-18';
+const { newEmailMessage } = require("emails");
+
+const  generateCode = (length = 10) => {
+    var result = '';
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
 
 exports.handler = async (request) => {
 
@@ -78,6 +89,81 @@ exports.handler = async (request) => {
                     Username: userName
                 };
                 await cognito.adminUpdateUserAttributes(params).promise();
+
+                if (attributes.hasOwnProperty('email') && attributes.email.length > 0) {
+
+                    /**
+                     * First of all, we get the old email, since it will be necessary to identify
+                     * the user in the /change-email link
+                     */
+                    const user = await cognito.adminGetUser({
+                        UserPoolId: userPoolId,
+                        Username: userName
+                    }).promise();
+                    const oldEmail = user.UserAttributes.find(attr => attr.Name === 'email').Value;
+    
+                    /**
+                     * Generate a random code and set the expiration time in 2 hours
+                     */
+                    const updateCode = generateCode();
+                    const updateCodeExpiration = (new Date()).getTime() + (2 * 60 * 60 * 1000);
+    
+                    /**
+                     * Update the custom attributes custom:update_code and custom:update_code_exp
+                     */
+                    const codeParams = {
+                        UserAttributes: [
+                            {
+                                Name: 'custom:update_code',
+                                Value: updateCode
+                            },
+                            {
+                                Name: 'custom:update_code_exp',
+                                Value: '' + updateCodeExpiration
+                            }
+                        ],
+                        UserPoolId: userPoolId,
+                        Username: userName
+                    };
+    
+                    await cognito.adminUpdateUserAttributes(codeParams).promise();
+    
+                    /**
+                     * Send a confirmation e-mail to the new address before making any changes.
+                     * If a user tries to change its e-mail address and sends a wrong one (because
+                     * of a typo or something like that), we need to make sure it has access to the new
+                     * email before actually changing it.
+                     * 
+                     * The confirmation email provides a confirmation link to /change-email with 3
+                     * query params:
+                     * 
+                     * - oldEmail: To be able to identify the user
+                     * - email: The new email address
+                     * - code: The one-time temporary code we just created
+                     */
+    
+                    const link = `https://yp989cvkn3.execute-api.us-east-2.amazonaws.com/dev/accounts/validate-new-email?currentEmail=${oldEmail}&newEmail=${attributes.email}&code=${updateCode}`;
+                    const ses = new AWS.SES({ region: 'us-east-2' });
+                    const email = {
+                        Destination: {
+                            ToAddresses: [attributes.email]
+                        },
+                        Message: {
+                            Body: {
+                                Html: {
+                                    Charset: "utf-8",
+                                    Data: newEmailMessage(attributes.email, link)
+                                }
+                            },
+                            Subject: {
+                                Data: "Confirm tu nueva dirección de correo electrónico"
+                            }
+                        },
+                        Source: "blablabla"
+                    };
+    
+                    await ses.sendEmail(email).promise();
+                }
                 response.statusCode = 200;
             }
             else {
