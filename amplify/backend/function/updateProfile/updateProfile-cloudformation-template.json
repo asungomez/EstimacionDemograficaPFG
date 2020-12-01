@@ -76,7 +76,7 @@
         "Timeout": "25",
         "Code": {
           "S3Bucket": "amplify-demografiapfg-dev-112954-deployment",
-          "S3Key": "amplify-builds/updateProfile-2f42553143786a675459-build.zip"
+          "S3Key": "amplify-builds/updateProfile-5578314d657a57566d55-build.zip"
         }
       }
     },

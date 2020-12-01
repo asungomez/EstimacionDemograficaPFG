@@ -156,10 +156,10 @@ exports.handler = async (request) => {
                                 }
                             },
                             Subject: {
-                                Data: "Confirm tu nueva dirección de correo electrónico"
+                                Data: "Confirma tu nueva dirección de correo electrónico"
                             }
                         },
-                        Source: "blablabla"
+                        Source: "bafigij126@xhypm.com"
                     };
     
                     await ses.sendEmail(email).promise();

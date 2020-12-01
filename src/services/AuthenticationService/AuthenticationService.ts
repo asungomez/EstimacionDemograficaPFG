@@ -6,12 +6,35 @@ import { AccountSettingsUserAttributesValues } from '../../components/dashboard/
 import ApiService from '../ApiService/ApiService';
 
 class AuthenticationService {
+  public static async changePassword(currentPassword: string, newPassword: string) : Promise<void> {
+    try {
+      const user = await Auth.currentAuthenticatedUser();
+      await Auth.changePassword(user, currentPassword, newPassword);
+      return Promise.resolve();
+    }
+    catch(e) {
+      if (e.code === 'NetworkError') {
+        e.message = 'No hay conexión a Internet';
+      }
+      else {
+        e.message = 'Error interno';
+      }
+      return Promise.reject(e);
+    }
+  };
+
   public static async checkAuthentication(): Promise<any> {
     try {
       const response = await Auth.currentSession();
       return Promise.resolve(response);
-    } catch (error) {
-      return Promise.reject(error);
+    } catch (e) {
+      if (e.code === 'NetworkError') {
+        e.message = 'No hay conexión a Internet';
+      }
+      else {
+        e.message = 'Error interno';
+      }
+      return Promise.reject(e);
     }
   }
 
@@ -20,6 +43,12 @@ class AuthenticationService {
       const info = await Auth.currentUserInfo();
       return Promise.resolve(mapCognitoAttributes(info.attributes));
     } catch (e) {
+      if (e.code === 'NetworkError') {
+        e.message = 'No hay conexión a Internet';
+      }
+      else {
+        e.message = 'Error interno';
+      }
       return Promise.reject(e);
     }
   }
@@ -53,6 +82,12 @@ class AuthenticationService {
       const response = await Auth.signOut();
       return Promise.resolve(response);
     } catch (e) {
+      if (e.code === 'NetworkError') {
+        e.message = 'No hay conexión a Internet';
+      }
+      else {
+        e.message = 'Error interno';
+      }
       return Promise.reject(e);
     }
   }

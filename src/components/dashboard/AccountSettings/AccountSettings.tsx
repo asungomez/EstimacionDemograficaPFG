@@ -11,6 +11,7 @@ import {
 import { Toast } from '@elastic/eui/src/components/toast/global_toast_list';
 import React, { useState } from 'react';
 
+import AccountSettingsPassword from './AccountSettingsPassword/AccountSettingsPassword';
 import AccountSettingsUserAttributes from './AccountSettingsUserAttributes/AccountSettingsUserAttributes';
 
 const AccountSettings: React.FC<{}> = () => {
@@ -47,6 +48,13 @@ const AccountSettings: React.FC<{}> = () => {
         <EuiSpacer />
         <EuiFlexItem grow={false}>
           <AccountSettingsUserAttributes onSuccess={successMessage} />
+        </EuiFlexItem>
+        <EuiHorizontalRule />
+      </EuiFlexGroup>
+      <EuiFlexGroup direction="column" responsive={false}>
+        <EuiSpacer />
+        <EuiFlexItem grow={false}>
+          <AccountSettingsPassword onSuccess={successMessage} />
         </EuiFlexItem>
         <EuiHorizontalRule />
       </EuiFlexGroup>
