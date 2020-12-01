@@ -50,6 +50,12 @@
           ]
         }
       ]
+    },
+    "cancelAccount": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": []
     }
   },
   "api": {
@@ -68,6 +74,14 @@
         {
           "category": "function",
           "resourceName": "updateProfile",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        },
+        {
+          "category": "function",
+          "resourceName": "cancelAccount",
           "attributes": [
             "Name",
             "Arn"

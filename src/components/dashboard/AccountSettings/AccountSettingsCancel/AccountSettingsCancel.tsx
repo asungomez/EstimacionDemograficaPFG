@@ -28,7 +28,9 @@ const AccountSettingsCancel: React.FC<{}> = () => {
           </EuiFlexItem>
         </EuiFlexGroup>
       </EuiDescribedFormGroup>
-      {openModal && <AccountSettingsCancelModal onClose={() => setOpenModal(false)} />}
+      {openModal && (
+        <AccountSettingsCancelModal onClose={() => setOpenModal(false)} />
+      )}
     </>
   );
 };

@@ -18,6 +18,16 @@
                     "/PATCH"
                 ]
             }
+        },
+        {
+            "name": "/account/cancel",
+            "lambdaFunction": "cancelAccount",
+            "privacy": {
+                "private": true,
+                "auth": [
+                    "/DELETE"
+                ]
+            }
         }
     ],
     "resourceName": "pfgapi",
@@ -28,10 +38,13 @@
         },
         {
             "lambdaFunction": "updateProfile"
+        },
+        {
+            "lambdaFunction": "cancelAccount"
         }
     ],
     "privacy": {
-        "auth": 1,
+        "auth": 2,
         "unauth": 0,
         "authRoleName": "amplify-demografiapfg-dev-112954-authRole",
         "unAuthRoleName": "amplify-demografiapfg-dev-112954-unauthRole"
@@ -52,7 +65,15 @@
                 "Name",
                 "Arn"
             ]
+        },
+        {
+            "category": "function",
+            "resourceName": "cancelAccount",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
         }
     ],
-    "uuid": "ba7762cc"
+    "uuid": "fc4d2d76"
 }

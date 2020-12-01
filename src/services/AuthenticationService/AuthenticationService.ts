@@ -6,6 +6,22 @@ import { AccountSettingsUserAttributesValues } from '../../components/dashboard/
 import ApiService from '../ApiService/ApiService';
 
 class AuthenticationService {
+  public static async cancelAccount() : Promise<void> {
+    try {
+      await ApiService.delete('/account/cancel');
+      return Promise.resolve();
+    }
+    catch(e) {
+      if (e.code === 'NetworkError') {
+        e.message = 'No hay conexión a Internet';
+      }
+      else {
+        e.message = 'Error interno';
+      }
+      return Promise.reject(e);
+    }
+  };
+
   public static async changePassword(currentPassword: string, newPassword: string) : Promise<void> {
     try {
       const user = await Auth.currentAuthenticatedUser();

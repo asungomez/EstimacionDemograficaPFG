@@ -17,23 +17,16 @@ import { useHistory } from 'react-router-dom';
 
 import logo from '../../../../assets/images/logo_uned.svg';
 import { useAuthenticationContext } from '../../../../contexts/AuthenticationContext';
-import AuthenticationService from '../../../../services/AuthenticationService/AuthenticationService';
+import useLogout from '../../../../hooks/useLogout';
 import EuiCustomLink from '../../../common/eui/EuiCustomLink';
 
 const Header: React.FC<{}> = () => {
   const [popoverOpen, setPopoverOpen] = useState(false);
-  const { userHasAuthenticated, user } = useAuthenticationContext();
+  const { user } = useAuthenticationContext();
   const history = useHistory();
+  const logOut = useLogout();
 
   const togglePopover = () => setPopoverOpen(open => !open);
-
-  const logOut = () => {
-    AuthenticationService.logOut()
-      .then(() => {
-        userHasAuthenticated(false);
-      })
-      .catch(() => {});
-  };
 
   return (
     <EuiHeader position="static">
