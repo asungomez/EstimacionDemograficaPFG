@@ -6,12 +6,51 @@ import { AccountSettingsUserAttributesValues } from '../../components/dashboard/
 import ApiService from '../ApiService/ApiService';
 
 class AuthenticationService {
+  public static async cancelAccount() : Promise<void> {
+    try {
+      await ApiService.delete('/account/cancel');
+      return Promise.resolve();
+    }
+    catch(e) {
+      if (e.code === 'NetworkError') {
+        e.message = 'No hay conexión a Internet';
+      }
+      else {
+        e.message = 'Error interno';
+      }
+      return Promise.reject(e);
+    }
+  };
+
+  public static async changePassword(currentPassword: string, newPassword: string) : Promise<void> {
+    try {
+      const user = await Auth.currentAuthenticatedUser();
+      await Auth.changePassword(user, currentPassword, newPassword);
+      return Promise.resolve();
+    }
+    catch(e) {
+      if (e.code === 'NetworkError') {
+        e.message = 'No hay conexión a Internet';
+      }
+      else {
+        e.message = 'Error interno';
+      }
+      return Promise.reject(e);
+    }
+  };
+
   public static async checkAuthentication(): Promise<any> {
     try {
       const response = await Auth.currentSession();
       return Promise.resolve(response);
-    } catch (error) {
-      return Promise.reject(error);
+    } catch (e) {
+      if (e.code === 'NetworkError') {
+        e.message = 'No hay conexión a Internet';
+      }
+      else {
+        e.message = 'Error interno';
+      }
+      return Promise.reject(e);
     }
   }
 
@@ -20,6 +59,12 @@ class AuthenticationService {
       const info = await Auth.currentUserInfo();
       return Promise.resolve(mapCognitoAttributes(info.attributes));
     } catch (e) {
+      if (e.code === 'NetworkError') {
+        e.message = 'No hay conexión a Internet';
+      }
+      else {
+        e.message = 'Error interno';
+      }
       return Promise.reject(e);
     }
   }
@@ -33,6 +78,10 @@ class AuthenticationService {
         error.message = 'El usuario especificado no existe';
       } else if (error.code === 'UserNotConfirmedException') {
         error.message = 'Necesitas confirmar tu dirección de email para iniciar sesión';
+      }
+      else if(error.code === 'NotAuthorizedException') {
+        error.code = 'WrongUsernameOrPassword';
+        error.message = 'El nombre de usuario no existe o la contraseña no es correcta';
       }
       else if(error.code === 'NetworkError'){
         error.message = 'No hay conexión a Internet';
@@ -49,6 +98,12 @@ class AuthenticationService {
       const response = await Auth.signOut();
       return Promise.resolve(response);
     } catch (e) {
+      if (e.code === 'NetworkError') {
+        e.message = 'No hay conexión a Internet';
+      }
+      else {
+        e.message = 'Error interno';
+      }
       return Promise.reject(e);
     }
   }
@@ -150,12 +205,19 @@ class AuthenticationService {
     }
   }
 
-  public static async updateUserProfile({firstName, lastName}: AccountSettingsUserAttributesValues) : Promise<void> {
+  public static async updateUserProfile({firstName, lastName, email, password}: AccountSettingsUserAttributesValues) : Promise<void> {
     try {
-      await ApiService.put('/account/update-profile', mapUserAttributesRequest(firstName, lastName));
+      if (email && password) {
+        const {email: currentEmail} = await this.getUserAttributes();
+        await this.logIn(currentEmail, password);
+      }
+      await ApiService.put('/account/update-profile', mapUserAttributesRequest(firstName, lastName, email));
     }
     catch(e) {
-      if (e.code === 'NetworkError') {
+      if (e.code === 'WrongUsernameOrPassword') {
+        e.message = 'Contraseña incorrecta';
+      }
+      else if (e.code === 'NetworkError') {
         e.message = 'No hay conexión a Internet';
       }
       else {
