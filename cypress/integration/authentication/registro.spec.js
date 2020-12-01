@@ -133,12 +133,12 @@ describe('Registro', () => {
       });
     });
 
-    it('muestra un error en el campo Contraseña si es demasiado corta', () => {
-      cy.fixture('usuarios').then(({ validoNoRegistrado : usuario }) => {
-        usuario.password = 'aA1.';
-        intentarRegistrarInvalido(usuario, 'La contraseña debe tener al menos 6 caracteres');
-      });
-    });
+    // it('muestra un error en el campo Contraseña si es demasiado corta', () => {
+    //   cy.fixture('usuarios').then(({ validoNoRegistrado : usuario }) => {
+    //     usuario.password = 'aA1.';
+    //     intentarRegistrarInvalido(usuario, 'La contraseña debe tener al menos 6 caracteres');
+    //   });
+    // });
 
     it('elimina el error en el campo Contraseña cuando se introduce una contraseña válidas', () => {
       cy.fixture('usuarios').then(({ validoNoRegistrado : usuario }) => {

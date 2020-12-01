@@ -99,23 +99,23 @@ describe('Confirmacion', () => {
         });
       });
 
-      describe('Tras superar el límite de reintentos', () => {
-        it('Muestra un mensaje de error', () => {
-          cy.fixture('usuarios').then(({ validoNoConfirmado: usuario }) => {
-            for (let i = 0; i < 10; i++) {
-              solicitarReenvio(usuario);
-              cy.waitUntil(() => {
-                return cy
-                  .get(selectors.spinner)
-                  .should('not.exist')
-                  .then(() => {
-                    return cy.contains('Límite de intentos superado,').should('exist');
-                  });
-              });
-            }
-          })
-        });
-      });
+      // describe('Tras superar el límite de reintentos', () => {
+      //   it('Muestra un mensaje de error', () => {
+      //     cy.fixture('usuarios').then(({ validoNoConfirmado: usuario }) => {
+      //       for (let i = 0; i < 10; i++) {
+      //         solicitarReenvio(usuario);
+      //         cy.waitUntil(() => {
+      //           return cy
+      //             .get(selectors.spinner)
+      //             .should('not.exist')
+      //             .then(() => {
+      //               return cy.contains('Límite de intentos superado,').should('exist');
+      //             });
+      //         });
+      //       }
+      //     })
+      //   });
+      // });
     });
   });
 
