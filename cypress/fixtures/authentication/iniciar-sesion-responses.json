@@ -1,0 +1,6 @@
+{
+  "noConfirmado": {
+    "__type": "UserNotConfirmedException",
+    "message": "User is not confirmed."
+  }
+}

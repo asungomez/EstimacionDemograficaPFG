@@ -8,6 +8,5 @@ export default {
       cy.get('input[name="password"]').type(usuario.password);
     }
     cy.get('form').submit();
-    cy.wait(3000);
   }
 }
