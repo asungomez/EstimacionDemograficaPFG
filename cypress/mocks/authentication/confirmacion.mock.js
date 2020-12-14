@@ -28,6 +28,10 @@ export const confirmacionConUsuarioConfirmado = () => {
   mockConfirmacion(config.appBaseUrl + '/iniciar-sesion/?message=confirmed');
 };
 
+export const confirmacionConEnlaceCaducado = (email = 'some@email.com') => {
+  mockConfirmacion(config.appBaseUrl + '/error/?message=confirmacion_fallida&email='+email)
+};
+
 export const reenvioConfirmacionConExito = () => {
   mockReenvioConfirmacion('authentication/reenvio-confirmacion-responses', 'success', 200);
 };

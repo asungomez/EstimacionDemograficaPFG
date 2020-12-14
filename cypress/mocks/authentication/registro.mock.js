@@ -13,4 +13,4 @@ const mockRegistro = (fixtureFile, responseType, statusCode) => {
 
 export const registroConExito = () => {
   mockRegistro('authentication/registro-responses', 'success', 200);
-}
+};

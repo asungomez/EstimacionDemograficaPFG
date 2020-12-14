@@ -7,6 +7,10 @@
     "email": "abc",
     "password": "123"
   },
+  "validoConfirmado": {
+    "email": "piconax795@tjuln.com",
+    "password": "aaaAAA1.1.1."
+  },
   
   "validoNoRegistrado": {
     "email": "aaaaaa@valido.com",
@@ -16,10 +20,7 @@
     "email": "lefelaj168@tjuln.com",
     "password": "aaaAAA1.1.1."
   },
-  "validoConfirmado": {
-    "email": "piconax795@tjuln.com",
-    "password": "aaaAAA1.1.1."
-  },
+  
   "validoNoConfirmado": {
     "email": "xayekab287@tjuln.com",
     "password": "aaaAAA1.1.1."

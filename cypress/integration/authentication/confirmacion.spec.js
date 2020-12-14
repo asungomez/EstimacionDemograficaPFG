@@ -40,7 +40,23 @@ describe('Confirmacion', () => {
 
     describe('Con datos erróneos', () => {
       describe('Con enlace caducado', () => {
-        // TODO Probar https://yp989cvkn3.execute-api.us-east-2.amazonaws.com/dev/accounts/validate?code=925843&email=poyiv26807@pxjtw.com&id=72r4557bv9c35c37gp9pjgqmdj
+        before(() => {
+          mockResponses.confirmacionConEnlaceCaducado();
+          cy.visit(urlConfirmacion('some@email.com'));
+          cy.wait('@confirmation');
+        });
+    
+        it('redirige a error', () => {
+          cy.url().should('contain', 'error');
+        });
+    
+        it('muestra un mensaje de error', () => {
+          cy.contains('No ha sido posible confirmar tu cuenta').should('exist');
+        });
+
+        it('muestra la opción de reenviar el mensaje', () => {
+          cy.contains('Reenviar mensaje').should('exist');
+        });
       });
 
       describe('Cuando el email no existe', () => {

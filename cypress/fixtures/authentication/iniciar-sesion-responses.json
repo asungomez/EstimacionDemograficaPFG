@@ -2,5 +2,13 @@
   "noConfirmado": {
     "__type": "UserNotConfirmedException",
     "message": "User is not confirmed."
+  },
+  "noExiste": {
+    "__type": "UserNotFoundException",
+    "message": "User does not exist."
+  },
+  "noAutorizado": {
+    "__type": "NotAuthorizedException",
+    "message": "Incorrect username or password."
   }
 }
