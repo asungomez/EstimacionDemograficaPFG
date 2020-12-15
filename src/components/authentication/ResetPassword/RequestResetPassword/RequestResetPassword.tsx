@@ -86,7 +86,7 @@ const RequestResetPassword: React.FC<{}> = () => {
           </EuiTitle>
         </EuiText>
       </EuiFlexItem>
-      <EuiFlexItem grow={false}>
+      <EuiFlexItem grow={false} className="reset-password-container">
         <Formik
           initialValues={initialValues}
           validationSchema={schema}

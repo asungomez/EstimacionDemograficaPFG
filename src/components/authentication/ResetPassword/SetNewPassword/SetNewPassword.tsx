@@ -93,7 +93,7 @@ const SetNewPassword: React.FC<SetNewPasswordProps> = ({ email, code }) => {
           </EuiTitle>
         </EuiText>
       </EuiFlexItem>
-      <EuiFlexItem grow={false}>
+      <EuiFlexItem grow={false} className="reset-password-container">
         <Formik
           initialValues={initialValues}
           validationSchema={schema}

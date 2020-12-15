@@ -1,6 +1,9 @@
-import selectors from "../../common/selectors";
+import * as mockResponses from "../../mocks/authentication/restaurar-contrasena.mock";
+import selectors from '../../common/selectors';
 
 const urlRestaurar = (email, code = '1234') => `/recuperar-contrasena?code=${code}&email=${email}`;
+
+const urlTrasSolicitud = (email) => `/iniciar-sesion?message=resetPasswordRequested&email=${email}`;
 
 const requestResetPassword = (email) => {
   cy.visit('/recuperar-contrasena');
@@ -8,182 +11,166 @@ const requestResetPassword = (email) => {
   cy.get('form').submit();
 };
 
+let usuarioValido, usuarioInvalido;
+
 describe('Restaurar contraseña', () => {
 
+  before(() => {
+    cy.fixture('usuarios').then(({ valido, invalido }) => {
+      usuarioValido = valido;
+      usuarioInvalido = invalido;
+    });
+  });
+
   describe('Solicitar recuperación de contraseña', () => {
-  describe('De una cuenta registrada y confirmada', () => {
-    it('muestra un mensaje de éxito', () => {
-      cy.fixture('usuarios').then(({ validoConfirmado : usuario }) => {
-        requestResetPassword(usuario.email);
-        cy.waitUntil(() => {
-          return cy
-            .get(selectors.spinner)
-            .should('not.exist')
-            .then(() => {
-              return cy.contains('Te hemos enviado un enlace para restaurar tu contraseña').should('exist');
-            });
-        });
+    describe('De una cuenta registrada y confirmada', () => {
+      before(() => {
+        mockResponses.solicitarConExito();
+        requestResetPassword(usuarioValido.email);
+        cy.wait('@requestResetPassword');
+      });
+
+      it('muestra un mensaje de éxito', () => {
+        cy.contains('Te hemos enviado un enlace para restaurar tu contraseña').should('exist');
+      });
+
+      it('muestra la opción de reenviar mensaje', () => {
+        cy.contains('Enviar de nuevo').should('exist');
       });
     });
 
-    it('muestra la opción de reenviar mensaje', () => {
-      cy.fixture('usuarios').then(({ validoConfirmado : usuario }) => {
-        requestResetPassword(usuario.email);
-        cy.waitUntil(() => {
-          return cy
-            .get(selectors.spinner)
-            .should('not.exist')
-            .then(() => {
-              return cy.contains('Enviar de nuevo').should('exist');
-            });
-        });
+    describe('De una cuenta no registrada', () => {
+      before(() => {
+        mockResponses.solicitarUsuarioNoExiste();
+        requestResetPassword(usuarioValido.email);
+        cy.wait('@requestResetPassword');
       });
-    });
-  });
 
-  describe('De una cuenta no registrada', () => {
-    it('muestra un mensaje indicando que el usuario no está registrado', () => {
-      cy.fixture('usuarios').then(({ validoNoRegistrado : usuario }) => {
-        requestResetPassword('' + Math.random() + usuario.email);
-        cy.waitUntil(() => {
-          return cy
-            .get(selectors.spinner)
-            .should('not.exist')
-            .then(() => {
-              return cy.contains('Usuario no registrado').should('exist');
-            });
-        });
-      });
-    });
-
-    it('muestra la opción de crear una nueva cuenta', () => {
-      cy.fixture('usuarios').then(({ validoNoRegistrado : usuario }) => {
-        requestResetPassword('' + Math.random() + usuario.email);
-        cy.waitUntil(() => {
-          return cy
-            .get(selectors.spinner)
-            .should('not.exist')
-            .then(() => {
-              return cy.contains('Usuario no registrado').should('exist');
-            });
-        });
-      });
-    });
-  });
-
-  describe('De una cuenta no confirmada', () => {
-      it('muestra un mensaje indicando que el usuario no está confirmado', () => {
-        cy.fixture('usuarios').then(({ validoNoConfirmado : usuario }) => {
-          requestResetPassword(usuario.email);
-          cy.waitUntil(() => {
-            return cy
-              .get(selectors.spinner)
-              .should('not.exist')
-              .then(() => {
-                return cy.contains('Esta cuenta no está confirmada').should('exist');
-              });
-          });
-        });
+      it('muestra un mensaje indicando que el usuario no está registrado', () => {
+        cy.contains('Usuario no registrado').should('exist');
       });
 
       it('muestra la opción de crear una nueva cuenta', () => {
-        cy.fixture('usuarios').then(({ validoNoConfirmado : usuario }) => {
-          requestResetPassword(usuario.email);
-          cy.waitUntil(() => {
-            return cy
-              .get(selectors.spinner)
-              .should('not.exist')
-              .then(() => {
-                return cy.contains('Enviar de nuevo').should('exist');
-              });
-          });
-        });
+        cy.contains('Usuario no registrado').should('exist');
+      });
+    });
+
+    describe('De una cuenta no confirmada', () => {
+      before(() => {
+        mockResponses.solicitarUsuarioNoConfirmado();
+        requestResetPassword(usuarioValido.email);
+        cy.wait('@requestResetPassword');
+      });
+
+      it('muestra un mensaje indicando que el usuario no está confirmado', () => {
+        cy.contains('Esta cuenta no está confirmada').should('exist');
+      });
+
+      it('muestra la opción de crear una nueva cuenta', () => {
+        cy.contains('Enviar de nuevo').should('exist');
       });
     });
   });
 
   describe('Solicitar reenvío de correo de contraseña', () => {
+    before(() => {
+      mockResponses.reenviarCorreoConExito();
+      cy.visit(urlTrasSolicitud(usuarioValido.email));
+      cy.contains('Enviar de nuevo').click();
+      cy.wait('@resendPasswordMail');
+    });
+
     it('muestra un mensaje de éxito', () => {
-      cy.fixture('usuarios').then(({ validoConfirmado: usuario }) => {
-        requestResetPassword(usuario.email);
-        cy.waitUntil(() => {
-          return cy
-            .get(selectors.spinner)
-            .should('not.exist')
-            .then(() => {
-              cy.contains('Enviar de nuevo').click();
-              return cy.waitUntil(() => {
-                return cy
-                  .get(selectors.spinner)
-                  .should('not.exist')
-                  .then(() => {
-                    return cy.contains('Mensaje enviado con éxito').should('exist');
-                  });
-              });
-            });
-        });
-      });
+      cy.contains('Mensaje enviado con éxito').should('exist');
     });
   });
 
   describe('Hacer click en enlace de contraseña', () => {
+    before(() => {
+      cy.visit(urlRestaurar(usuarioValido.email));
+    });
+
     it('abre el formulario de nueva contraseña', () => {
-      cy.visit(urlRestaurar('email@valido.com'));
       cy.contains('Introduce tu nueva contraseña').should('exist');
+    });
+  });
+
+  describe('Introducir nueva contraseña', () => {
+
+    describe('Contraseña válida', () => {
+      before(() => {
+        cy.visit(urlRestaurar(usuarioValido.email));
+        cy.get('input[name="password"]').type(usuarioValido.password);
+      });
+
+      it('marca como cumplidas todas las restricciones de contraseña', () => {
+        cy.get(selectors.restriccionContrasenaInvalida).should('not.exist');
+      });
+    });
+
+    describe('Contraseña inválida', () => {
+
+      before(() => {
+        cy.visit(urlRestaurar(usuarioValido.email));
+        cy.get('input[name="password"]').type(usuarioInvalido.password);
+        cy.get('form').submit();
+      });
+
+      it('muestra un mensaje de error', () => {
+        cy.get(selectors.errorCampoFormulario).should('exist');
+      });
     });
   });
 
   describe('Enviar nueva contraseña', () => {
 
-    describe('Con código inválido', () => {
+    describe('Con código inválido o caducado', () => {
+      before(() => {
+        mockResponses.restaurarContrasenaCodigoCaducado();
+        cy.visit(urlRestaurar(usuarioValido.email));
+        cy.get('input[name="password"]').type(usuarioValido.password);
+        cy.get('form').submit();
+        cy.wait('@resetPassword');
+      });
+
       it('muestra un mensaje de error', () => {
-        cy.fixture('usuarios').then(({ validoConfirmado: usuario }) => {
-          cy.visit(urlRestaurar(usuario.email));
-          cy.get('input[name="password"]').type(usuario.password);
-          cy.get('form').submit();
-          return cy.waitUntil(() => {
-            return cy
-              .get(selectors.spinner)
-              .should('not.exist')
-              .then(() => {
-                return cy.contains('Enlace inválido').should('exist');
-              });
-          });
-        });
+        cy.contains('Enlace inválido').should('exist');
       });
 
       it('muestra la opción de reenviar correo', () => {
-        cy.fixture('usuarios').then(({ validoConfirmado: usuario }) => {
-          cy.visit(urlRestaurar(usuario.email));
-          cy.get('input[name="password"]').type(usuario.password);
-          cy.get('form').submit();
-          return cy.waitUntil(() => {
-            return cy
-              .get(selectors.spinner)
-              .should('not.exist')
-              .then(() => {
-                return cy.contains('Enviar de nuevo').should('exist');
-              });
-          });
-        });
+        cy.contains('Enviar de nuevo').should('exist');
       });
     });
 
     describe('Con usuario no existente', () => {
+      before(() => {
+        mockResponses.restaurarContrasenaUsuarioNoExiste();
+        cy.visit(urlRestaurar(usuarioValido.email));
+        cy.get('input[name="password"]').type(usuarioValido.password);
+        cy.get('form').submit();
+        cy.wait('@resetPassword');
+      });
+
       it('muestra un mensaje de error', () => {
-        cy.fixture('usuarios').then(({ validoNoRegistrado: usuario }) => {
-          cy.visit(urlRestaurar('' + Math.random() + usuario.email));
-          cy.get('input[name="password"]').type(usuario.password);
-          cy.get('form').submit();
-          return cy.waitUntil(() => {
-            return cy
-              .get(selectors.spinner)
-              .should('not.exist')
-              .then(() => {
-                return cy.contains('El usuario especificado no existe').should('exist');
-              });
-          });
-        });
+        cy.contains('El usuario especificado no existe').should('exist');
+      });
+    });
+
+    describe('Cuando todos los datos son correctos', () => {
+      before(() => {
+        mockResponses.restaurarContrasenaConExito();
+        cy.visit(urlRestaurar(usuarioValido.email));
+        cy.get('input[name="password"]').type(usuarioValido.password);
+        cy.get('form').submit();
+        cy.wait('@resetPassword');
+      });
+
+      it('redirige a login', () => {
+        cy.url().should('include', 'iniciar-sesion');
+      });
+
+      it('muestra un mensaje de éxito', () => {
+        cy.contains('Tu contraseña se ha actualizado').should('exist');
       });
     });
   });

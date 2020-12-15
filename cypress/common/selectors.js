@@ -1,4 +1,5 @@
 export default {
   spinner: '.euiLoadingSpinner',
-  errorCampoFormulario: '.euiFormErrorText'
+  errorCampoFormulario: '.euiFormErrorText',
+  restriccionContrasenaInvalida: '.euiListGroupItem--subdued',
 };
