@@ -18,7 +18,6 @@ import { useHistory } from 'react-router-dom';
 import logo from '../../../../assets/images/logo_uned.svg';
 import { useAuthenticationContext } from '../../../../contexts/AuthenticationContext';
 import useLogout from '../../../../hooks/useLogout';
-import EuiCustomLink from '../../../common/eui/EuiCustomLink';
 
 const Header: React.FC<{}> = () => {
   const [popoverOpen, setPopoverOpen] = useState(false);
@@ -56,11 +55,16 @@ const Header: React.FC<{}> = () => {
               {user.email}
             </EuiPopoverTitle>
             <EuiFlexGroup direction="column" alignItems="flexStart">
-              <EuiCustomLink to="/panel/cuenta">
-                <EuiButtonEmpty color="text" iconType="user">
-                  Perfil
-                </EuiButtonEmpty>
-              </EuiCustomLink>
+              <EuiButtonEmpty
+                color="text"
+                iconType="user"
+                onClick={() => {
+                  history.push('/panel/cuenta');
+                  setPopoverOpen(false);
+                }}
+              >
+                Perfil
+              </EuiButtonEmpty>
               <EuiButtonEmpty color="text" iconType="exit" onClick={logOut}>
                 Cerrar sesión
               </EuiButtonEmpty>

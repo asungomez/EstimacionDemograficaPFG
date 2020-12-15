@@ -1,4 +1,3 @@
-import selectors from "../../common/selectors";
 import { login } from "../../common/actions";
 import * as mockResponses from "../../mocks/authentication/iniciar-sesion.mock";
 

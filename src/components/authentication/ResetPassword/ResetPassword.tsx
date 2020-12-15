@@ -1,6 +1,7 @@
+import './ResetPassword.scss';
+
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import './ResetPassword.scss';
 
 import RequestResetPassword from './RequestResetPassword/RequestResetPassword';
 import SetNewPassword from './SetNewPassword/SetNewPassword';

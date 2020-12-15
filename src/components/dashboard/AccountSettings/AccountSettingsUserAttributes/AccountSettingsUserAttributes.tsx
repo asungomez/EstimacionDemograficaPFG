@@ -163,6 +163,7 @@ const AccountSettingsUserAttributes: React.FC<AccountSettingsUserAttributesProps
       }) => (
         <EuiForm component="form" onSubmit={handleSubmit}>
           <EuiDescribedFormGroup
+            id="modificar-perfil"
             title={<h3>Datos de perfil</h3>}
             description={
               <EuiText>
