@@ -27,4 +27,6 @@ export const editarPerfilConExito = () => mockEditarPerfil('authentication/edita
 
 export const editarPerfilConError = () => mockEditarPerfil('general-responses', 'internalError', 500);
 
+export const editarPerfilEmailYaExiste = () => mockEditarPerfil('authentication/editar-perfil-responses', 'emailYaExiste', 400);
+
 export const editarContrasenaConExito = () => mockEditarContrasena('authentication/editar-perfil-responses', 'exito', 200);

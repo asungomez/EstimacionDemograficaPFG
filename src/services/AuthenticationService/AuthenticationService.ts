@@ -217,6 +217,9 @@ class AuthenticationService {
       if (e.code === 'WrongUsernameOrPassword') {
         e.message = 'Contraseña incorrecta';
       }
+      else if(e.response.data.code === 'EmailAlreadyRegistered') {
+        e.message = 'El email '+email+' ya pertenece a otro usuario';
+      }
       else if (e.code === 'NetworkError') {
         e.message = 'No hay conexión a Internet';
       }

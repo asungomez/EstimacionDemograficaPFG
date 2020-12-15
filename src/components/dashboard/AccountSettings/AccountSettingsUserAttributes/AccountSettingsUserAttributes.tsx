@@ -1,6 +1,7 @@
 import {
   EuiButton,
   EuiButtonEmpty,
+  EuiCallOut,
   EuiDescribedFormGroup,
   EuiFieldPassword,
   EuiFieldText,
@@ -58,6 +59,7 @@ const AccountSettingsUserAttributes: React.FC<AccountSettingsUserAttributesProps
   const [submitError, setSubmitError] = useState<string>(null);
   const [editing, setEditing] = useState(false);
   const [editingEmail, setEditingEmail] = useState(false);
+  const [showEmailChangedMessage, setShowEmailChangedMessage] = useState(false);
 
   const { user, setUser } = useAuthenticationContext();
 
@@ -111,7 +113,7 @@ const AccountSettingsUserAttributes: React.FC<AccountSettingsUserAttributesProps
         if (updatedValues.email && updatedValues.email.length > 0) {
           setFieldValue('email', user.email);
           setFieldValue('password', '');
-          // TODO display message about confirmation
+          setShowEmailChangedMessage(true);
         }
         setUser(newUser);
         setEditing(false);
@@ -119,6 +121,7 @@ const AccountSettingsUserAttributes: React.FC<AccountSettingsUserAttributesProps
         setSubmitting(false);
       })
       .catch(error => {
+        setShowEmailChangedMessage(false);
         setSubmitError(error.message);
         setSubmitting(false);
       });
@@ -128,6 +131,7 @@ const AccountSettingsUserAttributes: React.FC<AccountSettingsUserAttributesProps
     event: React.ChangeEvent<any>,
     handleChange: (e: React.ChangeEvent<any>) => void
   ) => {
+    setShowEmailChangedMessage(false);
     setEditing(true);
     if (event.target.name === 'email') {
       setEditingEmail(true);
@@ -142,6 +146,7 @@ const AccountSettingsUserAttributes: React.FC<AccountSettingsUserAttributesProps
         initialValues[field as AccountSettingsUserAttributesFields]
       );
     }
+    setShowEmailChangedMessage(false);
     setSubmitError(null);
     setEditingEmail(false);
     setEditing(false);
@@ -176,6 +181,19 @@ const AccountSettingsUserAttributes: React.FC<AccountSettingsUserAttributesProps
             {submitError && (
               <>
                 <EuiError error={submitError} />
+                <EuiSpacer />
+              </>
+            )}
+            {showEmailChangedMessage && (
+              <>
+                <EuiCallOut
+                  title="Has solicitado editar tu dirección de correo electrónico"
+                  iconType="email"
+                >
+                  Te hemos enviado un enlace de confirmación a tu nueva
+                  dirección de correo electrónico. Haz click en el enlace para
+                  hacer efectivo el cambio.
+                </EuiCallOut>
                 <EuiSpacer />
               </>
             )}

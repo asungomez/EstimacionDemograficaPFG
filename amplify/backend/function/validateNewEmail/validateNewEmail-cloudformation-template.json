@@ -9,10 +9,6 @@
     },
     "env": {
       "Type": "String"
-    },
-    "authdemografiapfgee9e612fUserPoolId": {
-      "Type": "String",
-      "Default": "authdemografiapfgee9e612fUserPoolId"
     }
   },
   "Conditions": {
@@ -37,12 +33,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "updateProfile",
+            "validateNewEmail",
             {
               "Fn::Join": [
                 "",
                 [
-                  "updateProfile",
+                  "validateNewEmail",
                   "-",
                   {
                     "Ref": "env"
@@ -59,9 +55,6 @@
             },
             "REGION": {
               "Ref": "AWS::Region"
-            },
-            "AUTH_DEMOGRAFIAPFGEE9E612F_USERPOOLID": {
-              "Ref": "authdemografiapfgee9e612fUserPoolId"
             }
           }
         },
@@ -76,7 +69,7 @@
         "Timeout": "25",
         "Code": {
           "S3Bucket": "amplify-demografiapfg-dev-112954-deployment",
-          "S3Key": "amplify-builds/updateProfile-492b4f4b367459425a53-build.zip"
+          "S3Key": "amplify-builds/validateNewEmail-566f526b4954526d4d51-build.zip"
         }
       }
     },
@@ -86,12 +79,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "demografiapfgLambdaRole0517b152",
+            "demografiapfgLambdaRole566a9bb2",
             {
               "Fn::Join": [
                 "",
                 [
-                  "demografiapfgLambdaRole0517b152",
+                  "demografiapfgLambdaRole566a9bb2",
                   "-",
                   {
                     "Ref": "env"
@@ -161,14 +154,6 @@
             {
               "Effect": "Allow",
               "Action": [
-                "ses:SendEmail",
-                "ses:SendRawEmail"
-              ],
-              "Resource": "*"
-            },
-            {
-              "Effect": "Allow",
-              "Action": [
                 "cognito-idp:AdminUpdateUserAttributes",
                 "cognito-idp:AdminGetUser",
                 "cognito-idp:ListUsers"
@@ -186,63 +171,6 @@
                   }
                 ]
               }
-            }
-          ]
-        }
-      }
-    },
-    "AmplifyResourcesPolicy": {
-      "DependsOn": [
-        "LambdaExecutionRole"
-      ],
-      "Type": "AWS::IAM::Policy",
-      "Properties": {
-        "PolicyName": "amplify-lambda-execution-policy",
-        "Roles": [
-          {
-            "Ref": "LambdaExecutionRole"
-          }
-        ],
-        "PolicyDocument": {
-          "Version": "2012-10-17",
-          "Statement": [
-            {
-              "Effect": "Allow",
-              "Action": [
-                "cognito-idp:ForgotPassword",
-                "cognito-idp:UpdateAuthEventFeedback",
-                "cognito-idp:UpdateResourceServer",
-                "cognito-idp:UpdateUserPoolClient",
-                "cognito-idp:AdminUpdateUserAttributes",
-                "cognito-idp:UpdateUserAttributes",
-                "cognito-idp:UpdateUserPoolDomain",
-                "cognito-idp:UpdateIdentityProvider",
-                "cognito-idp:UpdateGroup",
-                "cognito-idp:AdminUpdateAuthEventFeedback",
-                "cognito-idp:UpdateDeviceStatus",
-                "cognito-idp:UpdateUserPool"
-              ],
-              "Resource": [
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:cognito-idp:",
-                      {
-                        "Ref": "AWS::Region"
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId"
-                      },
-                      ":userpool/",
-                      {
-                        "Ref": "authdemografiapfgee9e612fUserPoolId"
-                      }
-                    ]
-                  ]
-                }
-              ]
             }
           ]
         }

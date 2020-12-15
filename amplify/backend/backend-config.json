@@ -56,6 +56,12 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda",
       "dependsOn": []
+    },
+    "validateNewEmail": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": []
     }
   },
   "api": {
@@ -82,6 +88,14 @@
         {
           "category": "function",
           "resourceName": "cancelAccount",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        },
+        {
+          "category": "function",
+          "resourceName": "validateNewEmail",
           "attributes": [
             "Name",
             "Arn"

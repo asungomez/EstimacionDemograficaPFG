@@ -44,7 +44,6 @@ describe('Editar perfil', () => {
 
   describe('Introducir un nuevo apellido', () => {
     beforeEach(() => {
-
       cy.get('input[name="lastName"]').clear();
       cy.get('input[name="lastName"]').type(perfilValido.lastName);
     });
@@ -52,6 +51,35 @@ describe('Editar perfil', () => {
     it('muestra los botones de guardar/cancelar', () => {
       cy.contains('Guardar').should('exist');
       cy.contains('Cancelar').should('exist');
+    });
+  });
+
+  describe('Introducir nuevo email', () => {
+    beforeEach(() => {
+      cy.get('input[name="email"]').clear();
+      cy.get('input[name="email"]').type(perfilValido.email);
+    });
+
+    it('muestra los botones de guardar/cancelar', () => {
+      cy.contains('Guardar').should('exist');
+      cy.contains('Cancelar').should('exist');
+    });
+
+    it('muestra el campo contraseña', () => {
+      cy.get('input[name="password"]').should('exist');
+    });
+  });
+
+  describe('Cancelar edición de formulario', () => {
+    beforeEach(() => {
+      cy.get('input[name="lastName"]').clear();
+      cy.get('input[name="lastName"]').type(perfilValido.lastName);
+      cy.contains('Cancelar').click();
+    });
+
+    it('oculta los botones de guardar/cancelar', () => {
+      cy.get('#modificar-perfil').contains('Guardar').should('not.exist');
+      cy.get('#modificar-perfil').contains('Cancelar').should('not.exist');
     });
   });
 
@@ -91,6 +119,36 @@ describe('Editar perfil', () => {
 
       it('muestra un mensaje de error', () => {
         cy.contains('Error interno').should('exist');
+      });
+    });
+  });
+
+  describe('Editar email', () => {
+    describe('Con datos correctos', () => {
+      beforeEach(() => {
+        mockResponses.editarPerfilConExito();
+        actualizarPerfil({ email: perfilValido.email, password: perfilValido.password });
+        cy.wait('@updateProfile');
+      });
+
+      it('muestra un mensaje informativo', () => {
+        cy.contains('Has solicitado editar tu dirección de correo electrónico').should('exist');
+      });
+
+      it('no modifica el email', () => {
+        cy.get('input[name="email"]').should('not.have.value', perfilValido.email);
+      });
+    });
+
+    describe('Cuando el email ya estaba registrado', () => {
+      beforeEach(() => {
+        mockResponses.editarPerfilEmailYaExiste();
+        actualizarPerfil({ email: perfilValido.email, password: perfilValido.password });
+        cy.wait('@updateProfile');
+      });
+
+      it('muestra un mensaje de error', () => {
+        cy.contains('ya pertenece a otro usuario').should('exist');
       });
     });
   });

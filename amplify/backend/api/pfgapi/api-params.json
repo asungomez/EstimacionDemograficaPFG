@@ -28,6 +28,13 @@
                     "/DELETE"
                 ]
             }
+        },
+        {
+            "name": "/accounts/validate-new-email",
+            "lambdaFunction": "validateNewEmail",
+            "privacy": {
+                "open": true
+            }
         }
     ],
     "resourceName": "pfgapi",
@@ -41,6 +48,9 @@
         },
         {
             "lambdaFunction": "cancelAccount"
+        },
+        {
+            "lambdaFunction": "validateNewEmail"
         }
     ],
     "privacy": {
@@ -73,7 +83,15 @@
                 "Name",
                 "Arn"
             ]
+        },
+        {
+            "category": "function",
+            "resourceName": "validateNewEmail",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
         }
     ],
-    "uuid": "fc4d2d76"
+    "uuid": "42083845"
 }
