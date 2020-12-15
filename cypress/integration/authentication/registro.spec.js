@@ -125,7 +125,7 @@ describe('Registro', () => {
 
       it('muestra un error en el campo del formulario', () => {
         const usuario = { ...usuarioValido, password: 'aA1.' };
-        intentarRegistrarInvalido(usuario, 'La contraseña debe tener al menos 6 caracteres');
+        intentarRegistrarInvalido(usuario, 'La contraseña debe tener al menos 12 caracteres');
       });
 
       describe('Introducir una contraseña válida', () => {
