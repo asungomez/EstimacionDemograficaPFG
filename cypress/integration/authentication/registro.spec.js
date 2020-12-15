@@ -67,6 +67,7 @@ describe('Registro', () => {
       });
 
       describe('Introducir un email válido', () => {
+        
         beforeEach(() => {
           const usuario = { ...usuarioValido, email: usuarioInvalido.email };
           intentarRegistrarInvalido(usuario);
