@@ -191,6 +191,60 @@ describe('Editar perfil', () => {
         cy.url().should('contain', 'panel');
       });
     });
+
+    describe('Cuando el código no es válido', () => {
+      beforeEach(() => {
+        mockResponses.enlaceConfirmacionCodigoInvalido();
+        cy.visit(urlConfirmacion());
+      });
+
+      it('redirige a la vista de error', () => {
+        cy.url().should('contain', 'error');
+      });
+
+      it('muestra un mensaje de error', () => {
+        cy.contains('El enlace de confirmación no es válido').should('exist');
+      });
+
+      it('muestra la opción de ir a ajustes de cuenta', () => {
+        cy.contains('Ir a ajustes de cuenta').should('exist');
+      });
+    });
+
+    describe('Cuando el código ha caducado', () => {
+      // TODO probar link https://yp989cvkn3.execute-api.us-east-2.amazonaws.com/dev/accounts/validate-new-email?currentEmail=konaf66808@ahhtee.com&newEmail=colab33852@94jo.com&code=rDVYLxFf2E a las 15:00
+      beforeEach(() => {
+        mockResponses.enlaceConfirmacionCodigoExpirado();
+        cy.visit(urlConfirmacion());
+      });
+
+      it('redirige a la vista de error', () => {
+        cy.url().should('contain', 'error');
+      });
+
+      it('muestra un mensaje de error', () => {
+        cy.contains('El enlace de confirmación ha expirado').should('exist');
+      });
+
+      it('muestra la opción de ir a ajustes de cuenta', () => {
+        cy.contains('Ir a ajustes de cuenta').should('exist');
+      });
+    });
+
+    describe('Cuando el email original no corresponde a ningún usuario', () => {
+      beforeEach(() => {
+        mockResponses.enlaceConfirmacionUsuarioNoExiste();
+        cy.visit(urlConfirmacion());
+      });
+
+      it('redirige a la vista de error', () => {
+        cy.url().should('contain', 'error');
+      });
+
+      it('muestra un mensaje de error', () => {
+        cy.contains('Usuario no encontrado').should('exist');
+      });
+    });
   });
 
   

@@ -42,3 +42,9 @@ export const editarPerfilEmailYaExiste = () => mockEditarPerfil('authentication/
 export const editarContrasenaConExito = () => mockEditarContrasena('authentication/editar-perfil-responses', 'exito', 200);
 
 export const enlaceConfirmacionConExito = () => mockConfirmacion(config.appBaseUrl + '/panel/cuenta');
+
+export const enlaceConfirmacionCodigoInvalido = () => mockConfirmacion(config.appBaseUrl + '/error/?message=cambiar_email_codigo_invalido');
+
+export const enlaceConfirmacionCodigoExpirado = () => mockConfirmacion(config.appBaseUrl + '/error/?message=cambiar_email_codigo_expirado');
+
+export const enlaceConfirmacionUsuarioNoExiste = () => mockConfirmacion(config.appBaseUrl + '/error/?message=usuario_no_existe');

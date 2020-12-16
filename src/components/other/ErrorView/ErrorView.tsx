@@ -126,20 +126,16 @@ const ErrorView: React.FC<{}> = () => {
           <EuiError error={error} />
         </EuiFlexItem>
       )}
-      <EuiFlexItem grow={false}>
-        {errors[type].action ? (
+      {errors[type].action && (
+        <EuiFlexItem grow={false}>
           <EuiButton
             onClick={() => errors[type].action.callback()}
             isLoading={loading}
           >
             {errors[type].action.name}
           </EuiButton>
-        ) : (
-          <EuiCustomLink to="/">
-            <EuiButton>Volver al inicio</EuiButton>
-          </EuiCustomLink>
-        )}
-      </EuiFlexItem>
+        </EuiFlexItem>
+      )}
       <EuiFlexItem grow={false}>
         <EuiCustomLink to="/">Volver al inicio</EuiCustomLink>
       </EuiFlexItem>

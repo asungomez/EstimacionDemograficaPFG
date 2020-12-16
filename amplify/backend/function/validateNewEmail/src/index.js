@@ -48,7 +48,7 @@ exports.handler = async (request) => {
                 ).Value;
                 const currentTime = (new Date()).getTime();
 
-                if (currentTime >= codeExpiration) {
+                if (currentTime <= codeExpiration) {
                     /**
                      * If the received code matches the stored one and it's not expired, the user
                      * attributes can be updated.
