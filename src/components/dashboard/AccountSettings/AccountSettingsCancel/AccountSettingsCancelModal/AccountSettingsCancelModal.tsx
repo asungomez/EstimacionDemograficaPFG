@@ -1,4 +1,16 @@
-import { EuiConfirmModal, EuiOverlayMask } from '@elastic/eui';
+import {
+  EuiButton,
+  EuiFlexGroup,
+  EuiFlexItem,
+  EuiModal,
+  EuiModalBody,
+  EuiModalFooter,
+  EuiModalHeader,
+  EuiModalHeaderTitle,
+  EuiOverlayMask,
+  EuiSpacer,
+  EuiText,
+} from '@elastic/eui';
 import React, { useState } from 'react';
 
 import useLogout from '../../../../../hooks/useLogout';
@@ -31,22 +43,44 @@ const AccountSettingsCancelModal: React.FC<AccountSettingsCancelModalProps> = ({
   };
   return (
     <EuiOverlayMask>
-      <EuiConfirmModal
-        title="¿Seguro que deseas cancelar tu cuenta?"
-        onCancel={onClose}
-        onConfirm={cancelAccount}
-        cancelButtonText="No, volver atrás"
-        confirmButtonText="Sí, cancelar mi cuenta"
-        buttonColor="danger"
-        defaultFocusedButton="confirm"
-        confirmButtonDisabled={loading}
-      >
-        <p>
-          Si cancelas tu cuenta, toda la información asociada a ella se perderá.
-        </p>
-        <p>Esta operación no se puede deshacer.</p>
-        {error && <EuiError error={error} />}
-      </EuiConfirmModal>
+      <EuiModal onClose={onClose}>
+        <EuiModalHeader>
+          <EuiModalHeaderTitle>
+            ¿Seguro que deseas cancelar tu cuenta?
+          </EuiModalHeaderTitle>
+        </EuiModalHeader>
+        <EuiModalBody>
+          <EuiText>
+            Si cancelas tu cuenta, toda la información asociada a ella se
+            perderá.
+          </EuiText>
+          <EuiText>Esta operación no se puede deshacer.</EuiText>
+          {error && <EuiError error={error} />}
+          <EuiSpacer />
+        </EuiModalBody>
+        <EuiModalFooter>
+          <EuiFlexGroup
+            direction="row"
+            alignItems="center"
+            justifyContent="flexEnd"
+          >
+            <EuiFlexItem grow={false}>
+              <EuiButton isDisabled={loading} onClick={onClose}>
+                No, volver atrás
+              </EuiButton>
+            </EuiFlexItem>
+            <EuiFlexItem grow={false}>
+              <EuiButton
+                color="danger"
+                isLoading={loading}
+                onClick={cancelAccount}
+              >
+                Sí, cancelar mi cuenta
+              </EuiButton>
+            </EuiFlexItem>
+          </EuiFlexGroup>
+        </EuiModalFooter>
+      </EuiModal>
     </EuiOverlayMask>
   );
 };
