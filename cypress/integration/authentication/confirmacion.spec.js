@@ -1,9 +1,7 @@
 import { login } from "../../common/actions";
-import selectors from "../../common/selectors";
 import config from "../../utils/config";
 import * as mockResponses from "../../mocks/authentication/confirmacion.mock";
 import * as mockLoginResponses from "../../mocks/authentication/iniciar-sesion.mock";
-import { wait } from "@testing-library/react";
 
 const urlConfirmacion = (email, code = '1234', id = 'abcd') => `${config.apiBaseUrl}/accounts/validate?code=${code}&email=${email}&id=${id}`;
 

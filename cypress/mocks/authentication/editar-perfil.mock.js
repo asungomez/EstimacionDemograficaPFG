@@ -1,4 +1,4 @@
-import { mockResponse } from '../utils';
+import { mockRedirect, mockResponse } from '../utils';
 import config from '../../utils/config';
 
 const mockEditarPerfil = (fixtureFile, responseType, statusCode) => {
@@ -23,6 +23,16 @@ const mockEditarContrasena = (fixtureFile, responseType, statusCode) => {
   );
 };
 
+const mockConfirmacion = (destination) => {
+  mockRedirect(
+      'GET', 
+      config.apiBaseUrl + '/accounts/validate-new-email?*', 
+      302, 
+      destination, 
+      'newEmailConfirmation'
+    );
+};
+
 export const editarPerfilConExito = () => mockEditarPerfil('authentication/editar-perfil-responses', 'exito', 200);
 
 export const editarPerfilConError = () => mockEditarPerfil('general-responses', 'internalError', 500);
@@ -30,3 +40,5 @@ export const editarPerfilConError = () => mockEditarPerfil('general-responses', 
 export const editarPerfilEmailYaExiste = () => mockEditarPerfil('authentication/editar-perfil-responses', 'emailYaExiste', 400);
 
 export const editarContrasenaConExito = () => mockEditarContrasena('authentication/editar-perfil-responses', 'exito', 200);
+
+export const enlaceConfirmacionConExito = () => mockConfirmacion(config.appBaseUrl + '/panel/cuenta');

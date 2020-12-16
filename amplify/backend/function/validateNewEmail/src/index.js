@@ -48,7 +48,7 @@ exports.handler = async (request) => {
                 ).Value;
                 const currentTime = (new Date()).getTime();
 
-                if (currentTime <= codeExpiration) {
+                if (currentTime >= codeExpiration) {
                     /**
                      * If the received code matches the stored one and it's not expired, the user
                      * attributes can be updated.
@@ -84,17 +84,17 @@ exports.handler = async (request) => {
                     return redirectResponse(appURL + '/panel/cuenta', 'Redirect succesfully');
                 }
                 else {
-                    return errorRedirect('codigo_expirado', callback);
+                    return errorRedirect(appURL, 'cambiar_email_codigo_expirado');
                 }
             }
             else {
-                return errorRedirect('codigo_invalido', callback);
+                return errorRedirect(appURL, 'cambiar_email_codigo_invalido');
             }
         }
         else {
-            return errorRedirect('usuario_no_existe', callback);
+            return errorRedirect(appURL, 'usuario_no_existe');
         }
     } catch (err) {
-        return errorRedirect('cambio_fallido', callback);
+        return errorRedirect(appURL, 'cambiar_email_fallido');
     }
 };

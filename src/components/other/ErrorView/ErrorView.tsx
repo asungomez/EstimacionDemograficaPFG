@@ -15,6 +15,9 @@ import EuiError from '../../common/eui/EuiError';
 const ERROR_TYPES = [
   'confirmacion_fallida',
   'usuario_no_existe',
+  'cambiar_email_codigo_expirado',
+  'cambiar_email_codigo_invalido',
+  'cambiar_email_fallido',
   'default',
 ] as const;
 type ErrorType = typeof ERROR_TYPES[number];
@@ -57,6 +60,8 @@ const ErrorView: React.FC<{}> = () => {
     }
   };
 
+  const goToAccountSettings = () => history.push('/panel/cuenta');
+
   const errors: { [type in ErrorType]: ErrorDescription } = {
     confirmacion_fallida: {
       title: 'No ha sido posible confirmar tu cuenta',
@@ -70,6 +75,28 @@ const ErrorView: React.FC<{}> = () => {
     usuario_no_existe: {
       title: 'Usuario no encontrado',
       description: 'El usuario especificado no existe.',
+    },
+    cambiar_email_codigo_expirado: {
+      title: 'El enlace de confirmación ha expirado',
+      description:
+        'Para volver a iniciar el proceso de actualización tu dirección de correo electrónico, ve a los ajustes de tu cuenta',
+      action: {
+        name: 'Ir a ajustes de cuenta',
+        callback: goToAccountSettings,
+      },
+    },
+    cambiar_email_codigo_invalido: {
+      title: 'El enlace de confirmación no es válido',
+      description:
+        'Para volver a iniciar el proceso de actualización tu dirección de correo electrónico, ve a los ajustes de tu cuenta',
+      action: {
+        name: 'Ir a ajustes de cuenta',
+        callback: goToAccountSettings,
+      },
+    },
+    cambiar_email_fallido: {
+      title: 'No se pudo actualizar tu dirección de correo electrónico',
+      description: 'Por favor, inténtalo de nuevo más tarde',
     },
     default: {
       title: 'Ha habido un error',
@@ -99,16 +126,20 @@ const ErrorView: React.FC<{}> = () => {
           <EuiError error={error} />
         </EuiFlexItem>
       )}
-      {errors[type].action && (
-        <EuiFlexItem grow={false}>
+      <EuiFlexItem grow={false}>
+        {errors[type].action ? (
           <EuiButton
             onClick={() => errors[type].action.callback()}
             isLoading={loading}
           >
             {errors[type].action.name}
           </EuiButton>
-        </EuiFlexItem>
-      )}
+        ) : (
+          <EuiCustomLink to="/">
+            <EuiButton>Volver al inicio</EuiButton>
+          </EuiCustomLink>
+        )}
+      </EuiFlexItem>
       <EuiFlexItem grow={false}>
         <EuiCustomLink to="/">Volver al inicio</EuiCustomLink>
       </EuiFlexItem>
