@@ -26,7 +26,7 @@ const CreateDataSet: React.FC<{}> = () => {
             setData(data);
             setStatus('map-data');
           })
-          .catch(() => {});
+          .catch(() => setStatus('select-format'));
       } else {
         setStatus('select-format');
       }

@@ -1,3 +1,5 @@
+import yaml from 'js-yaml';
+
 export type FileType = 'json' | 'yaml' | 'csv' | 'custom';
 
 class Parser {
@@ -17,19 +19,19 @@ class Parser {
   }
 
   public static parseFile(file: File, type: FileType) : Promise<any> {
-    if(type === 'json') {
-      return Parser.parseJsonFile(file);
-    }
-  }
-
-  private static parseJsonFile(file: File) : Promise<any> {
     return new Promise((resolve, reject) => {
       const fileReader = new FileReader();
       fileReader.onerror = () => reject(fileReader.error);
       fileReader.onload = () => {
         const stringContent : string = fileReader.result as string;
         try {
-          const objectContent = JSON.parse(stringContent);
+          let objectContent : any = {};
+          if(type === 'json') {
+            objectContent = Parser.parseJsonString(stringContent)
+          }
+          else if(type === 'yaml') {
+            objectContent = Parser.parseYamlString(stringContent);
+          }
           resolve(objectContent);
         }
         catch(e) {
@@ -38,7 +40,15 @@ class Parser {
       }
 
       fileReader.readAsText(file);
-    })
+    });
+  }
+
+  private static parseJsonString(text: string) : any {
+    return JSON.parse(text);
+  }
+
+  private static parseYamlString(text: string) : any {
+    return yaml.load(text);
   }
 };
 
