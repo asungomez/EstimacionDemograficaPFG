@@ -9,8 +9,8 @@ import React, { useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 
 import AuthenticationService from '../../../services/AuthenticationService/AuthenticationService';
-import EuiCustomLink from '../../common/eui/EuiCustomLink';
-import EuiError from '../../common/eui/EuiError';
+import EuiCustomLink from '../eui/EuiCustomLink';
+import EuiError from '../eui/EuiError';
 
 const ERROR_TYPES = [
   'confirmacion_fallida',
