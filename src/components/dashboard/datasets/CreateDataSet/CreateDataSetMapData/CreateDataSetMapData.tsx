@@ -7,7 +7,6 @@ export type CreateDataSetMapDataProps = {
 const CreateDataSetMapData: React.FC<CreateDataSetMapDataProps> = ({
   data,
 }) => {
-  console.log(data);
   return <>Map data</>;
 };
 
