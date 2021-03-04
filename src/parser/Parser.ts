@@ -1,4 +1,5 @@
 import yaml from 'js-yaml';
+import Papa from 'papaparse';
 
 export type FileType = 'json' | 'yaml' | 'csv' | 'custom';
 
@@ -32,6 +33,9 @@ class Parser {
           else if(type === 'yaml') {
             objectContent = Parser.parseYamlString(stringContent);
           }
+          else if(type === 'csv') {
+            objectContent = Parser.parseCsvString(stringContent);
+          }
           resolve(objectContent);
         }
         catch(e) {
@@ -49,6 +53,21 @@ class Parser {
 
   private static parseYamlString(text: string) : any {
     return yaml.load(text);
+  }
+
+  private static parseCsvString(text: string) : any {
+    const parseResult = Papa.parse(text, {header: true});
+    if(parseResult.data.length === 0) {
+      if(parseResult.errors.length > 0) {
+        throw new Error(parseResult.errors[0].message);
+      }
+      else {
+        throw new Error('Empty dataset');
+      }
+    }
+    else {
+      return parseResult.data;
+    }
   }
 };
 
