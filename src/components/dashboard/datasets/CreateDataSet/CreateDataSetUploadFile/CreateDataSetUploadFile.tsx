@@ -11,7 +11,7 @@ import React from 'react';
 import uploadImage from '../../../../../assets/images/upload_image.svg';
 
 export type CreateDataSetUploadFileProps = {
-  onUpload: () => void;
+  onUpload: (files: FileList) => void;
 };
 
 const CreateDataSetUploadFile: React.FC<CreateDataSetUploadFileProps> = ({

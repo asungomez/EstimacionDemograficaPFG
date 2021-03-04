@@ -1,5 +1,14 @@
 import React from 'react';
 
-const CreateDataSetMapData: React.FC<{}> = () => <>Map data</>;
+export type CreateDataSetMapDataProps = {
+  data: any;
+};
+
+const CreateDataSetMapData: React.FC<CreateDataSetMapDataProps> = ({
+  data,
+}) => {
+  console.log(data);
+  return <>Map data</>;
+};
 
 export default CreateDataSetMapData;

@@ -5,13 +5,33 @@ import {
 } from '@elastic/eui';
 import React, { useState } from 'react';
 
+import Parser from '../../../../parser/Parser';
 import CreateDataSetMapData from './CreateDataSetMapData/CreateDataSetMapData';
+import CreateDataSetSelectFormat from './CreateDataSetSelectFormat/CreateDataSetSelectFormat';
 import CreateDataSetUploadFile from './CreateDataSetUploadFile/CreateDataSetUploadFile';
 
-type CreateDataSetStatus = 'upload' | 'map-data';
+type CreateDataSetStatus = 'upload' | 'map-data' | 'select-format';
 
 const CreateDataSet: React.FC<{}> = () => {
   const [status, setStatus] = useState<CreateDataSetStatus>('upload');
+  const [data, setData] = useState<any>(null);
+
+  const parseFiles = (files: FileList) => {
+    if (files.length > 0) {
+      const file = files[0];
+      const fileType = Parser.guessFileTypeFromExtension(file.name);
+      if (fileType !== 'custom') {
+        Parser.parseFile(file, fileType)
+          .then(data => {
+            setData(data);
+            setStatus('map-data');
+          })
+          .catch(() => {});
+      } else {
+        setStatus('select-format');
+      }
+    }
+  };
 
   return (
     <>
@@ -23,9 +43,11 @@ const CreateDataSet: React.FC<{}> = () => {
         </EuiPageContentHeaderSection>
       </EuiPageHeader>
       {status === 'upload' ? (
-        <CreateDataSetUploadFile onUpload={() => setStatus('map-data')} />
+        <CreateDataSetUploadFile onUpload={parseFiles} />
       ) : status === 'map-data' ? (
-        <CreateDataSetMapData />
+        <CreateDataSetMapData data={data} />
+      ) : status === 'select-format' ? (
+        <CreateDataSetSelectFormat />
       ) : null}
     </>
   );
