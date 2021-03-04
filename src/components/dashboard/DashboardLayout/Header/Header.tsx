@@ -13,30 +13,27 @@ import {
   EuiPopoverTitle,
 } from '@elastic/eui';
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import logo from '../../../../assets/images/logo_uned.svg';
 import { useAuthenticationContext } from '../../../../contexts/AuthenticationContext';
-import AuthenticationService from '../../../../services/AuthenticationService';
+import useLogout from '../../../../hooks/useLogout';
 
 const Header: React.FC<{}> = () => {
   const [popoverOpen, setPopoverOpen] = useState(false);
-  const { userHasAuthenticated, user } = useAuthenticationContext();
+  const { user } = useAuthenticationContext();
+  const history = useHistory();
+  const logOut = useLogout();
 
   const togglePopover = () => setPopoverOpen(open => !open);
-
-  const logOut = () => {
-    AuthenticationService.logOut()
-      .then(() => {
-        userHasAuthenticated(false);
-      })
-      .catch(() => {});
-  };
 
   return (
     <EuiHeader position="static">
       <EuiHeaderSection grow side="left">
         <EuiHeaderSectionItem>
-          <EuiHeaderLogo iconType={logo}>Estimación demográfica</EuiHeaderLogo>
+          <EuiHeaderLogo iconType={logo} onClick={() => history.push('/panel')}>
+            Estimación demográfica
+          </EuiHeaderLogo>
         </EuiHeaderSectionItem>
       </EuiHeaderSection>
       <EuiHeaderSection grow={false} side="right">
@@ -58,7 +55,14 @@ const Header: React.FC<{}> = () => {
               {user.email}
             </EuiPopoverTitle>
             <EuiFlexGroup direction="column" alignItems="flexStart">
-              <EuiButtonEmpty color="text" iconType="user">
+              <EuiButtonEmpty
+                color="text"
+                iconType="user"
+                onClick={() => {
+                  history.push('/panel/cuenta');
+                  setPopoverOpen(false);
+                }}
+              >
                 Perfil
               </EuiButtonEmpty>
               <EuiButtonEmpty color="text" iconType="exit" onClick={logOut}>

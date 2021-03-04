@@ -1,171 +1,164 @@
 import selectors from "../../common/selectors";
+import * as mockResponses from "../../mocks/authentication/registro.mock";
+
+const registrar = (usuario) => {
+  cy.visit('/registro');
+  if (usuario && usuario.email && usuario.email.length > 0) {
+    cy.get('input[name="email"]').type(usuario.email);
+  }
+  if (usuario && usuario.password && usuario.password.length > 0) {
+    cy.get('input[name="password"]').type(usuario.password);
+  }
+  cy.get('form').submit();
+};
+
+let usuarioValido, usuarioInvalido;
 
 describe('Registro', () => {
 
-  const registrar = (usuario) => {
-    cy.visit('/registro');
-    if(usuario && usuario.email && usuario.email.length > 0) {
-      cy.get('input[name="email"]').type(usuario.email);
-    }
-    if(usuario && usuario.password && usuario.password.length > 0) {
-      cy.get('input[name="password"]').type(usuario.password);
-    }
-    cy.get('form').submit();
-    cy.wait(3000);
-  };
+  before(() => {
+    cy.fixture('usuarios').then(({ valido, invalido }) => {
+      usuarioValido = valido;
+      usuarioInvalido = invalido;
+    });
+  })
 
   describe('Registrar una cuenta con datos válidos', () => {
-
-    let usuario = {
-      email: '',
-      password: ''
-    };
-
-    beforeEach(() => {
-      cy.fixture('usuarios').then(({ validoNoRegistrado }) => {
-        usuario.email = '' + Math.random() + validoNoRegistrado.email;
-        usuario.password = validoNoRegistrado.password;
-        registrar(usuario);
-      });
+    before(() => {
+      mockResponses.registroConExito();
+      registrar(usuarioValido);
+      cy.wait('@signUp');
     });
 
     it('redirige a iniciar sesión', () => {
-      cy.waitUntil(() => {
-        return cy
-          .get(selectors.spinner)
-          .should('not.exist')
-          .then(() => {
-            return cy.url().should('contain', 'iniciar-sesion');
-          });
-      });
+      cy.url().should('contain', 'iniciar-sesion');
     });
 
     it('muestra un mensaje de éxito', () => {
-      cy.waitUntil(() => {
-        return cy
-          .get(selectors.spinner)
-          .should('not.exist')
-          .then(() => {
-            return cy.contains('Te hemos enviado un enlace de confirmación').should('exist');
-          });
-      });
+      cy.contains('Te hemos enviado un enlace de confirmación').should('exist');
     });
 
     it('permite el reenvío del mensaje de confirmación', () => {
-      cy.waitUntil(() => {
-        return cy
-          .get(selectors.spinner)
-          .should('not.exist')
-          .then(() => {
-            return cy.contains('button', 'Enviar de nuevo').should('exist');
-          });
-      });
+      cy.contains('button', 'Enviar de nuevo').should('exist');
     });
   });
 
   describe('Intentar registrar una cuenta con datos inválidos', () => {
     const intentarRegistrarInvalido = (usuario, errorEsperado) => {
       registrar(usuario);
-      if(errorEsperado) {
+      if (errorEsperado) {
         cy.contains(selectors.errorCampoFormulario, errorEsperado).should('exist');
       }
     };
 
-    it('muestra un error en el campo Email si está en blanco', () => {
-      cy.fixture('usuarios').then(({ validoNoRegistrado : usuario }) => {
-        usuario.email = '';
+    describe('Campo email en blanco', () => {
+
+      it('muestra un error en el campo del formulario', () => {
+        const usuario = { ...usuarioValido, email: '' };
         intentarRegistrarInvalido(usuario, 'Introduce tu email');
       });
     });
 
-    it('muestra un error en el campo Email si no es un email válido', () => {
-      cy.fixture('usuarios').then(({ validoNoRegistrado : usuario }) => {
-        usuario.email = 'abc';
+    describe('Campo email inválido', () => {
+
+      it('muestra un error en el campo del formulario', () => {
+        const usuario = { ...usuarioValido, email: usuarioInvalido.email };
         intentarRegistrarInvalido(usuario, 'No es una dirección de email válida');
       });
-    });
 
-    it('elimina el error en el campo Email cuando se introduce un email válido', () => {
-      cy.fixture('usuarios').then(({ validoNoRegistrado : usuario }) => {
-        let usuarioInvalido = {};
-        usuarioInvalido.email = 'abc';
-        usuarioInvalido.password = usuario.password;
-        intentarRegistrarInvalido(usuarioInvalido);
-        cy.get('input[name="email"]').click();
-        cy.get('input[name="email"]').clear()
-        cy.get('input[name="email"]').type(usuario.email);
-        cy.get(selectors.errorCampoFormulario).should('not.exist');
+      describe('Introducir un email válido', () => {
+        
+        beforeEach(() => {
+          const usuario = { ...usuarioValido, email: usuarioInvalido.email };
+          intentarRegistrarInvalido(usuario);
+          cy.get('input[name="email"]').click();
+          cy.get('input[name="email"]').clear();
+          cy.get('input[name="email"]').type(usuarioValido.email);
+        });
+
+        it('elimina el error en el campo del formulario', () => {
+          cy.get(selectors.errorCampoFormulario).should('not.exist');
+        });
       });
     });
 
-    it('muestra un error en el campo Contraseña si está en blanco', () => {
-      cy.fixture('usuarios').then(({ validoNoRegistrado : usuario }) => {
-        usuario.password = '';
+    describe('Campo contraseña en blanco', () => {
+
+      it('muestra un error en el campo del formulario', () => {
+        const usuario = { ...usuarioValido, password: '' };
         intentarRegistrarInvalido(usuario, 'Introduce tu contraseña');
       });
     });
 
-    it('muestra un error en el campo Contraseña si no contiene minúsculas', () => {
-      cy.fixture('usuarios').then(({ validoNoRegistrado : usuario }) => {
-        usuario.password = 'AAAAAA1.1.1.';
+    describe('Campo contraseña sin minúsculas', () => {
+
+      it('muestra un error en el campo del formulario', () => {
+        const usuario = { ...usuarioValido, password: 'AAAAAA1.1.1.' };
         intentarRegistrarInvalido(usuario, 'La contraseña debe tener al menos una letra minúscula');
       });
     });
 
-    it('muestra un error en el campo Contraseña si no contiene mayúsculas', () => {
-      cy.fixture('usuarios').then(({ validoNoRegistrado : usuario }) => {
-        usuario.password = 'aaaaaa1.1.1.';
+    describe('Campo contraseña sin mayúsculas', () => {
+
+      it('muestra un error en el campo del formulario', () => {
+        const usuario = { ...usuarioValido, password: 'aaaaaa1.1.1.' };
         intentarRegistrarInvalido(usuario, 'La contraseña debe tener al menos una letra mayúscula');
       });
     });
 
-    it('muestra un error en el campo Contraseña si no contiene mayúsculas', () => {
-      cy.fixture('usuarios').then(({ validoNoRegistrado : usuario }) => {
-        usuario.password = 'aaaAAA......';
+    describe('Campo contraseña sin números', () => {
+
+      it('muestra un error en el campo del formulario', () => {
+        const usuario = { ...usuarioValido, password: 'aaaAAA......' };
         intentarRegistrarInvalido(usuario, 'La contraseña debe tener al menos un número');
       });
     });
 
-    it('muestra un error en el campo Contraseña si no contiene símbolos', () => {
-      cy.fixture('usuarios').then(({ validoNoRegistrado : usuario }) => {
-        usuario.password = 'aaaAAA111111';
+    describe('Campo contraseña sin símbolos', () => {
+
+      it('muestra un error en el campo del formulario', () => {
+        const usuario = { ...usuarioValido, password: 'aaaAAA111111' };
         intentarRegistrarInvalido(usuario, 'La contraseña debe tener al menos un símbolo');
       });
     });
 
-    it('muestra un error en el campo Contraseña si es demasiado corta', () => {
-      cy.fixture('usuarios').then(({ validoNoRegistrado : usuario }) => {
-        usuario.password = 'aA1.';
-        intentarRegistrarInvalido(usuario, 'La contraseña debe tener al menos 6 caracteres');
+    describe('Campo contraseña demasiado corto', () => {
+
+      it('muestra un error en el campo del formulario', () => {
+        const usuario = { ...usuarioValido, password: 'aA1.' };
+        intentarRegistrarInvalido(usuario, 'La contraseña debe tener al menos 12 caracteres');
       });
-    });
 
-    it('elimina el error en el campo Contraseña cuando se introduce una contraseña válidas', () => {
-      cy.fixture('usuarios').then(({ validoNoRegistrado : usuario }) => {
-        let usuarioInvalido = {};
-        usuarioInvalido.email = usuario.email;
-        usuarioInvalido.password = '';
-        intentarRegistrarInvalido(usuario);
-        cy.get('input[name="password"]').type(usuario.password);
-        cy.get(selectors.errorCampoFormulario).should('not.exist');
-      });
-    });
-  });
+      describe('Introducir una contraseña válida', () => {
+        beforeEach(() => {
+          const usuario = { ...usuarioValido, password: 'aA1.' };
+          intentarRegistrarInvalido(usuario);
+          cy.get('input[name="password"]').click();
+          cy.get('input[name="password"]').clear();
+          cy.get('input[name="password"]').type(usuarioValido.password);
+        });
 
-  describe('Intentar registrar una cuenta ya registrada', () => {
-
-    it('muestra un mensaje de error tras cargar', () => {
-      cy.fixture('usuarios').then(({ validoRegistrado : usuario }) => {
-        registrar(usuario);
-        cy.waitUntil(() => {
-          return cy
-            .get(selectors.spinner)
-            .should('not.exist')
-            .then(() => {
-              return cy.contains('La dirección de email ya se encuentra registrada').should('exist');
-            });
+        it('elimina el error en el campo del formulario', () => {
+          cy.get(selectors.errorCampoFormulario).should('not.exist');
         });
       });
     });
   });
+
+  // describe('Intentar registrar una cuenta ya registrada', () => {
+
+  //   it('muestra un mensaje de error tras cargar', () => {
+  //     cy.fixture('usuarios').then(({ validoRegistrado : usuario }) => {
+  //       registrar(usuario);
+  //       cy.waitUntil(() => {
+  //         return cy
+  //           .get(selectors.spinner)
+  //           .should('not.exist')
+  //           .then(() => {
+  //             return cy.contains('La dirección de email ya se encuentra registrada').should('exist');
+  //           });
+  //       });
+  //     });
+  //   });
+  // });
 });

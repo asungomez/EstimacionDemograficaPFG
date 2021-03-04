@@ -36,6 +36,32 @@
           ]
         }
       ]
+    },
+    "updateProfile": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": [
+        {
+          "category": "auth",
+          "resourceName": "demografiapfgee9e612f",
+          "attributes": [
+            "UserPoolId"
+          ]
+        }
+      ]
+    },
+    "cancelAccount": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": []
+    },
+    "validateNewEmail": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": []
     }
   },
   "api": {
@@ -46,6 +72,30 @@
         {
           "category": "function",
           "resourceName": "validateAccount",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        },
+        {
+          "category": "function",
+          "resourceName": "updateProfile",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        },
+        {
+          "category": "function",
+          "resourceName": "cancelAccount",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        },
+        {
+          "category": "function",
+          "resourceName": "validateNewEmail",
           "attributes": [
             "Name",
             "Arn"

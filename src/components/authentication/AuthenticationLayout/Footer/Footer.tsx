@@ -10,13 +10,7 @@ const Footer: React.FC<{}> = () => (
       Github
     </EuiLink>
     <EuiLink
-      href="https://github.com/asungomez/EstimacionDemograficaPFG"
-      target="_blank"
-    >
-      Términos del Servicio
-    </EuiLink>
-    <EuiLink
-      href="https://github.com/asungomez/EstimacionDemograficaPFG"
+      href="https://descargas.uned.es/publico/pdf/Politica_privacidad_UNED.pdf"
       target="_blank"
     >
       Política de privacidad

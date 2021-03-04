@@ -18,7 +18,7 @@ import { useHistory } from 'react-router-dom';
 import * as Yup from 'yup';
 
 import { usePasswordContext } from '../../../../contexts/PasswordContext';
-import AuthenticationService from '../../../../services/AuthenticationService';
+import AuthenticationService from '../../../../services/AuthenticationService/AuthenticationService';
 import EuiCustomLink from '../../../common/eui/EuiCustomLink';
 import PasswordChecker from '../../SignUp/PasswodChecker/PasswordChecker';
 import SetNewPasswordMessage, {
@@ -47,7 +47,7 @@ const SetNewPassword: React.FC<SetNewPasswordProps> = ({ email, code }) => {
   const { policy } = usePasswordContext();
 
   const submit = ({ password }: SetNewPasswordFormValues) => {
-    setPopoverOpen(false);
+    closePopover();
     setSubmitting(true);
     setError(null);
     setMessage(null);
@@ -93,7 +93,7 @@ const SetNewPassword: React.FC<SetNewPasswordProps> = ({ email, code }) => {
           </EuiTitle>
         </EuiText>
       </EuiFlexItem>
-      <EuiFlexItem grow={false}>
+      <EuiFlexItem grow={false} className="reset-password-container">
         <Formik
           initialValues={initialValues}
           validationSchema={schema}

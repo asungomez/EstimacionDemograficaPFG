@@ -1,3 +1,5 @@
+import './LogIn.scss';
+
 import {
   EuiButton,
   EuiButtonEmpty,
@@ -19,7 +21,7 @@ import { useLocation } from 'react-router-dom';
 import * as Yup from 'yup';
 
 import useLogin from '../../../hooks/useLogin';
-import AuthenticationService from '../../../services/AuthenticationService';
+import AuthenticationService from '../../../services/AuthenticationService/AuthenticationService';
 import EuiCustomLink from '../../common/eui/EuiCustomLink';
 import LogInMessage, { LogInMessageType } from './LogInMessage/LogInMessage';
 
@@ -47,20 +49,23 @@ const LogIn: React.FC<{}> = () => {
   const [message, setMessage] = useState<LogInMessageType>(
     new URLSearchParams(location.search).get('message') as LogInMessageType
   );
-  const email = new URLSearchParams(location.search).get('email');
-  const logIn = useLogin('/dashboard');
+  const [email, setEmail] = useState(
+    new URLSearchParams(location.search).get('email')
+  );
+  const logIn = useLogin('/panel');
 
-  const submit = (values: LogInFormValues) => {
+  const submit = ({ email, password }: LogInFormValues) => {
     setError(null);
     setSubmitting(true);
     setMessage(null);
-    AuthenticationService.logIn(values.email, values.password)
+    setEmail(null);
+    AuthenticationService.logIn(email, password)
       .then(() => {
-        setSubmitting(false);
         logIn();
       })
       .catch(error => {
         if (error.code === 'UserNotConfirmedException') {
+          setEmail(email);
           setMessage('needsConfirmation');
         } else if (error.code === 'UserNotFoundException') {
           setMessage('notExistent');
@@ -81,7 +86,7 @@ const LogIn: React.FC<{}> = () => {
         </EuiText>
       </EuiFlexItem>
       <EuiSpacer size="xs" />
-      <EuiFlexItem grow={false}>
+      <EuiFlexItem grow={false} className="log-in-form-container">
         <Formik
           initialValues={initialValues}
           validationSchema={schema}
@@ -110,6 +115,7 @@ const LogIn: React.FC<{}> = () => {
                 label="Email"
                 isInvalid={errors.email && touched.email}
                 error={errors.email}
+                fullWidth
               >
                 <EuiFieldText
                   name="email"
@@ -117,18 +123,21 @@ const LogIn: React.FC<{}> = () => {
                   value={values.email}
                   onChange={handleChange}
                   icon="email"
+                  fullWidth
                 />
               </EuiFormRow>
               <EuiFormRow
                 label="Contraseña"
                 isInvalid={errors.password && touched.password}
                 error={errors.password}
+                fullWidth
               >
                 <EuiFieldPassword
                   name="password"
                   type="dual"
                   value={values.password}
                   onChange={handleChange}
+                  fullWidth
                 />
               </EuiFormRow>
               <EuiSpacer size="xl" />

@@ -1,0 +1,17 @@
+{
+  "success": {
+    "CodeDeliveryDetails": {
+      "AttributeName": "email",
+      "DeliveryMedium": "EMAIL",
+      "Destination": "l***@y***.com"
+    }
+  },
+  "yaConfirmado": {
+    "__type": "InvalidParameterException",
+    "message": "User is already confirmed."
+  },
+  "limiteSuperado": {
+    "__type": "LimitExceededException",
+    "message": "Attempt limit exceeded, please try after some time."
+  }
+}

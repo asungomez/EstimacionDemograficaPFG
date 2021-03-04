@@ -1,106 +1,96 @@
-import selectors from "../../common/selectors";
+import { login } from "../../common/actions";
+import * as mockResponses from "../../mocks/authentication/iniciar-sesion.mock";
 
-const login = (usuario) => {
-  cy.visit('/iniciar-sesion');
-  if(usuario && usuario.email && usuario.email.length > 0) {
-    cy.get('input[name="email"]').type(usuario.email);
-  }
-  if(usuario && usuario.password && usuario.password.length > 0) {
-    cy.get('input[name="password"]').type(usuario.password);
-  }
-  cy.get('form').submit();
-  cy.wait(3000);
-};
+let usuarioConfirmado, usuarioValido;
 
 describe('Iniciar sesion', () => {
+
+  before(() => {
+    cy.fixture('usuarios').then(({ validoConfirmado, valido }) => {
+      usuarioConfirmado = validoConfirmado;
+      usuarioValido = valido;
+    });
+  });
+
   describe('Con un usuario registrado y confirmado', () => {
-    it('redirige al dashboard', () => {
-      cy.fixture('usuarios').then(({validoConfirmado: usuario}) => {
-        login(usuario);
-        cy.waitUntil(() => {
-          return cy
-            .get(selectors.spinner)
-            .should('not.exist')
-            .then(() => {
-              return cy.url().should('contain', 'dashboard');
-            });
-        });
+
+    describe('Usando la contraseña correcta', () => {
+      before(() => {
+        mockResponses.iniciarSesionEstablecerAlias();
+        login(usuarioConfirmado);
+        cy.wait('@login');
+      });
+  
+      it('redirige al panel', () => {
+        cy.url().should('contain', 'panel');
+      });
+    });
+
+    describe('Usando una contraseña incorrecta', () => {
+      before(() => {
+        mockResponses.iniciarSesionContrasenaIncorrecta();
+        login(usuarioValido);
+        cy.wait('@login');
+      });
+
+      it('se mantiene en la página de inicio de sesión', () => {
+        cy.url().should('contain', 'iniciar-sesion');
+      });
+  
+      it('muestra un mensaje de error', () => {
+        cy.contains('El nombre de usuario no existe o la contraseña no es correcta').should('exist');
       });
     });
   });
 
-  describe('Con un usuario registrado pero no confirmado', () => {
-    it('muestra un mensaje de error', () => {
-      cy.fixture('usuarios').then(({validoNoConfirmado: usuario}) => {
-        login(usuario);
-        cy.waitUntil(() => {
-          return cy
-            .get(selectors.spinner)
-            .should('not.exist')
-            .then(() => {
-              return cy.contains('Tu dirección de email no está confirmada').should('exist');
-            });
-        });
-      });
+  describe('Con un usuario registrado y no confirmado', () => {
+    before(() => {
+      mockResponses.iniciarSesionUsuarioNoConfirmado();
+      login(usuarioValido);
+      cy.wait('@login');
     });
 
-    it('muestra la opción de reenviar el mensaje', () => {
-      cy.fixture('usuarios').then(({validoNoConfirmado: usuario}) => {
-        login(usuario);
-        cy.waitUntil(() => {
-          return cy
-            .get(selectors.spinner)
-            .should('not.exist')
-            .then(() => {
-              return cy.contains('Enviar de nuevo').should('exist');
-            });
-        });
-      });
+    it('se mantiene en la página de inicio de sesión', () => {
+      cy.url().should('contain', 'iniciar-sesion');
+    });
+
+    it('muestra un mensaje de error', () => {
+      cy.contains('Tu dirección de email no está confirmada').should('exist');
+    });
+
+    it('permite el reenvío del mensaje de confirmación', () => {
+      cy.contains('Enviar de nuevo').should('exist');
     });
   });
 
   describe('Con un usuario que no existe', () => {
-    it('muestra un mensaje de error', () => {
-      cy.fixture('usuarios').then(({validoNoRegistrado: usuario}) => {
-        usuario.email = '' + Math.random() + usuario.email;
-        login(usuario);
-        cy.waitUntil(() => {
-          return cy
-            .get(selectors.spinner)
-            .should('not.exist')
-            .then(() => {
-              return cy.contains('No existe la cuenta').should('exist');
-            });
-        });
-      });
+    before(() => {
+      mockResponses.iniciarSesionUsuarioNoExiste();
+      login(usuarioValido);
+      cy.wait('@login');
     });
 
-    it('muestra la opción de registro', () => {
-      cy.fixture('usuarios').then(({validoNoRegistrado: usuario}) => {
-        usuario.email = '' + Math.random() + usuario.email;
-        login(usuario);
-        cy.waitUntil(() => {
-          return cy
-            .get(selectors.spinner)
-            .should('not.exist')
-            .then(() => {
-              return cy.contains('Crear nueva cuenta').should('exist');
-            });
-        });
-      });
+    it('se mantiene en la página de inicio de sesión', () => {
+      cy.url().should('contain', 'iniciar-sesion');
+    });
+
+    it('muestra un mensaje de error', () => {
+      cy.contains('No existe la cuenta').should('exist');
+    });
+
+    it('muestra la opción de registrar una nueva cuenta', () => {
+      cy.contains('Crear nueva cuenta').should('exist');
     });
   });
 
   describe('Cerrar sesión', () => {
-    beforeEach(() => {
-      cy.fixture('usuarios').then(({validoConfirmado: usuario}) => {
-        login(usuario);
-      });
-    });
-
-    it('redirige a login', () => {
+    before(() => {
+      login(usuarioConfirmado);
       cy.get("[aria-label='Opciones']").click();
       cy.contains('Cerrar sesión').click();
+    });
+
+    it('redirige a iniciar sesión', () => {
       cy.url().should('contain', 'iniciar-sesion');
     });
   });

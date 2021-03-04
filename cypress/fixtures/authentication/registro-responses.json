@@ -1,0 +1,11 @@
+{
+  "success": {
+    "CodeDeliveryDetails": {
+      "AttributeName": "email",
+      "DeliveryMedium": "EMAIL",
+      "Destination": "m***@m***.com"
+    },
+    "UserConfirmed": false,
+    "UserSub": "d1b5712b-d4a1-4891-96c2-943174908fe9"
+  }
+}
