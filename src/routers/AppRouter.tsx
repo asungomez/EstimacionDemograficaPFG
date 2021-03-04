@@ -2,8 +2,8 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 import AuthenticationLayout from '../components/authentication/AuthenticationLayout/AuthenticationLayout';
-import DashboardLayout from '../components/dashboard/DashboardLayout/DashboardLayout';
 import NotFound from '../components/common/NotFound/NotFound';
+import DashboardLayout from '../components/dashboard/DashboardLayout/DashboardLayout';
 import AuthenticatedRoute from './AuthenticatedRoute';
 import UnauthenticatedRoute from './UnauthenticatedRoute';
 

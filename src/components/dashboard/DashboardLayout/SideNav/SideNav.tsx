@@ -2,41 +2,33 @@ import { EuiSideNav } from '@elastic/eui';
 import React, { useState } from 'react';
 
 const SideNav: React.FC<{}> = () => {
-  const [isSideNavOpenOnMobile, setisSideNavOpenOnMobile] = useState(false);
+  const [isSideNavOpenOnMobile, setIsSideNavOpenOnMobile] = useState(false);
 
   const toggleOpenOnMobile = () => {
-    setisSideNavOpenOnMobile(!isSideNavOpenOnMobile);
+    setIsSideNavOpenOnMobile(!isSideNavOpenOnMobile);
   };
 
   const menuItems = [
     {
       name: 'Datos',
-      id: 0,
+      id: 'data-sets',
+      onClick: () => {},
       items: [
         {
-          name: 'Lorem',
-          id: 1,
-          onClick: () => {},
-        },
-        {
-          name: 'Ipsum',
-          id: 2,
+          name: 'Crear conjunto de datos',
+          id: 'create-data-sets',
           onClick: () => {},
         },
       ],
     },
     {
       name: 'Informes',
-      id: 3,
+      id: 'reports',
+      onClick: () => {},
       items: [
         {
-          name: 'Lorem',
-          id: 4,
-          onClick: () => {},
-        },
-        {
-          name: 'Ipsum',
-          id: 5,
+          name: 'Crear informe',
+          id: 'create-report',
           onClick: () => {},
         },
       ],

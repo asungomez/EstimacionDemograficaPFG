@@ -1,0 +1,11 @@
+.home__welcome-image {
+  width: 100%;
+
+  @media screen and (min-width: 500px) {
+    width: 40%;
+  }
+
+  @media screen and (min-width: 768px) {
+    width: 25%;
+  }
+}
