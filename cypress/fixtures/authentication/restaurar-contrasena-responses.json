@@ -1,0 +1,33 @@
+{
+  "solicitudConExito": {
+    "CodeDeliveryDetails": {
+      "AttributeName": "email",
+      "DeliveryMedium": "EMAIL",
+      "Destination": "t***@t***.com"
+    }
+  },
+  "solicitudUsuarioNoExiste": {
+    "__type": "UserNotFoundException",
+    "message": "Username/client id combination not found."
+  },
+  "solicitudUsuarioNoConfirmado": {
+    "__type": "InvalidParameterException",
+    "message": "Cannot reset password for the user as there is no registered/verified email or phone_number"
+  },
+  "reenvioConExito": {
+    "CodeDeliveryDetails": {
+      "AttributeName": "email",
+      "DeliveryMedium": "EMAIL",
+      "Destination": "r***@f***.com"
+    }
+  },
+  "restaurarContrasenaCodigoCaducado": {
+    "__type": "ExpiredCodeException",
+    "message": "Invalid code provided, please request a code again."
+  },
+  "restaurarContrasenaUsuarioNoExiste": {
+    "__type": "UserNotFoundException",
+    "message": "Username/client id combination not found."
+  },
+  "restaurarContrasenaConExito": {}
+}

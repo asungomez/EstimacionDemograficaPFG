@@ -1,0 +1,25 @@
+{
+  "trigger": true,
+  "modules": [
+    "verification-link"
+  ],
+  "parentResource": "demografiapfgee9e612f",
+  "functionName": "demografiapfgee9e612fCustomMessage",
+  "resourceName": "demografiapfgee9e612fCustomMessage",
+  "parentStack": "auth",
+  "triggerEnvs": [
+    {
+      "key": "RESOURCENAME",
+      "value": "resourceName"
+    }
+  ],
+  "triggerDir": "/usr/lib/node_modules/@aws-amplify/cli/node_modules/amplify-category-auth/provider-utils/awscloudformation/triggers/CustomMessage",
+  "triggerTemplate": "CustomMessage.json.ejs",
+  "roleName": "demografiapfgee9e612fCustomMessage",
+  "skipEdit": true,
+  "REDIRECTURL": "http://MODIFY_THIS",
+  "EMAILSUBJECT": "MODIFY_THIS",
+  "EMAILMESSAGE": "MODIFY_THIS",
+  "RESOURCENAME": "resourceName",
+  "enableCors": false
+}

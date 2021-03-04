@@ -1,0 +1,97 @@
+{
+    "paths": [
+        {
+            "name": "/accounts/validate",
+            "lambdaFunction": "validateAccount",
+            "privacy": {
+                "open": true
+            },
+            "policyResourceName": "/accounts/validate"
+        },
+        {
+            "name": "/account/update-profile",
+            "lambdaFunction": "updateProfile",
+            "privacy": {
+                "private": true,
+                "auth": [
+                    "/PUT",
+                    "/PATCH"
+                ]
+            }
+        },
+        {
+            "name": "/account/cancel",
+            "lambdaFunction": "cancelAccount",
+            "privacy": {
+                "private": true,
+                "auth": [
+                    "/DELETE"
+                ]
+            }
+        },
+        {
+            "name": "/accounts/validate-new-email",
+            "lambdaFunction": "validateNewEmail",
+            "privacy": {
+                "open": true
+            }
+        }
+    ],
+    "resourceName": "pfgapi",
+    "apiName": "pfgapi",
+    "functionArns": [
+        {
+            "lambdaFunction": "validateAccount"
+        },
+        {
+            "lambdaFunction": "updateProfile"
+        },
+        {
+            "lambdaFunction": "cancelAccount"
+        },
+        {
+            "lambdaFunction": "validateNewEmail"
+        }
+    ],
+    "privacy": {
+        "auth": 2,
+        "unauth": 0,
+        "authRoleName": "amplify-demografiapfg-dev-112954-authRole",
+        "unAuthRoleName": "amplify-demografiapfg-dev-112954-unauthRole"
+    },
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "validateAccount",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        },
+        {
+            "category": "function",
+            "resourceName": "updateProfile",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        },
+        {
+            "category": "function",
+            "resourceName": "cancelAccount",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        },
+        {
+            "category": "function",
+            "resourceName": "validateNewEmail",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        }
+    ],
+    "uuid": "42083845"
+}

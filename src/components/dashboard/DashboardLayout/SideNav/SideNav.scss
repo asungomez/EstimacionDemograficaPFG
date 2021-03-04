@@ -1,0 +1,9 @@
+.side-nav {
+  .euiSideNavItem--root {
+    margin-top: .75rem;
+    
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+}

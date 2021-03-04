@@ -1,0 +1,7 @@
+{
+  "exito": {},
+  "emailYaExiste": {
+    "message": "Email already registered",
+    "code": "EmailAlreadyRegistered"
+  }
+}
