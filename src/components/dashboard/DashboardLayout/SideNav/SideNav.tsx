@@ -1,8 +1,10 @@
 import { EuiSideNav } from '@elastic/eui';
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 const SideNav: React.FC<{}> = () => {
   const [isSideNavOpenOnMobile, setIsSideNavOpenOnMobile] = useState(false);
+  const history = useHistory();
 
   const toggleOpenOnMobile = () => {
     setIsSideNavOpenOnMobile(!isSideNavOpenOnMobile);
@@ -12,12 +14,12 @@ const SideNav: React.FC<{}> = () => {
     {
       name: 'Datos',
       id: 'data-sets',
-      onClick: () => {},
+      onClick: () => history.push('/panel/datos'),
       items: [
         {
           name: 'Crear conjunto de datos',
           id: 'create-data-sets',
-          onClick: () => {},
+          onClick: () => history.push('/panel/datos/crear'),
         },
       ],
     },

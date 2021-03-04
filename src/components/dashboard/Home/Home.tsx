@@ -1,9 +1,16 @@
 import './Home.scss';
 
-import { EuiButton, EuiFlexGroup, EuiFlexItem, EuiText, EuiTitle } from '@elastic/eui';
+import {
+  EuiButton,
+  EuiFlexGroup,
+  EuiFlexItem,
+  EuiText,
+  EuiTitle,
+} from '@elastic/eui';
 import React from 'react';
 
 import welcomeImage from '../../../assets/images/welcome_image.svg';
+import EuiCustomLink from '../../common/eui/EuiCustomLink';
 
 const Home: React.FC<{}> = () => {
   return (
@@ -40,9 +47,9 @@ const Home: React.FC<{}> = () => {
           </EuiTitle>
         </EuiFlexItem>
         <EuiFlexItem grow={false}>
-          <EuiButton fill>
-            Crear conjunto de datos
-          </EuiButton>
+          <EuiCustomLink to="/panel/datos/crear">
+            <EuiButton fill>Crear conjunto de datos</EuiButton>
+          </EuiCustomLink>
         </EuiFlexItem>
       </EuiFlexGroup>
     </>
