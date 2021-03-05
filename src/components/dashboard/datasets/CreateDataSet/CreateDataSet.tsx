@@ -6,8 +6,9 @@ import {
 } from '@elastic/eui';
 import React, { useState } from 'react';
 
-import Parser, { FileType } from '../../../../parser/Parser';
+import Parser, { FileType, ParserDefinition } from '../../../../parser/Parser';
 import CreateDataSetConfirmation from './CreateDataSetConfirmation/CreateDataSetConfirmation';
+import CreateDataSetCustomParser from './CreateDataSetCustomParser/CreateDataSetCustomParser';
 import CreateDataSetMapData from './CreateDataSetMapData/CreateDataSetMapData';
 import CreateDataSetParsingError from './CreateDataSetParsingError/CreateDataSetParsingError';
 import CreateDataSetSelectFile from './CreateDataSetSelectFile/CreateDataSetSelectFile';
@@ -18,7 +19,8 @@ type CreateDataSetStatus =
   | 'map-data'
   | 'select-format'
   | 'present-file-contents'
-  | 'parsing-error';
+  | 'parsing-error'
+  | 'custom-parser';
 
 const CreateDataSet: React.FC<{}> = () => {
   const [status, setStatus] = useState<CreateDataSetStatus>('select-file');
@@ -51,13 +53,30 @@ const CreateDataSet: React.FC<{}> = () => {
   };
 
   const selectFileType = (fileType: FileType) => {
-    Parser.parseFile(file, fileType)
+    if (fileType !== 'custom') {
+      Parser.parseFile(file, fileType)
+        .then(data => {
+          if (typeof data === 'object') {
+            setData(data);
+            setStatus('present-file-contents');
+          } else {
+            selectFormatManually();
+          }
+        })
+        .catch(() => parsingError());
+    } else {
+      createCustomParser();
+    }
+  };
+
+  const useCustomParser = (parser: ParserDefinition) => {
+    Parser.parseFile(file, 'custom', parser)
       .then(data => {
         if (typeof data === 'object') {
           setData(data);
           setStatus('present-file-contents');
         } else {
-          selectFormatManually();
+          parsingError();
         }
       })
       .catch(() => parsingError());
@@ -69,6 +88,7 @@ const CreateDataSet: React.FC<{}> = () => {
   };
   const startMappingData = () => setStatus('map-data');
   const parsingError = () => setStatus('parsing-error');
+  const createCustomParser = () => setStatus('custom-parser');
 
   return (
     <>
@@ -99,6 +119,11 @@ const CreateDataSet: React.FC<{}> = () => {
         <CreateDataSetParsingError
           onCancel={cancel}
           onBack={selectFormatManually}
+        />
+      ) : status === 'custom-parser' ? (
+        <CreateDataSetCustomParser
+          onCreate={useCustomParser}
+          onCancel={selectFormatManually}
         />
       ) : null}
     </>

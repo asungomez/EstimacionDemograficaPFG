@@ -17,7 +17,7 @@ const buildChildrenNodes = (data: any, depth: string): Node[] => {
     data.forEach((element, index) => {
       const elementDepth = `${depth}_${index}`;
       children.push({
-        label: index,
+        label: ''+index,
         id: elementDepth,
         children: buildChildrenNodes(element, elementDepth),
         icon: <EuiIcon type="arrowRight" />,

@@ -21,7 +21,6 @@ const CreateDataSetConfirmation: React.FC<CreateDataSetConfirmationProps> = ({
   onConfirm,
   onReject,
 }) => {
-  console.log(data);
   return (
     <EuiFlexGroup direction="column">
       <EuiFlexItem grow={false}>
