@@ -109,7 +109,11 @@ const CreateDataSet: React.FC<{}> = () => {
           onReject={selectFormatManually}
         />
       ) : status === 'map-data' ? (
-        <CreateDataSetMapData data={data} />
+        <CreateDataSetMapData
+          data={data}
+          onCancel={cancel}
+          onBack={selectFormatManually}
+        />
       ) : status === 'select-format' ? (
         <CreateDataSetSelectFormat
           onSelect={selectFileType}
