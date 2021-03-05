@@ -19,6 +19,21 @@ class Parser {
     return 'custom';
   }
 
+  private static parseCsvString(text: string) : any {
+    const parseResult = Papa.parse(text, {header: true});
+    if(parseResult.data.length === 0) {
+      if(parseResult.errors.length > 0) {
+        throw new Error(parseResult.errors[0].message);
+      }
+      else {
+        throw new Error('Empty dataset');
+      }
+    }
+    else {
+      return parseResult.data;
+    }
+  }
+
   public static parseFile(file: File, type: FileType) : Promise<any> {
     return new Promise((resolve, reject) => {
       const fileReader = new FileReader();
@@ -55,19 +70,25 @@ class Parser {
     return yaml.load(text);
   }
 
-  private static parseCsvString(text: string) : any {
-    const parseResult = Papa.parse(text, {header: true});
-    if(parseResult.data.length === 0) {
-      if(parseResult.errors.length > 0) {
-        throw new Error(parseResult.errors[0].message);
+  public static supportedFormats() : {name: string, type: FileType}[] {
+    return [
+      {
+        name: 'JSON',
+        type: 'json'
+      },
+      {
+        name: 'YAML',
+        type: 'yaml'
+      },
+      {
+        name: 'CSV',
+        type: 'csv'
+      },
+      {
+        name: 'Formato personalizado',
+        type: 'custom'
       }
-      else {
-        throw new Error('Empty dataset');
-      }
-    }
-    else {
-      return parseResult.data;
-    }
+    ]
   }
 };
 

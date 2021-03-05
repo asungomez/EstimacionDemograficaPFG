@@ -12,10 +12,14 @@ import CreateDataSetFileContents from './CreateDataSetFileContents/CreateDataSet
 
 export type CreateDataSetConfirmationProps = {
   data: any;
+  onConfirm: () => void;
+  onReject: () => void;
 };
 
 const CreateDataSetConfirmation: React.FC<CreateDataSetConfirmationProps> = ({
   data,
+  onConfirm,
+  onReject,
 }) => {
   console.log(data);
   return (
@@ -38,10 +42,14 @@ const CreateDataSetConfirmation: React.FC<CreateDataSetConfirmationProps> = ({
           justifyContent="flexStart"
         >
           <EuiFlexItem grow={false}>
-            <EuiButton fill>Sí</EuiButton>
+            <EuiButton fill onClick={onConfirm}>
+              Sí
+            </EuiButton>
           </EuiFlexItem>
           <EuiFlexItem grow={false}>
-            <EuiButtonEmpty color="danger">No</EuiButtonEmpty>
+            <EuiButtonEmpty color="danger" onClick={onReject}>
+              No
+            </EuiButtonEmpty>
           </EuiFlexItem>
         </EuiFlexGroup>
       </EuiFlexItem>

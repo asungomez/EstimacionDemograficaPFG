@@ -6,30 +6,32 @@ export type CreateDataSetFileContentsProps = {
   data: any;
 };
 
-const buildChildrenNodes = (data: any, deep: string): Node[] => {
+const buildChildrenNodes = (data: any, depth: string): Node[] => {
   const children = [];
   if (typeof data !== 'object') {
     children.push({
       label: data,
-      id: `${deep}_0`,
+      id: `${depth}_0`,
     });
   } else if (Array.isArray(data)) {
-    data.forEach((element, index) =>
+    data.forEach((element, index) => {
+      const elementDepth = `${depth}_${index}`;
       children.push({
         label: index,
-        id: `${deep}_${index}`,
-        children: buildChildrenNodes(element, `${deep}_${index}`),
+        id: elementDepth,
+        children: buildChildrenNodes(element, elementDepth),
         icon: <EuiIcon type="arrowRight" />,
         iconWhenExpanded: <EuiIcon type="arrowDown" />,
-      })
-    );
+      });
+    });
   } else {
     for (const key in data) {
       const element = data[key];
+      const elementDepth = `${depth}_${key}`;
       children.push({
         label: key,
-        id: `${deep}_${key}`,
-        children: buildChildrenNodes(element, `${deep}_${key}`),
+        id: elementDepth,
+        children: buildChildrenNodes(element, elementDepth),
         icon: <EuiIcon type="arrowRight" />,
         iconWhenExpanded: <EuiIcon type="arrowDown" />,
       });
