@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 
+import { ParsedDataItem } from '../../../../../services/DataSetService/utils/DataSetServiceTypes';
+import CreateDataSetMapDataConfirmation from './CreateDataSetMapDataConfirmation/CreateDataSetMapDataConfirmation';
 import CreateDataSetMapDataError from './CreateDataSetMapDataError/CreateDataSetMapDataError';
-import CreateDataSetMapDataSelectDataSource from './CreateDataSetMapDataSelectDataSource/CreateDataSetMapDataSelectDataSource';
+import CreateDataSetMapDataSelectDataArray from './CreateDataSetMapDataSelectDataArray/CreateDataSetMapDataSelectDataArray';
+import CreateDataSetMapDataSelectFields from './CreateDataSetMapDataSelectFields/CreateDataSetMapDataSelectFields';
 
 export type CreateDataSetMapDataProps = {
   data: any;
@@ -10,8 +13,9 @@ export type CreateDataSetMapDataProps = {
 };
 
 type CreateDataSetMapDataStatus =
-  | 'select-data-source'
-  | 'select-text-source'
+  | 'select-data-array'
+  | 'map-fields'
+  | 'present-parsed-data'
   | 'error';
 
 const CreateDataSetMapData: React.FC<CreateDataSetMapDataProps> = ({
@@ -19,14 +23,33 @@ const CreateDataSetMapData: React.FC<CreateDataSetMapDataProps> = ({
   onCancel,
   onBack,
 }) => {
-  let initialStatus: CreateDataSetMapDataStatus = 'select-data-source';
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [parsedData, setParsedData] = useState<ParsedDataItem[]>(null);
+
+  let initialStatus: CreateDataSetMapDataStatus = 'select-data-array';
   if (Array.isArray(data)) {
-    initialStatus = 'select-text-source';
+    if (data.length > 0) {
+      if (typeof data[0] === 'object') {
+        if (Array.isArray(data[0])) {
+          initialStatus = 'error';
+          setErrorMessage(
+            'Los elementos de la lista de datos deben ser objetos o cadenas de caracteres'
+          );
+        } else {
+          initialStatus = 'map-fields';
+        }
+      } else {
+        setParsedData(data.map(item => ({ text: '' + item })));
+        initialStatus = 'present-parsed-data';
+      }
+    } else {
+      initialStatus = 'error';
+      setErrorMessage('La lista de datos debe tener al menos un elemento.');
+    }
   }
   const [status, setStatus] = useState<CreateDataSetMapDataStatus>(
     initialStatus
   );
-  const [errorMessage, setErrorMessage] = useState(null);
 
   const mappingError = (error: string) => {
     setErrorMessage(error);
@@ -34,8 +57,23 @@ const CreateDataSetMapData: React.FC<CreateDataSetMapDataProps> = ({
   };
 
   const selectDataArray = (dataArray: any[]) => {
-    console.log(dataArray);
-    setStatus('select-text-source');
+    if (typeof dataArray[0] === 'object') {
+      if (Array.isArray(dataArray[0])) {
+        setErrorMessage(
+          'Los elementos de la lista de datos deben ser objetos o cadenas de caracteres'
+        );
+        setStatus('error');
+      } else {
+        setStatus('map-fields');
+      }
+    } else {
+      setParsedData(
+        dataArray.map(dataItem => ({
+          text: dataItem,
+        }))
+      );
+      setStatus('present-parsed-data');
+    }
   };
 
   return status === 'error' ? (
@@ -44,16 +82,18 @@ const CreateDataSetMapData: React.FC<CreateDataSetMapDataProps> = ({
       onCancel={onCancel}
       onBack={onBack}
     />
-  ) : status === 'select-data-source' ? (
-    <CreateDataSetMapDataSelectDataSource
+  ) : status === 'select-data-array' ? (
+    <CreateDataSetMapDataSelectDataArray
       data={data}
       onError={mappingError}
       onSelect={selectDataArray}
       onCancel={onCancel}
     />
-  ) : (
-    <>Is array</>
-  );
+  ) : status === 'map-fields' ? (
+    <CreateDataSetMapDataSelectFields />
+  ) : status === 'present-parsed-data' ? (
+    <CreateDataSetMapDataConfirmation data={parsedData} />
+  ) : null;
 };
 
 export default CreateDataSetMapData;

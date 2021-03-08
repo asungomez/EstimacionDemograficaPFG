@@ -7,9 +7,9 @@ import {
 } from '@elastic/eui';
 import React, { useState } from 'react';
 
-import CreateDataSetMapDataSelectDataSourceItem from './CreateDataSetMapDataSelectDataSourceItem/CreateDataSetMapDataSelectDataSourceItem';
+import CreateDataSetMapDataSelectDataArrayItem from './CreateDataSetMapDataSelectDataArrayItem/CreateDataSetMapDataSelectDataArrayItem';
 
-export type CreateDataSetMapDataSelectDataSourceProps = {
+export type CreateDataSetMapDataSelectDataArrayProps = {
   data: any;
   onError: (message: string) => void;
   onCancel: () => void;
@@ -25,7 +25,7 @@ const extractArrays = (data: any, path: string[]): DataArrayType[] => {
   const arrays: DataArrayType[] = [];
   for (const key in data) {
     if (typeof data[key] === 'object') {
-      if (Array.isArray(data[key])) {
+      if (Array.isArray(data[key]) && data[key].length > 0) {
         arrays.push({
           path: [...path, key],
           data: data[key],
@@ -39,26 +39,33 @@ const extractArrays = (data: any, path: string[]): DataArrayType[] => {
   return arrays;
 };
 
-const CreateDataSetMapDataSelectDataSource: React.FC<CreateDataSetMapDataSelectDataSourceProps> = ({
+const CreateDataSetMapDataSelectDataArray: React.FC<CreateDataSetMapDataSelectDataArrayProps> = ({
   data,
   onError,
   onCancel,
   onSelect,
 }) => {
-  const arrays = extractArrays(data, []);
+  const [arrays] = useState(extractArrays(data, []));
   const [selectedArray, setSelectedArray] = useState(0);
 
   const selectArray = () => {
-    onSelect(arrays[selectedArray].data.map(element => '' + element));
+    const dataArray = arrays[selectedArray].data;
+    if (typeof dataArray[0] === 'object') {
+      onSelect(dataArray);
+    } else {
+      onSelect(dataArray.map(element => '' + element));
+    }
   };
 
   if (arrays.length === 0) {
     onError('Tu fichero de datos debe contener al menos una lista.');
     return null;
+  } else if (arrays.length === 1) {
+    selectArray();
+    return null;
   }
-
   const lists = arrays.map((array, index) => (
-    <CreateDataSetMapDataSelectDataSourceItem
+    <CreateDataSetMapDataSelectDataArrayItem
       index={index}
       isSelected={index === selectedArray}
       onSelect={setSelectedArray}
@@ -91,4 +98,4 @@ const CreateDataSetMapDataSelectDataSource: React.FC<CreateDataSetMapDataSelectD
   );
 };
 
-export default React.memo(CreateDataSetMapDataSelectDataSource);
+export default React.memo(CreateDataSetMapDataSelectDataArray);

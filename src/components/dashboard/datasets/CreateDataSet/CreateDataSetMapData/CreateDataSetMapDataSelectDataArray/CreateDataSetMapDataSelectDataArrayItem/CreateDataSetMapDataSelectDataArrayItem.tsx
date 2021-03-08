@@ -10,16 +10,16 @@ import {
 import React from 'react';
 
 import CreateDataSetFileContents from '../../../CreateDataSetConfirmation/CreateDataSetFileContents/CreateDataSetFileContents';
-import { DataArrayType } from '../CreateDataSetMapDataSelectDataSource';
+import { DataArrayType } from '../CreateDataSetMapDataSelectDataArray';
 
-export type CreateDataSetMapDataSelectDataSourceItemProps = {
+export type CreateDataSetMapDataSelectDataArrayItemProps = {
   index: number;
   isSelected: boolean;
   array: DataArrayType;
   onSelect: (index: number) => void;
 };
 
-const CreateDataSetMapDataSelectDataSourceItem: React.FC<CreateDataSetMapDataSelectDataSourceItemProps> = ({
+const CreateDataSetMapDataSelectDataArrayItem: React.FC<CreateDataSetMapDataSelectDataArrayItemProps> = ({
   index,
   isSelected,
   array,
@@ -58,4 +58,4 @@ const CreateDataSetMapDataSelectDataSourceItem: React.FC<CreateDataSetMapDataSel
   </EuiPanel>
 );
 
-export default CreateDataSetMapDataSelectDataSourceItem;
+export default CreateDataSetMapDataSelectDataArrayItem;
