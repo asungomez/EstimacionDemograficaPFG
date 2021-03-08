@@ -30,10 +30,22 @@ const CreateDataSetMapDataSelectField: React.FC<CreateDataSetMapDataSelectFieldP
     id: radioId(index),
     label: field,
   }));
+  if (fieldToSelect === 'user') {
+    radioOptions.push({
+      id: radioId(candidateFields.length),
+      label: 'Ninguno.',
+    });
+  }
   const changeSelection = (selectedId: string) =>
     setSelectedOption(indexFromId(selectedId));
 
-  const selectField = () => onSelect(candidateFields[selectedOption]);
+  const selectField = () => {
+    if (selectedOption < candidateFields.length) {
+      onSelect(candidateFields[selectedOption]);
+    } else {
+      onSelect(null);
+    }
+  };
 
   return (
     <EuiFlexGroup direction="column">
