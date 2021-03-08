@@ -82,7 +82,7 @@ const parsers: ParsersDefinition = {
   csv: {
     name: 'CSV',
     parser: (text) => {
-      const parseResult = Papa.parse(text, { header: true });
+      const parseResult = Papa.parse(text, { header: true, skipEmptyLines: 'greedy' });
       if (parseResult.data.length === 0) {
         if (parseResult.errors.length > 0) {
           throw new Error(parseResult.errors[0].message);

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useDebugValue, useState } from 'react';
 
 import { ParsedDataItem } from '../../../../../services/DataSetService/utils/DataSetServiceTypes';
 import CreateDataSetMapDataConfirmation from './CreateDataSetMapDataConfirmation/CreateDataSetMapDataConfirmation';
@@ -18,6 +18,10 @@ type CreateDataSetMapDataStatus =
   | 'present-parsed-data'
   | 'error';
 
+export type DataItem = {
+  [field: string]: string;
+};
+
 const CreateDataSetMapData: React.FC<CreateDataSetMapDataProps> = ({
   data,
   onCancel,
@@ -25,6 +29,7 @@ const CreateDataSetMapData: React.FC<CreateDataSetMapDataProps> = ({
 }) => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [parsedData, setParsedData] = useState<ParsedDataItem[]>(null);
+  const [dataArray, setDataArray] = useState<DataItem[]>(null);
 
   let initialStatus: CreateDataSetMapDataStatus = 'select-data-array';
   if (Array.isArray(data)) {
@@ -64,6 +69,7 @@ const CreateDataSetMapData: React.FC<CreateDataSetMapDataProps> = ({
         );
         setStatus('error');
       } else {
+        setDataArray(dataArray);
         setStatus('map-fields');
       }
     } else {
@@ -76,21 +82,46 @@ const CreateDataSetMapData: React.FC<CreateDataSetMapDataProps> = ({
     }
   };
 
+  const finishParsingData = (parsedData: ParsedDataItem[]) => {
+    setParsedData(parsedData);
+    setStatus('present-parsed-data');
+  };
+
+  const cleanUp = () => {
+    setParsedData(null);
+    setDataArray(null);
+  };
+
+  const cancel = () => {
+    cleanUp();
+    onCancel();
+  };
+
+  const back = () => {
+    cleanUp();
+    onBack();
+  };
+
   return status === 'error' ? (
     <CreateDataSetMapDataError
       message={errorMessage}
-      onCancel={onCancel}
-      onBack={onBack}
+      onCancel={cancel}
+      onBack={back}
     />
   ) : status === 'select-data-array' ? (
     <CreateDataSetMapDataSelectDataArray
       data={data}
       onError={mappingError}
       onSelect={selectDataArray}
-      onCancel={onCancel}
+      onCancel={cancel}
     />
   ) : status === 'map-fields' ? (
-    <CreateDataSetMapDataSelectFields />
+    <CreateDataSetMapDataSelectFields
+      data={dataArray}
+      onCancel={cancel}
+      onSelect={finishParsingData}
+      onError={mappingError}
+    />
   ) : status === 'present-parsed-data' ? (
     <CreateDataSetMapDataConfirmation data={parsedData} />
   ) : null;
