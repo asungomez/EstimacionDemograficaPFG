@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { ParsedDataItem } from '../../../../../../services/DataSetService/utils/DataSetServiceTypes';
 import { DataItem } from '../CreateDataSetMapData';
-import CreateDataSetMapDataSelectFieldsText from './CreateDataSetMapDataSelectFieldsText/CreateDataSetMapDataSelectFieldsText';
+import CreateDataSetMapDataSelectField from './CreateDataSetMapDataSelectField/CreateDataSetMapDataSelectField';
 
 type CreateDataSetMapDataSelectFieldsStatus =
   | 'select-text-field'
@@ -55,8 +55,6 @@ const CreateDataSetMapDataSelectFields: React.FC<CreateDataSetMapDataSelectField
     const newParsedData = data.map(item => ({
       text: item[field],
     }));
-    console.log(newCandidateFields);
-    console.log(newParsedData);
     setParsedData(newParsedData);
     setCandidateFields(newCandidateFields);
     if (newCandidateFields.length > 0) {
@@ -65,14 +63,35 @@ const CreateDataSetMapDataSelectFields: React.FC<CreateDataSetMapDataSelectField
       onSelect(newParsedData);
     }
   };
-  return status === 'select-text-field' ? (
-    <CreateDataSetMapDataSelectFieldsText
+
+  const selectUserField = (field: string) => {
+    const newCandidateFields = candidateFields.filter(
+      fieldName => fieldName !== field
+    );
+    const newParsedData = data.map((item, index) => ({
+      author: item[field],
+      ...parsedData[index],
+    }));
+    console.log(newCandidateFields);
+    console.log(newParsedData);
+    setParsedData(newParsedData);
+    setCandidateFields(newCandidateFields);
+    if (newCandidateFields.length > 0) {
+      setStatus('select-attributes');
+    } else {
+      onSelect(newParsedData);
+    }
+  };
+
+  return status === 'select-text-field' || status === 'select-user-fields' ? (
+    <CreateDataSetMapDataSelectField
       candidateFields={candidateFields}
       onCancel={onCancel}
-      onSelect={selectTextField}
+      onSelect={
+        status === 'select-text-field' ? selectTextField : selectUserField
+      }
+      fieldToSelect={status === 'select-text-field' ? 'text' : 'user'}
     />
-  ) : status === 'select-user-fields' ? (
-    <>Select user fields</>
   ) : null;
 };
 

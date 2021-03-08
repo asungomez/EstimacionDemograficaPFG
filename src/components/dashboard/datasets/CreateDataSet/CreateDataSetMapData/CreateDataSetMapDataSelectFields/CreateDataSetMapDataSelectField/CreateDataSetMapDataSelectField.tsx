@@ -9,19 +9,21 @@ import {
 } from '@elastic/eui';
 import React, { useState } from 'react';
 
-export type CreateDataSetMapDataSelectFieldsTextProp = {
+export type CreateDataSetMapDataSelectFieldProps = {
   candidateFields: string[];
   onSelect: (fieldName: string) => void;
   onCancel: () => void;
+  fieldToSelect: 'text' | 'user';
 };
 
-const radioId = (index: number) => `radio_${index}`;
-const indexFromId = (id: string) => +id.split('_')[1];
+export const radioId = (index: number) => `radio_${index}`;
+export const indexFromId = (id: string) => +id.split('_')[1];
 
-const CreateDataSetMapDataSelectFieldsText: React.FC<CreateDataSetMapDataSelectFieldsTextProp> = ({
+const CreateDataSetMapDataSelectField: React.FC<CreateDataSetMapDataSelectFieldProps> = ({
   candidateFields,
   onCancel,
   onSelect,
+  fieldToSelect,
 }) => {
   const [selectedOption, setSelectedOption] = useState(0);
   const radioOptions = candidateFields.map((field, index) => ({
@@ -35,7 +37,11 @@ const CreateDataSetMapDataSelectFieldsText: React.FC<CreateDataSetMapDataSelectF
 
   return (
     <EuiFlexGroup direction="column">
-      <EuiFormRow label="¿Cuál de los siguientes campos se corresponde con el texto a analizar?">
+      <EuiFormRow
+        label={`¿Cuál de los siguientes campos se corresponde con el ${
+          fieldToSelect === 'text' ? 'texto a analizar' : 'autor del texto'
+        }?`}
+      >
         <EuiRadioGroup
           options={radioOptions}
           idSelected={radioId(selectedOption)}
@@ -59,4 +65,4 @@ const CreateDataSetMapDataSelectFieldsText: React.FC<CreateDataSetMapDataSelectF
   );
 };
 
-export default CreateDataSetMapDataSelectFieldsText;
+export default CreateDataSetMapDataSelectField;
