@@ -1,4 +1,4 @@
-import './CreateDataSetSelectFile.scss';
+import './CDSSelectFile.scss';
 
 import {
   EuiFilePicker,
@@ -10,13 +10,11 @@ import React from 'react';
 
 import uploadImage from '../../../../../assets/images/upload_image.svg';
 
-export type CreateDataSetSelectFileProps = {
+export type CDSSelectFileProps = {
   onSelect: (file: File) => void;
 };
 
-const CreateDataSetSelectFile: React.FC<CreateDataSetSelectFileProps> = ({
-  onSelect,
-}) => {
+const CDSSelectFile: React.FC<CDSSelectFileProps> = ({ onSelect }) => {
   const selectFiles = (files: FileList) => {
     if (files.length > 0) {
       onSelect(files[0]);
@@ -55,4 +53,4 @@ const CreateDataSetSelectFile: React.FC<CreateDataSetSelectFileProps> = ({
   );
 };
 
-export default CreateDataSetSelectFile;
+export default CDSSelectFile;
