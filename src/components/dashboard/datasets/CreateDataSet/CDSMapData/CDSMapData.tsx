@@ -1,10 +1,10 @@
 import React from 'react';
+import { DataItem } from '../../../../../models/DataSet';
+import { DataArrayType } from '../../../../../parser/Parser';
 
-import { FileContents } from '../../../../../parser/Parser';
-import { DataItem } from '../CreateDataSetMapData/CreateDataSetMapData';
 
 export type CDSMapDataProps = {
-  rawData: FileContents;
+  rawData: DataArrayType;
   onMap: (parsedData: DataItem[]) => void;
   onCancel: () => void;
 };

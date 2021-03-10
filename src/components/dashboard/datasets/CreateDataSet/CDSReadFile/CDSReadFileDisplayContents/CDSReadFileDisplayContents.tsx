@@ -8,16 +8,17 @@ import {
 } from '@elastic/eui';
 import React from 'react';
 
-import CreateDataSetFileContents from './CreateDataSetFileContents/CreateDataSetFileContents';
+import { FileContents } from '../../../../../../parser/Parser';
+import CDSFileContents from '../CDSFileContents/CDSFileContents';
 
-export type CreateDataSetConfirmationProps = {
-  data: any;
+export type CDSReadFileDisplayContentsProps = {
+  contents: FileContents;
   onConfirm: () => void;
   onReject: () => void;
 };
 
-const CreateDataSetConfirmation: React.FC<CreateDataSetConfirmationProps> = ({
-  data,
+const CDSReadFileDisplayContents: React.FC<CDSReadFileDisplayContentsProps> = ({
+  contents,
   onConfirm,
   onReject,
 }) => {
@@ -28,7 +29,7 @@ const CreateDataSetConfirmation: React.FC<CreateDataSetConfirmationProps> = ({
       </EuiFlexItem>
       <EuiFlexItem grow={false}>
         <EuiPanel>
-          <CreateDataSetFileContents data={data} />
+          <CDSFileContents contents={contents} />
         </EuiPanel>
       </EuiFlexItem>
       <EuiFlexItem grow={false}>
@@ -56,4 +57,4 @@ const CreateDataSetConfirmation: React.FC<CreateDataSetConfirmationProps> = ({
   );
 };
 
-export default CreateDataSetConfirmation;
+export default CDSReadFileDisplayContents;

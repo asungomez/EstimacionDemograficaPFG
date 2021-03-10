@@ -65,7 +65,7 @@ type DataItem = {
   [field: string]: string;
 };
 
-type DataArrayType = {
+export type DataArrayType = {
   path: string[];
   data: DataItem[] | string[];
   commonKeys?: string[];

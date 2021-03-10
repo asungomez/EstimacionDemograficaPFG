@@ -23,7 +23,7 @@ import {
   ParserDefinition,
   SkipEmptyLineOption,
   skipEmptyLinesOptions,
-} from '../../../../../parser/Parser';
+} from '../../../../../../parser/Parser';
 
 const initialValues: ParserDefinition = {
   delimiter: '',
@@ -48,14 +48,14 @@ const schema: Yup.ObjectSchema<ParserDefinition> = Yup.object().shape({
   skipEmptyLines: Yup.mixed(),
 });
 
-export type CreateDataSetCustomParserProps = {
+export type CDSReadFileCreateParserProps = {
   onCreate: (parser: ParserDefinition) => void;
   onCancel: () => void;
 };
 
-const CreateDataSetCustomParser: React.FC<CreateDataSetCustomParserProps> = ({
-  onCreate,
+const CDSReadFileCreateParser: React.FC<CDSReadFileCreateParserProps> = ({
   onCancel,
+  onCreate,
 }) => {
   const newLineOptions: EuiSuperSelectOption<
     NewLineFormat
@@ -191,4 +191,4 @@ const CreateDataSetCustomParser: React.FC<CreateDataSetCustomParserProps> = ({
   );
 };
 
-export default CreateDataSetCustomParser;
+export default CDSReadFileCreateParser;

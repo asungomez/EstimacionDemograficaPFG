@@ -6,19 +6,19 @@ import {
   EuiForm,
   EuiFormRow,
   EuiSelectable,
-  EuiSelectableOption,
   EuiSpacer,
 } from '@elastic/eui';
+import { EuiSelectableOption } from '@elastic/eui/src/components/selectable/selectable_option';
 import React, { useState } from 'react';
 
-import Parser, { FileType } from '../../../../../parser/Parser';
+import Parser, { FileType } from '../../../../../../parser/Parser';
 
-export type CreateDataSetSelectFormatProps = {
+export type CDSReadFileSelectFormatProps = {
   onSelect: (type: FileType) => void;
   onCancel: () => void;
 };
 
-const CreateDataSetSelectFormat: React.FC<CreateDataSetSelectFormatProps> = ({
+const CDSReadFileSelectFormat: React.FC<CDSReadFileSelectFormatProps> = ({
   onSelect,
   onCancel,
 }) => {
@@ -82,4 +82,4 @@ const CreateDataSetSelectFormat: React.FC<CreateDataSetSelectFormatProps> = ({
   );
 };
 
-export default CreateDataSetSelectFormat;
+export default CDSReadFileSelectFormat;
