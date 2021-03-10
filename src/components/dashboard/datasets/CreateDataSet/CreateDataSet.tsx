@@ -1,6 +1,7 @@
 import { EuiFlexGroup, EuiFlexItem } from '@elastic/eui';
 import React, { useState } from 'react';
 
+import { FileContents } from '../../../../parser/Parser';
 import CDSMapData from './CDSMapData/CDSMapData';
 import CDSReadFile from './CDSReadFile/CDSReadFile';
 import CDSSave from './CDSSave/CDSSave';
@@ -19,7 +20,7 @@ export type CreateDataSetStep = typeof CDS_STEPS[number];
 const CreateDataSet: React.FC<{}> = () => {
   const [step, setStep] = useState<CreateDataSetStep>('select-file');
   const [file, setFile] = useState<File>(null);
-  const [rawData, setRawData] = useState<any[]>(null);
+  const [rawData, setRawData] = useState<FileContents>(null);
   const [parsedData, setParsedData] = useState<DataItem[]>(null);
 
   const selectFile = (file: File) => {
@@ -27,7 +28,7 @@ const CreateDataSet: React.FC<{}> = () => {
     setStep('read-file');
   };
 
-  const readFile = (data: any[]) => {
+  const readFile = (data: FileContents) => {
     setRawData(data);
     setStep('map-file-contents');
   };

@@ -20,7 +20,7 @@ const stepTitles: StepTitles = {
   'select-file': 'Selección del fichero de datos',
   'read-file': 'Lectura del contenido del fichero',
   'map-file-contents': 'Selección de datos para almacenar',
-  'save': 'Guardar conjunto de datos'
+  save: 'Guardar conjunto de datos',
 };
 
 const CDSSteps: React.FC<CDSStepsProps> = ({ step, onClick }) => {
