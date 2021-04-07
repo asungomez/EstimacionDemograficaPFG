@@ -1,7 +1,7 @@
 import React from 'react';
+
 import { DataItem } from '../../../../../models/DataSet';
 import { DataArrayType } from '../../../../../parser/Parser';
-
 
 export type CDSMapDataProps = {
   rawData: DataArrayType;

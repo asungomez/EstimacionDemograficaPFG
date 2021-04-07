@@ -1,6 +1,6 @@
 import React from 'react';
-import { DataItem } from '../../../../../models/DataSet';
 
+import { DataItem } from '../../../../../models/DataSet';
 
 export type CDSSaveProps = {
   data: DataItem[];

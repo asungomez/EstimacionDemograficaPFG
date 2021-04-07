@@ -6,7 +6,6 @@ import { FileContents } from '../../../../../../parser/Parser';
 
 const buildChildrenNodes = (data: any, depth: string): Node[] => {
   const children = [];
-  console.log(data);
   if (typeof data !== 'object') {
     children.push({
       label: data,

@@ -69,7 +69,6 @@ const SignUp: React.FC<{}> = () => {
         setSubmitting(false);
       })
       .catch(error => {
-        console.log(error);
         setError(error.message);
         setSubmitting(false);
       });

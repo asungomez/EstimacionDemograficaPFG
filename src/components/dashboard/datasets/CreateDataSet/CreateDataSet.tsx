@@ -1,8 +1,8 @@
 import { EuiFlexGroup, EuiFlexItem } from '@elastic/eui';
 import React, { useState } from 'react';
+
 import { DataItem } from '../../../../models/DataSet';
 import { DataArrayType } from '../../../../parser/Parser';
-
 import CDSMapData from './CDSMapData/CDSMapData';
 import CDSReadFile from './CDSReadFile/CDSReadFile';
 import CDSSave from './CDSSave/CDSSave';
@@ -30,6 +30,7 @@ const CreateDataSet: React.FC<{}> = () => {
 
   const readFile = (data: DataArrayType) => {
     setRawData(data);
+    console.log(data);
     setStep('map-file-contents');
   };
 
@@ -67,11 +68,11 @@ const CreateDataSet: React.FC<{}> = () => {
   };
 
   return (
-    <EuiFlexGroup direction="column" alignItems="flexStart">
+    <EuiFlexGroup direction="column" alignItems="center">
       <EuiFlexItem grow={false}>
         <CDSSteps step={step} onClick={changeStep} />
       </EuiFlexItem>
-      <EuiFlexItem grow={false}>
+      <EuiFlexItem grow={false} style={{ width: '100%' }}>
         {step === 'select-file' ? (
           <CDSSelectFile onSelect={selectFile} />
         ) : step === 'read-file' ? (

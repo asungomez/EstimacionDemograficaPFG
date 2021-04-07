@@ -2,10 +2,15 @@ import { EuiFlexGroup, EuiFlexItem, EuiLoadingSpinner } from '@elastic/eui';
 import React, { useEffect, useState } from 'react';
 
 import useReadFile from '../../../../../hooks/useReadFile';
-import { DataArrayType, FileType, ParserDefinition } from '../../../../../parser/Parser';
+import {
+  DataArrayType,
+  FileType,
+  ParserDefinition,
+} from '../../../../../parser/Parser';
 import CDSError from '../CDSError/CDSError';
 import CDSReadFileCreateParser from './CDSReadFileCreateParser/CDSReadFileCreateParser';
 import CDSReadFileDisplayContents from './CDSReadFileDisplayContents/CDSReadFileDisplayContents';
+import CDSReadFileSelectArray from './CDSReadFileSelectArray/CDSReadFileSelectArray';
 import CDSReadFileSelectFormat from './CDSReadFileSelectFormat/CDSReadFileSelectFormat';
 
 export type CDSReadFileProps = {
@@ -49,6 +54,7 @@ const CDSReadFile: React.FC<CDSReadFileProps> = ({
   }, [data, loading, error]);
 
   const returnToSelectFormat = () => setStatus('select-format');
+
   const confirmDataContents = () => {
     if (data.arrays.length === 1) {
       onRead(data.arrays[0]);
@@ -75,7 +81,7 @@ const CDSReadFile: React.FC<CDSReadFileProps> = ({
         {loading ? (
           <EuiLoadingSpinner size="xl" />
         ) : status === 'error' ? (
-          <CDSError message={parsingErrorMessage} />
+          <CDSError message={parsingErrorMessage} onCancel={onCancel} />
         ) : status === 'select-format' ? (
           <CDSReadFileSelectFormat
             onSelect={onSelectFormat}
@@ -93,7 +99,11 @@ const CDSReadFile: React.FC<CDSReadFileProps> = ({
             onReject={returnToSelectFormat}
           />
         ) : status === 'select-array' ? (
-          <>Select array</>
+          <CDSReadFileSelectArray
+            arrays={data.arrays}
+            onCancel={onCancel}
+            onSelect={onRead}
+          />
         ) : null}
       </EuiFlexItem>
     </EuiFlexGroup>

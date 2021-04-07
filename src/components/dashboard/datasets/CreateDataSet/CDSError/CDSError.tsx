@@ -1,15 +1,16 @@
 import './CDSError.scss';
 
-import { EuiFlexGroup, EuiFlexItem, EuiText, EuiTitle } from '@elastic/eui';
+import { EuiButton, EuiFlexGroup, EuiFlexItem, EuiText, EuiTitle } from '@elastic/eui';
 import React from 'react';
 
 import errorImage from '../../../../../assets/images/parsing_error.svg';
 
 export type CDSErrorProps = {
   message: string;
+  onCancel: () => void;
 };
 
-const CDSError: React.FC<CDSErrorProps> = ({ message }) => {
+const CDSError: React.FC<CDSErrorProps> = ({ message, onCancel }) => {
   return (
     <EuiFlexGroup direction="column" alignItems="center">
       <EuiFlexItem grow={false} className="create-data-set__error-image">
@@ -38,6 +39,11 @@ const CDSError: React.FC<CDSErrorProps> = ({ message }) => {
       </EuiFlexItem>
       <EuiFlexItem grow={false}>
         <EuiText>{message}</EuiText>
+      </EuiFlexItem>
+      <EuiFlexItem grow={false}>
+        <EuiButton fill onClick={onCancel}>
+          Atrás
+        </EuiButton>
       </EuiFlexItem>
     </EuiFlexGroup>
   );
