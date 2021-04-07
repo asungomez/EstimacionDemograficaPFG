@@ -18,9 +18,22 @@ export const CDS_STEPS = [
 export type CreateDataSetStep = typeof CDS_STEPS[number];
 
 const CreateDataSet: React.FC<{}> = () => {
-  const [step, setStep] = useState<CreateDataSetStep>('select-file');
+  const [step, setStep] = useState<CreateDataSetStep>('map-file-contents');
   const [file, setFile] = useState<File>(null);
-  const [rawData, setRawData] = useState<DataArrayType>(null);
+  const [rawData, setRawData] = useState<DataArrayType>({
+    path: [],
+    data: [
+      {
+        text: 'Hola',
+        author: 'Pepe',
+      },
+      {
+        text: 'Adios',
+        author: 'Juju',
+      },
+    ],
+    commonKeys: ['text', 'author'],
+  });
   const [parsedData, setParsedData] = useState<DataItem[]>(null);
 
   const selectFile = (file: File) => {

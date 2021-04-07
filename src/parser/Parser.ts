@@ -63,13 +63,13 @@ type ParsersDefinition = {
   };
 };
 
-type DataItem = {
+export type RawDataItem = {
   [field: string]: string;
 };
 
 export type DataArrayType = {
   path: string[];
-  data: DataItem[] | string[];
+  data: RawDataItem[] | string[];
   commonKeys?: string[];
 };
 
@@ -92,7 +92,7 @@ const mapConfiguration = (config: ParserDefinition): ParseConfig => ({
       : 'greedy',
 });
 
-const commonKeys = (data: DataItem[]) => {
+const commonKeys = (data: RawDataItem[]) => {
   let keysIntersection = Object.keys(data[0]);
   for (const item of data) {
     const objectKeys = Object.keys(item);
