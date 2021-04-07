@@ -1,5 +1,3 @@
-class DataSetService {
-
-};
+class DataSetService {}
 
 export default DataSetService;

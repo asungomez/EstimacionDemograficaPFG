@@ -38,7 +38,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --passWithNoTests",
     "eject": "react-scripts eject",
-    "lint": "echo \"Linting...\" && eslint \"./src/**/*.tsx\"",
+    "lint": "echo \"Linting...\" && eslint \"./src/**/*.ts*\"",
     "format": "yarn --silent lint --fix",
     "integration-tests": "NODE_ENV=test yarn run cypress open",
     "validate": "yarn test --watchAll=false && yarn -s lint --fix"

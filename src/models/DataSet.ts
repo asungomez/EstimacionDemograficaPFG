@@ -3,6 +3,6 @@ export type DataItem = {
   text: string;
   author: string;
   attributes?: {
-    [attribute: string]: string
-  }
+    [attribute: string]: string;
+  };
 };

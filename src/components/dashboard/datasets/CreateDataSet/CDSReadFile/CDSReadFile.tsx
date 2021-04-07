@@ -29,7 +29,8 @@ type CDSReadFileStatus =
 const parsingErrorMessage =
   'El formato del fichero no es válido.' +
   ' Un fichero de datos debe contener al menos una lista. La lista debe ser de ' +
-  'cadenas de caracteres o de objetos con al menos una clave en común.';
+  'cadenas de caracteres, de listas de cadenas de caracteres o de objetos con ' +
+  'al menos una clave en común.';
 
 const CDSReadFile: React.FC<CDSReadFileProps> = ({
   file,

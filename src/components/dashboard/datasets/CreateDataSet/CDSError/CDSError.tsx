@@ -1,6 +1,12 @@
 import './CDSError.scss';
 
-import { EuiButton, EuiFlexGroup, EuiFlexItem, EuiText, EuiTitle } from '@elastic/eui';
+import {
+  EuiButton,
+  EuiFlexGroup,
+  EuiFlexItem,
+  EuiText,
+  EuiTitle,
+} from '@elastic/eui';
 import React from 'react';
 
 import errorImage from '../../../../../assets/images/parsing_error.svg';

@@ -1,5 +1,5 @@
-import { User } from "../../../models/User";
-import { UserAttributesRequest } from "./AuthenticationServiceTypes";
+import { User } from '../../../models/User';
+import { UserAttributesRequest } from './AuthenticationServiceTypes';
 
 export const mapCognitoAttributes = (attributes: any): User => {
   return {
@@ -10,20 +10,24 @@ export const mapCognitoAttributes = (attributes: any): User => {
   };
 };
 
-export const mapUserAttributesRequest = (firstName: string, lastName: string, email?: string) : UserAttributesRequest => {
-  const request : UserAttributesRequest = {
-    attributes: {}
+export const mapUserAttributesRequest = (
+  firstName: string,
+  lastName: string,
+  email?: string
+): UserAttributesRequest => {
+  const request: UserAttributesRequest = {
+    attributes: {},
   };
 
-  if(firstName && firstName.length > 0) {
+  if (firstName && firstName.length > 0) {
     request.attributes.first_name = firstName;
   }
-  if(lastName && lastName.length > 0) {
+  if (lastName && lastName.length > 0) {
     request.attributes.last_name = lastName;
   }
-  if(email && email.length > 0) {
+  if (email && email.length > 0) {
     request.attributes.email = email;
   }
 
   return request;
-}
+};

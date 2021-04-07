@@ -43,9 +43,7 @@ class ApiService {
     }
   }
 
-  private static async getRequest(
-    path: string
-  ): Promise<any> {
+  private static async getRequest(path: string): Promise<any> {
     try {
       const response = await API.get('pfgapi', path, null);
       cache[path] = {
@@ -61,10 +59,7 @@ class ApiService {
     }
   }
 
-  public static async get(
-    path: string,
-    cached: boolean = true
-  ): Promise<any> {
+  public static async get(path: string, cached: boolean = true): Promise<any> {
     if (cached) {
       if (cache[path]) {
         if (cache[path].expirationTime >= new Date().getTime()) {
@@ -100,10 +95,7 @@ class ApiService {
     }
   }
 
-  public static async put(
-    path: string,
-    requestBody: any = null
-  ): Promise<any> {
+  public static async put(path: string, requestBody: any = null): Promise<any> {
     try {
       const response = await API.put(
         'pfgapi',
