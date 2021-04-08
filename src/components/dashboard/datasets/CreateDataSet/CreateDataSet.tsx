@@ -26,13 +26,17 @@ const CreateDataSet: React.FC<{}> = () => {
       {
         text: 'Hola',
         author: 'Pepe',
+        gender: 'Female',
+        age: '12',
       },
       {
         text: 'Adios',
         author: 'Juju',
+        gender: 'Male',
+        age: '15',
       },
     ],
-    commonKeys: ['text', 'author'],
+    commonKeys: ['text', 'author', 'gender', 'age'],
   });
   const [parsedData, setParsedData] = useState<DataItem[]>(null);
 

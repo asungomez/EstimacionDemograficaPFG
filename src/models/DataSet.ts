@@ -2,7 +2,7 @@ export type DataItem = {
   id?: string;
   text: string;
   author?: string;
-  attributes?: {
+  metadata?: {
     [attribute: string]: string;
   };
 };

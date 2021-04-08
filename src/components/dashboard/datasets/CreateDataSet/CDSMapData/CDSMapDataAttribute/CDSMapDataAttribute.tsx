@@ -5,32 +5,42 @@ import {
   EuiFlexItem,
   EuiText,
 } from '@elastic/eui';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { DataArrayType, RawDataItem } from '../../../../../../parser/Parser';
-import CDSMapDataTextItem from './CDSMapDataTextItem/CDSMapDataTextItem';
+import CDSMapDataAttributeItem from './CDSMapDataAttributeItem/CDSMapDataAttributeItem';
 
-type CDSMapDataTextProps = {
+type CDSMapDataAttributeProps = {
   data: DataArrayType;
   onSelect: (key: string) => void;
   onCancel: () => void;
+  description: string;
+  skippable?: boolean;
+  onSkip?: () => void;
 };
 
-const listItems = (data: RawDataItem[], key: string): string[] =>
+export const listItems = (data: RawDataItem[], key: string): string[] =>
   data.map((item: RawDataItem) => (item as RawDataItem)[key]);
 
-const CDSMapDataText: React.FC<CDSMapDataTextProps> = ({
+const CDSMapDataAttribute: React.FC<CDSMapDataAttributeProps> = ({
   data,
   onSelect,
   onCancel,
+  description,
+  skippable = false,
+  onSkip,
 }) => {
   const [selectedKey, setSelectedKey] = useState<string>(data.commonKeys[0]);
 
   const selectKey = () => onSelect(selectedKey);
 
+  useEffect(() => {
+    setSelectedKey(data.commonKeys[0]);
+  }, [data]);
+
   const candidateKeys = data.commonKeys.map(key => (
     <EuiFlexItem grow={false} key={key}>
-      <CDSMapDataTextItem
+      <CDSMapDataAttributeItem
         dataKey={key}
         items={listItems(data.data as RawDataItem[], key)}
         isSelected={selectedKey === key}
@@ -38,10 +48,11 @@ const CDSMapDataText: React.FC<CDSMapDataTextProps> = ({
       />
     </EuiFlexItem>
   ));
+
   return (
     <EuiFlexGroup direction="column">
       <EuiFlexItem grow={false}>
-        <EuiText>Selecciona el campo de texto</EuiText>
+        <EuiText>{description}</EuiText>
       </EuiFlexItem>
       {candidateKeys}
       <EuiFlexItem grow={false}>
@@ -51,6 +62,11 @@ const CDSMapDataText: React.FC<CDSMapDataTextProps> = ({
               Continuar
             </EuiButton>
           </EuiFlexItem>
+          {skippable && (
+            <EuiFlexItem grow={false}>
+              <EuiButtonEmpty onClick={onSkip}>Omitir</EuiButtonEmpty>
+            </EuiFlexItem>
+          )}
           <EuiFlexItem grow={false}>
             <EuiButtonEmpty color="danger" onClick={onCancel}>
               Cancelar
@@ -62,4 +78,4 @@ const CDSMapDataText: React.FC<CDSMapDataTextProps> = ({
   );
 };
 
-export default CDSMapDataText;
+export default CDSMapDataAttribute;

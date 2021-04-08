@@ -7,14 +7,14 @@ import {
 } from '@elastic/eui';
 import React from 'react';
 
-type CDSMapDataTextItemProps = {
+type CDSMapDataAttributeItemProps = {
   dataKey: string;
   items: string[];
   isSelected: boolean;
   onSelect: () => void;
 };
 
-const CDSMapDataTextItem: React.FC<CDSMapDataTextItemProps> = ({
+const CDSMapDataAttributeItem: React.FC<CDSMapDataAttributeItemProps> = ({
   dataKey,
   items,
   isSelected,
@@ -45,4 +45,4 @@ const CDSMapDataTextItem: React.FC<CDSMapDataTextItemProps> = ({
   );
 };
 
-export default CDSMapDataTextItem;
+export default CDSMapDataAttributeItem;
