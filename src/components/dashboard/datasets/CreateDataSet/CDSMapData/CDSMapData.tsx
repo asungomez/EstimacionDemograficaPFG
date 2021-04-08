@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { DataItem } from '../../../../../models/DataSet';
 import { DataArrayType, RawDataItem } from '../../../../../parser/Parser';
-import CDSMapDataDisplay from './CDSMapDataText/CDSMapDataDisplay/CDSMapDataDisplay';
+import CDSMapDataDisplay from './CDSMapDataDisplay/CDSMapDataDisplay';
 import CDSMapDataText from './CDSMapDataText/CDSMapDataText';
 
 export type CDSMapDataProps = {
